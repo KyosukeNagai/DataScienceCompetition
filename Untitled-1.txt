@@ -37,6 +37,7 @@ for col in columns_to_use:
     df_subset[col] = df_subset[col].replace(9999, np.nan)
 
 df_subset = df_subset.dropna()
+print(len(df_subset))
 
 # ---------------------------------------------------------
 # 分析①：世帯収入によって「体験」の機会に差があるか？
@@ -228,7 +229,7 @@ sns.barplot(x='bias_level', y='aim_univ', data=df_idea3_girls, palette='Set1')
 plt.title('親の理系ジェンダーバイアスが女子の「大学院進学希望割合」に与える影響')
 plt.xlabel('親の「理科・算数は男子が向いている」という意識')
 plt.ylabel('大学院への進学を希望する割合')
-plt.ylim(0, 1)
+plt.ylim(0, 0.1)
 plt.show()
 
 # %%
@@ -246,5 +247,321 @@ print("■ グラフ⑤：親の理系ジェンダーバイアスごとの女子
 bias_univ_mean = df_idea3_girls.groupby('bias_level')['aim_univ'].mean().reset_index()
 bias_univ_mean.columns = ['親のバイアス', '女子の大学進学希望割合']
 display(bias_univ_mean)
+
+# %%
+# =========================================================
+# アイデア案：「習い事」を通じた機会格差とその影響
+# =========================================================
+
+# 分析に必要な変数の抽出（Wave 1のデータを使用）
+columns_lesson = [
+    'ds0000000052_w1p', # 昨年の世帯収入（親）: 1(200万未満)〜10(2000万以上)
+    'ds0000000101_w1p', # 習い事やスポーツクラブに通っているか（親）: 1(行っている), 2(行ってない)
+    'ds0000000097_w1c', # （習い事）週に何回行くか（子）: 1(1回)〜7(7回以上), 8(行っていない)
+    'ds0000000363_w1c', # 性格・特性：難しいことや新しいことにいつも挑戦したい（子）: 1(とても)〜4(まったく)
+    'ds0000000210_w1c'  # 将来なりたい職業はあるか（子）: 1(ある), 2(ない)
+]
+
+df_lesson = df[columns_lesson].copy()
+
+# 欠損値の処理 (7777, 8888, 9999 を NaN に置換して除外)
+# リストを使って一括で置換します
+for col in columns_lesson:
+    df_lesson[col] = df_lesson[col].replace(7777, np.nan)
+    df_lesson[col] = df_lesson[col].replace(8888, np.nan)
+    df_lesson[col] = df_lesson[col].replace(9999, np.nan)
+
+df_lesson = df_lesson.dropna()
+
+# ---------------------------------------------------------
+# データの加工
+# ---------------------------------------------------------
+# ①習い事に行っているかどうかのフラグを作成 (1:行っている->1, 2:行っていない->0)
+df_lesson['has_lesson'] = df_lesson['ds0000000101_w1p'].apply(lambda x: 1 if x == 1 else 0)
+
+# ②習い事の回数を数値化 (8:行っていない -> 0回に変換、1〜7はそのまま)
+df_lesson['lesson_frequency'] = df_lesson['ds0000000097_w1c'].apply(lambda x: 0 if x == 8 else x)
+
+# ③挑戦意欲スコアの調整（値が大きいほど意欲が高いよう反転：5 - 現在の値）
+df_lesson['challenge_spirit'] = 5 - df_lesson['ds0000000363_w1c']
+
+# ④将来の夢のフラグ化 (1:ある->1, 2:ない->0)
+df_lesson['has_dream'] = df_lesson['ds0000000210_w1c'].apply(lambda x: 1 if x == 1 else 0)
+
+# ---------------------------------------------------------
+# グラフの描画と数値表の表示
+# ---------------------------------------------------------
+from IPython.display import display
+
+# --- 分析①：世帯収入と「習い事」実施割合の関連 ---
+income_lesson = df_lesson.groupby('ds0000000052_w1p')['has_lesson'].mean().reset_index()
+
+plt.figure(figsize=(10, 5))
+sns.barplot(x='ds0000000052_w1p', y='has_lesson', data=income_lesson, color='skyblue')
+plt.title('親の世帯収入と子どもの「習い事」実施割合の関連')
+plt.xlabel('世帯収入カテゴリ (1: 200万円未満 ～ 10: 2000万円以上)')
+plt.ylabel('習い事に通っている割合')
+plt.ylim(0, 1)
+plt.show()
+
+print("■ 分析①：親の世帯収入カテゴリごとの「習い事」実施割合")
+income_lesson.columns = ['世帯収入(1〜10)', '習い事実施割合']
+display(income_lesson)
+
+
+# --- 分析②：習い事の頻度と「挑戦意欲」の関連 ---
+plt.figure(figsize=(8, 5))
+# barplotのデフォルト設定で各カテゴリの平均値とエラーバー（信頼区間）が表示されます
+sns.barplot(x='lesson_frequency', y='challenge_spirit', data=df_lesson, palette='Set2')
+plt.title('習い事の頻度と「難しいことに挑戦する意欲」の関連')
+plt.xlabel('習い事の頻度 (週0回 ～ 7回以上)')
+plt.ylabel('挑戦意欲スコアの平均 (高いほど意欲あり)')
+plt.ylim(2.5, 3.5)
+plt.show()
+
+print("■ 分析②：習い事の頻度(週0〜7回)ごとの「挑戦意欲」平均スコア")
+freq_challenge_mean = df_lesson.groupby('lesson_frequency')['challenge_spirit'].mean().reset_index()
+freq_challenge_mean.columns = ['習い事の頻度(回/週)', '挑戦意欲スコア平均']
+display(freq_challenge_mean)
+
+
+# --- 分析③：習い事の頻度と「将来の夢」の関連 ---
+lesson_dream = df_lesson.groupby('lesson_frequency')['has_dream'].mean().reset_index()
+
+plt.figure(figsize=(8, 5))
+sns.lineplot(x='lesson_frequency', y='has_dream', data=lesson_dream, marker='o', linewidth=2, color='coral')
+plt.title('習い事の頻度と「将来なりたい職業がある割合」の関連')
+plt.xlabel('習い事の頻度 (週0回 ～ 7回以上)')
+plt.ylabel('将来なりたい職業がある割合')
+plt.ylim(0, 1)
+plt.show()
+
+print("■ 分析③：習い事の頻度(週0〜7回)ごとの「将来なりたい職業がある割合」")
+lesson_dream.columns = ['習い事の頻度(回/週)', '将来の夢がある割合']
+display(lesson_dream)
+
+# %%
+# =========================================================
+# アイデア案：「塾のタイプ」による学習意欲の源泉の違い
+# =========================================================
+
+# 分析に必要な変数の抽出（Wave 6のデータを使用）
+columns_juku = [
+    'ds0000000121_w6p', # 現在学習塾に行っているか（親）: 1(行っている), 2(行っていない)
+    'ds0000000122_w6p', # どのような学習塾に通っているか（親）: 1(プリント), 2(補習塾), 3(進学塾)
+    'ds0000000154_w6c', # 勉強がどれくらい好きか（子）: 1(とても好き)〜4(まったく好きではない)
+    'ds0000000224_w6c', # 学習意欲：新しいことを知るのがうれしい（子）: 1(とても)〜4(まったく)
+    'ds0000000228_w6c'  # 学習意欲：希望する学校に進みたい（子）: 1(とても)〜4(まったく)
+]
+
+df_juku = df[columns_juku].copy()
+
+# 欠損値の処理 (7777, 8888, 9999 をまとめて NaN に置換)
+for col in columns_juku:
+    df_juku[col] = df_juku[col].replace(7777, np.nan)
+    df_juku[col] = df_juku[col].replace(8888, np.nan)
+    df_juku[col] = df_juku[col].replace(9999, np.nan)
+
+# 分析に必要な「子どもの意欲」の回答がないものを除外
+df_juku = df_juku.dropna(subset=['ds0000000121_w6p', 'ds0000000154_w6c', 'ds0000000224_w6c', 'ds0000000228_w6c'])
+
+# ---------------------------------------------------------
+# データの加工
+# ---------------------------------------------------------
+# 塾のタイプを作成する関数
+def get_juku_type(row):
+    if row['ds0000000121_w6p'] == 2:
+        return '0: 行っていない'
+    elif row['ds0000000121_w6p'] == 1:
+        if row['ds0000000122_w6p'] == 1:
+            return '1: プリント教室'
+        elif row['ds0000000122_w6p'] == 2:
+            return '2: 補習塾'
+        elif row['ds0000000122_w6p'] == 3:
+            return '3: 進学塾'
+    return np.nan
+
+# 行単位で関数を適用し、新しい列「juku_type」を作成
+df_juku['juku_type'] = df_juku.apply(get_juku_type, axis=1)
+df_juku = df_juku.dropna(subset=['juku_type'])
+
+# スコアの反転（数値が大きいほど「好き」「あてはまる」にする：5 - 現在の値）
+df_juku['study_like'] = 5 - df_juku['ds0000000154_w6c']
+df_juku['motivation_curiosity'] = 5 - df_juku['ds0000000224_w6c']
+df_juku['motivation_entrance'] = 5 - df_juku['ds0000000228_w6c']
+
+# ---------------------------------------------------------
+# グラフの描画と数値表の表示
+# ---------------------------------------------------------
+from IPython.display import display
+
+# --- 塾のタイプ別の各スコア平均を算出 ---
+juku_grouped = df_juku.groupby('juku_type')[['study_like', 'motivation_curiosity', 'motivation_entrance']].mean().reset_index()
+
+# グラフで描きやすいようにデータ形式を変換（Long形式）
+df_melted = pd.melt(juku_grouped, id_vars=['juku_type'], 
+                    value_vars=['study_like', 'motivation_curiosity', 'motivation_entrance'],
+                    var_name='score_type', value_name='mean_score')
+
+# グラフの凡例用にラベルを変更
+label_map = {
+    'study_like': '勉強が好き',
+    'motivation_curiosity': '新しいことを知るのがうれしい',
+    'motivation_entrance': '希望する学校に進みたい'
+}
+df_melted['score_type'] = df_melted['score_type'].map(label_map)
+
+# 棒グラフの描画
+plt.figure(figsize=(12, 6))
+sns.barplot(x='juku_type', y='mean_score', hue='score_type', data=df_melted, palette='muted')
+plt.title('塾のタイプによる「勉強好き度」と「学習意欲の源泉」の違い')
+plt.xlabel('塾のタイプ')
+plt.ylabel('平均スコア (1〜4点: 高いほど当てはまる)')
+plt.legend(title='評価項目', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.ylim(2, 4)
+plt.tight_layout() # レイアウトの崩れを防ぐ
+plt.show()
+
+# 数値表の表示
+print("■ 分析結果：塾のタイプごとの平均スコア")
+juku_grouped.columns = ['塾のタイプ', '勉強好き度', '新しいことを知る喜び', '希望校への進学意欲']
+display(juku_grouped)
+
+# %%
+import scipy.stats as stats
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+print("=========================================================")
+print("塾のタイプ間における各スコアの統計的有意差検定")
+print("=========================================================\n")
+
+# 検定対象のスコアとラベル
+scores_to_test = {
+    'study_like': '勉強が好き',
+    'motivation_curiosity': '新しいことを知るのがうれしい',
+    'motivation_entrance': '希望する学校に進みたい'
+}
+
+for score_col, score_name in scores_to_test.items():
+    print(f"■ 【{score_name}】の検定")
+    
+    # 各塾タイプのデータを抽出
+    group0 = df_juku[df_juku['juku_type'] == '0: 行っていない'][score_col]
+    group1 = df_juku[df_juku['juku_type'] == '1: プリント教室'][score_col]
+    group2 = df_juku[df_juku['juku_type'] == '2: 補習塾'][score_col]
+    group3 = df_juku[df_juku['juku_type'] == '3: 進学塾'][score_col]
+    
+    # 1. 一元配置分散分析 (ANOVA)
+    # 4つのグループの平均値に、少なくとも1つ以上の差があるかを検定します
+    f_val, p_val = stats.f_oneway(group0, group1, group2, group3)
+    
+    print(f"  [分散分析] p値 = {p_val:.4e}")
+    
+    if p_val < 0.05:
+        print("  => 全体として、少なくとも1つのグループ間に統計的に有意な差があります。")
+        print("  => どのグループ間に差があるか、多重比較検定を行います。\n")
+        
+        # 2. Tukeyの多重比較検定
+        # どの塾タイプとどの塾タイプの間に差があるのかを1対1で総当たりで検定します
+        tukey_result = pairwise_tukeyhsd(endog=df_juku[score_col], groups=df_juku['juku_type'], alpha=0.001)
+        print(tukey_result)
+        
+    else:
+        print("  => グループ間に統計的な有意差は見られませんでした。")
+        
+    print("\n" + "-"*60 + "\n")
+
+# %%
+import statsmodels.api as sm
+
+# =========================================================
+# アイデア案：「進学意欲と進学塾」の因果関係の切り分け
+# =========================================================
+
+# 分析に必要な変数の抽出（Wave 1とWave 6のデータを結合して使用）
+columns_causal = [
+    'ds0000000371_w1c', # Wave1の進学意欲：入るのが難しいと言われる高校(大学)に入りたい
+    'ds0000000121_w1p', # Wave1の通塾：現在学習塾に行っているか
+    'ds0000000122_w1p', # Wave1の塾タイプ：どのような学習塾に通っているか
+    'ds0000000371_w6c', # Wave6の進学意欲：入るのが難しいと言われる高校(大学)に入りたい
+    'ds0000000121_w6p', # Wave6の通塾：現在学習塾に行っているか
+    'ds0000000122_w6p'  # Wave6の塾タイプ：どのような学習塾に通っているか
+]
+
+df_causal = df[columns_causal].copy()
+
+# 安全のため、すべて数値型に変換（文字列が混ざっているエラーを防ぐ）
+df_causal = df_causal.apply(pd.to_numeric, errors='coerce')
+
+# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外
+for col in columns_causal:
+    df_causal[col] = df_causal[col].replace(7777, np.nan)
+    df_causal[col] = df_causal[col].replace(8888, np.nan)
+    df_causal[col] = df_causal[col].replace(9999, np.nan)
+
+df_causal = df_causal.dropna()
+print(len(df_causal))
+# ---------------------------------------------------------
+# データの加工
+# ---------------------------------------------------------
+# 進学意欲スコアの反転 (1:とても〜4:まったく を、数値が高いほど意欲が高いように反転)
+df_causal['motivation_w1'] = 5 - df_causal['ds0000000371_w1c']
+df_causal['motivation_w6'] = 5 - df_causal['ds0000000371_w6c']
+
+# 各Waveで「進学塾に通っているか(1)」「それ以外(0)」のフラグを作成する関数
+def is_shingakujuku(row, w):
+    juku_exist = row[f'ds0000000121_w{w}p']
+    juku_type = row[f'ds0000000122_w{w}p']
+    # 塾に行っている(1) かつ 進学塾(3) の場合のみ 1 を返す
+    if juku_exist == 1 and juku_type == 3:
+        return 1
+    else:
+        return 0
+
+df_causal['shingaku_w1'] = df_causal.apply(lambda row: is_shingakujuku(row, 1), axis=1)
+df_causal['shingaku_w6'] = df_causal.apply(lambda row: is_shingakujuku(row, 6), axis=1)
+
+# 純粋な効果を見るため、Wave1時点では進学塾に行っていなかった層のみに絞り込む
+df_causal_sub = df_causal[df_causal['shingaku_w1'] == 0].copy()
+
+# グラフ用のラベルを作成
+df_causal_sub['shingaku_label'] = df_causal_sub['shingaku_w6'].map({0: '行っていない/他の塾', 1: '進学塾に通っている'})
+
+# ---------------------------------------------------------
+# 分析①：過去の意欲が未来の進学塾通いを決めるか？（選択効果）
+# ---------------------------------------------------------
+plt.figure(figsize=(8, 5))
+sns.barplot(x='motivation_w1', y='shingaku_w6', data=df_causal_sub, palette='Blues')
+plt.title('【選択効果】Wave 1(過去)の進学意欲と、Wave 6(未来)の進学塾通塾率の関連')
+plt.xlabel('Wave 1時点での進学意欲スコア (高いほど意欲あり)')
+plt.ylabel('Wave 6で進学塾に通っている割合')
+plt.show()
+
+# ---------------------------------------------------------
+# 分析②：進学塾に通うことが意欲を底上げするか？（因果効果）
+# ---------------------------------------------------------
+# 過去の意欲を揃えた上で、進学塾の有無でWave 6の意欲を比較するグラフ
+plt.figure(figsize=(10, 6))
+# pointplotを使って、意欲の推移の違いを線で表現します
+sns.pointplot(x='motivation_w1', y='motivation_w6', hue='shingaku_label', 
+              data=df_causal_sub, dodge=True, markers=['o', 's'], palette='Set1')
+plt.title('【因果効果】過去の意欲が同じでも、進学塾に行くことで未来の意欲は押し上げられるか？')
+plt.xlabel('Wave 1(過去)の進学意欲スコア')
+plt.ylabel('Wave 6(未来)の進学意欲スコア (平均)')
+plt.show()
+
+# 重回帰分析（OLS）による統計的な検証
+# W6の意欲を、W1の意欲とW6の進学塾ダミーで説明するモデル
+X = df_causal_sub[['motivation_w1', 'shingaku_w6']]
+X = sm.add_constant(X) # 切片を追加
+y = df_causal_sub['motivation_w6']
+
+model = sm.OLS(y, X).fit()
+
+print("\n=========================================================")
+print("重回帰分析による進学塾の「純粋な押し上げ効果」の検証")
+print("=========================================================")
+print(model.summary())
+print("\n※ P>|t| が 0.05 より小さければ、その要因は統計的に意味のある影響を与えています。")
 
 
