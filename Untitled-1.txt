@@ -16,552 +16,406 @@ df = pd.read_csv('./Database/Benesse/1571.csv', encoding='utf-8-sig')
 # ここではダミーとしてdfが読み込まれていると仮定します
 
 # %%
-# 2. 分析に必要な変数の抽出（Wave1の例）
-columns_to_use = [
-    'ds0000000052_w1p', # 昨年の世帯収入（親）: 1(200万未満)〜10(2000万以上)
-    'ds0000000268_w1c', # 経験：家族で旅行をする（子）: 0(非選択), 1(選択)
-    'ds0000000270_w1c', # 経験：自然の中で思いっきり遊ぶ（子）: 0(非選択), 1(選択)
-    'ds0000000271_w1c', # 経験：美術館や博物館に行く（子）: 0(非選択), 1(選択)
-    'ds0000000363_w1c', # 性格・特性：難しいことや新しいことにいつも挑戦したい（子）: 1(とても)〜4(まったく)
-    'ds0000000210_w1c'  # 将来なりたい職業はあるか（子）: 1(ある), 2(ない)
-]
-
-# 分析用データフレームの作成
-df_subset = df[columns_to_use].copy()
-
-# 3. 欠損値の処理
-# 7777(質問なし), 8888(非該当), 9999(無回答・不明) をNaN(欠損値)に置き換えて除外する[5]
-for col in columns_to_use:
-    df_subset[col] = df_subset[col].replace(7777, np.nan)
-    df_subset[col] = df_subset[col].replace(8888, np.nan)
-    df_subset[col] = df_subset[col].replace(9999, np.nan)
-
-df_subset = df_subset.dropna()
-print(len(df_subset))
-
-# ---------------------------------------------------------
-# 分析①：世帯収入によって「体験」の機会に差があるか？
-# ---------------------------------------------------------
-# 世帯収入カテゴリごとに、家族旅行の経験(1)の平均（割合）を算出
-income_travel = df_subset.groupby('ds0000000052_w1p')['ds0000000268_w1c'].mean().reset_index()
-
-plt.figure(figsize=(10, 5))
-sns.barplot(x='ds0000000052_w1p', y='ds0000000268_w1c', data=income_travel, color='skyblue')
-plt.title('親の世帯収入と子どもの「家族旅行」経験割合の関連')
-plt.xlabel('世帯収入カテゴリ (1: 200万円未満 ～ 10: 2000万円以上)')
-plt.ylabel('家族旅行を経験した割合')
-plt.ylim(0, 1)
-plt.show()
-
-# ---------------------------------------------------------
-# 分析②：多様な「体験」は子どもの意欲や将来の夢に影響するか？
-# ---------------------------------------------------------
-# 3つの体験の合計スコアを作成 (0～3点)
-df_subset['experience_score'] = df_subset['ds0000000268_w1c'] + \
-                                df_subset['ds0000000270_w1c'] + \
-                                df_subset['ds0000000271_w1c']
-
-# 挑戦意欲スコアの調整
-# 元のデータは「1:とてもあてはまる ～ 4:まったくあてはまらない」なので、
-# 数値が大きいほど意欲が高いように反転させる（5 - 現在の値）
-df_subset['challenge_spirit'] = 5 - df_subset['ds0000000363_w1c']
-
-# 体験スコア別の「挑戦意欲」の平均を算出
-exp_challenge = df_subset.groupby('experience_score')['challenge_spirit'].mean().reset_index()
-
-plt.figure(figsize=(8, 5))
-sns.barplot(x='experience_score', y='challenge_spirit', data=exp_challenge, color='lightgreen')
-plt.title('体験の多さと「難しいことに挑戦する意欲」の関連')
-plt.xlabel('体験スコア (0～3: 経験した数)')
-plt.ylabel('挑戦意欲スコアの平均 (高いほど意欲あり)')
-plt.show()
-
-# 将来なりたい職業のダミー変数化 (1:ある->1, 2:ない->0)
-df_subset['has_dream'] = df_subset['ds0000000210_w1c'].apply(lambda x: 1 if x == 1 else 0)
-
-# 体験スコア別の「将来なりたい職業がある割合」を算出
-exp_dream = df_subset.groupby('experience_score')['has_dream'].mean().reset_index()
-
-plt.figure(figsize=(8, 5))
-sns.lineplot(x='experience_score', y='has_dream', data=exp_dream, marker='o', linewidth=2)
-plt.title('体験の多さと「将来なりたい職業がある割合」の関連')
-plt.xlabel('体験スコア (0～3: 経験した数)')
-plt.ylabel('将来なりたい職業がある割合')
-plt.ylim(0, 1)
-plt.show()
-
-# %%
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.api as sm
 from IPython.display import display
 
-print("■ 分析①：親の世帯収入カテゴリごとの「家族旅行」経験割合")
-# 1: 200万円未満 ～ 10: 2000万円以上
-display(income_travel)
-
-print("■ 分析②：体験スコア(0〜3)別の「挑戦意欲」の平均")
-# スコアが高いほど意欲が高い
-display(exp_challenge)
-
-print("■ 分析②：体験スコア(0〜3)別の「将来なりたい職業がある割合」")
-display(exp_dream)
-
-# %%
 # =========================================================
-# アイデア案2：デジタル環境へのアクセス格差と「自分で調べる力」の差
-# =========================================================
-
-# 分析に必要な変数の抽出（Wave 6のデータを使用）
-columns_idea2 = [
-    'ds0000000524_w6c', # メディア利用：パソコン (1:使っていない, 2:家族と共有, 3:自分専用)
-    'ds0000000525_w6c', # メディア利用：タブレット (1:使っていない, 2:家族と共有, 3:自分専用)
-    'ds0000000330_w6c', # 得意・苦手：わからないことや知らないことを調べること (1:とても得意〜4:とても苦手)
-    'ds0000000820_w6c', # コロナ禍休校中の学校対応：オンラインで授業があった (1:あった, 2:なかった)
-    'ds0000000799_w6c'  # コロナ禍休校中の家庭生活：しっかり勉強した (1:とてもあてはまる〜4:まったくあてはまらない)
-]
-
-df_idea2 = df[columns_idea2].copy()
-
-# 欠損値の処理 (7777, 8888, 9999 を NaN に置換して除外)
-for col in columns_idea2:
-    df_idea2[col] = df_idea2[col].replace(7777, np.nan)
-    df_idea2[col] = df_idea2[col].replace(8888, np.nan)
-    df_idea2[col] = df_idea2[col].replace(9999, np.nan)
-df_idea2 = df_idea2.dropna()
-
-# 自分専用のPCまたはタブレットがあるかどうかのフラグを作成
-# パソコンまたはタブレットが「3(自分専用のものを使っている)」なら1、そうでないなら0
-df_idea2['own_device'] = ((df_idea2['ds0000000524_w6c'] == 3) | (df_idea2['ds0000000525_w6c'] == 3)).astype(int)
-
-# 「調べること」の得意スコアの調整（大きいほど得意になるよう反転：5 - 現在の値）
-df_idea2['research_skill'] = 5 - df_idea2['ds0000000330_w6c']
-
-# 休校中に「しっかり勉強した」かのスコア（大きいほどあてはまるよう反転：5 - 現在の値）
-df_idea2['study_hard_score'] = 5 - df_idea2['ds0000000799_w6c']
-
-# グラフ①：自分専用端末の有無と「調べる力」の関連
-plt.figure(figsize=(8, 5))
-sns.barplot(x='own_device', y='research_skill', data=df_idea2, palette='Set2')
-plt.title('自分専用端末の有無と「調べることの得意意識」の関連')
-plt.xlabel('自分専用のPCまたはタブレットの有無 (0:なし, 1:あり)')
-plt.ylabel('調べるのが得意スコア (高いほど得意)')
-plt.show()
-
-# グラフ②：オンライン授業の有無と休校中の学習状況の関連
-plt.figure(figsize=(8, 5))
-sns.barplot(x='ds0000000820_w6c', y='study_hard_score', data=df_idea2, palette='Set3')
-plt.title('休校中のオンライン授業の有無と「しっかり勉強した」度合いの関連')
-plt.xlabel('オンライン授業があったか (1:あった, 2:なかった)')
-plt.ylabel('しっかり勉強したスコア (高いほどあてはまる)')
-plt.show()
-
-# %%
-print("■ グラフ①：自分専用端末の有無(0:なし, 1:あり)ごとの「調べることの得意意識」平均")
-device_skill_mean = df_idea2.groupby('own_device')['research_skill'].mean().reset_index()
-device_skill_mean.columns = ['自分専用端末の有無', '調べるのが得意スコア平均']
-display(device_skill_mean)
-
-print("■ グラフ②：休校中のオンライン授業の有無(1:あった, 2:なかった)ごとの「しっかり勉強した」度合い平均")
-online_study_mean = df_idea2.groupby('ds0000000820_w6c')['study_hard_score'].mean().reset_index()
-online_study_mean.columns = ['オンライン授業の有無', 'しっかり勉強したスコア平均']
-display(online_study_mean)
-
-# %%
-# =========================================================
-# アイデア案3：「無意識のバイアス」による進路選択の格差（見えない壁）
-# =========================================================
-
-# 分析に必要な変数の抽出（Wave 6のデータを使用）
-columns_idea3 = [
-    'ds0000000019_w6c', # 子どもの性別 (1:男子, 2:女子)
-    'ds0000000156_w6c', # 子どもの教科好き：算数（数学） (1:とても好き〜4:まったく好きではない, 5:わからない・ない)
-    'ds0000000390_w6p', # 親の意見：算数（数学）や理科は男子のほうが向いている (1:とてもそう思う〜4:まったくそう思わない)
-    'ds0000000198_w6c'  # 子どもの将来の希望進学段階 (1:中学校まで〜7:大学院まで, 9:まだ決めていない)
-]
-
-df_idea3 = df[columns_idea3].copy()
-
-# 欠損値の処理
-for col in columns_idea3:
-    df_idea3[col] = df_idea3[col].replace(7777, np.nan)
-    df_idea3[col] = df_idea3[col].replace(8888, np.nan)
-    df_idea3[col] = df_idea3[col].replace(9999, np.nan)
-
-# 教科好きの「5:わからない・ない」、進路の「9:まだ決めていない」等も分析から除外
-df_idea3['ds0000000156_w6c'] = df_idea3['ds0000000156_w6c'].replace(5, np.nan)
-df_idea3['ds0000000198_w6c'] = df_idea3['ds0000000198_w6c'].replace([8, 9], np.nan)
-df_idea3 = df_idea3.dropna()
-
-# 子どもの算数好きスコア（大きいほど好きになるよう反転：5 - 現在の値）
-df_idea3['math_liking_child'] = 5 - df_idea3['ds0000000156_w6c']
-
-# 親の理系ジェンダーバイアススコア（大きいほど「男子が向いている」と思う：5 - 現在の値）
-df_idea3['gender_bias_parent'] = 5 - df_idea3['ds0000000390_w6p']
-
-# 大学・大学院進学希望フラグ (6:大学まで, 7:大学院まで なら 1、それ以外は 0)
-print(df_idea3['ds0000000198_w6c'].unique())
-df_idea3['aim_univ'] = df_idea3['ds0000000198_w6c'].apply(lambda x: 1 if x in [7] else 0)
-
-# 子どもの性別ラベルを作成
-df_idea3['child_gender_label'] = df_idea3['ds0000000019_w6c'].map({1.0: '男子', 2.0: '女子'})
-
-# グラフ③：子どもの性別ごとの「算数好き度」の違い
-plt.figure(figsize=(8, 5))
-sns.barplot(x='child_gender_label', y='math_liking_child', data=df_idea3, palette='pastel')
-plt.title('子どもの性別による「算数（数学）好き度」の差')
-plt.xlabel('子どもの性別')
-plt.ylabel('算数好きスコア (高いほど好き)')
-plt.show()
-
-# グラフ④：親の理系ジェンダーバイアスが強い層と弱い層での、女子の算数好き度の違い
-# 親のバイアススコアが3以上を「強い」、2以下を「弱い」と定義
-df_idea3['bias_level'] = df_idea3['gender_bias_parent'].apply(lambda x: 'バイアスあり' if x >= 3 else 'バイアスなし')
-df_idea3_girls = df_idea3[df_idea3['ds0000000019_w6c'] == 2.0] # 女子のみ抽出
-
-plt.figure(figsize=(8, 5))
-sns.barplot(x='bias_level', y='math_liking_child', data=df_idea3_girls, palette='Set1')
-plt.title('親の理系ジェンダーバイアスが女子の「算数好き度」に与える影響')
-plt.xlabel('親の「理科・算数は男子が向いている」という意識')
-plt.ylabel('女子の算数好きスコア (高いほど好き)')
-plt.show()
-
-# グラフ⑤：親の理系ジェンダーバイアスが女子の「大学院進学希望割合」に与える影響
-plt.figure(figsize=(8, 5))
-sns.barplot(x='bias_level', y='aim_univ', data=df_idea3_girls, palette='Set1')
-plt.title('親の理系ジェンダーバイアスが女子の「大学院進学希望割合」に与える影響')
-plt.xlabel('親の「理科・算数は男子が向いている」という意識')
-plt.ylabel('大学院への進学を希望する割合')
-plt.ylim(0, 0.1)
-plt.show()
-
-# %%
-print("■ グラフ③：子どもの性別ごとの「算数（数学）好き度」平均")
-gender_math_mean = df_idea3.groupby('child_gender_label')['math_liking_child'].mean().reset_index()
-gender_math_mean.columns = ['子どもの性別', '算数好きスコア平均']
-display(gender_math_mean)
-
-print("■ グラフ④：親の理系ジェンダーバイアスごとの女子の「算数好き度」平均")
-bias_math_mean = df_idea3_girls.groupby('bias_level')['math_liking_child'].mean().reset_index()
-bias_math_mean.columns = ['親のバイアス', '女子の算数好きスコア平均']
-display(bias_math_mean)
-
-print("■ グラフ⑤：親の理系ジェンダーバイアスごとの女子の「大学・大学院進学希望割合」")
-bias_univ_mean = df_idea3_girls.groupby('bias_level')['aim_univ'].mean().reset_index()
-bias_univ_mean.columns = ['親のバイアス', '女子の大学進学希望割合']
-display(bias_univ_mean)
-
-# %%
-# =========================================================
-# アイデア案：「習い事」を通じた機会格差とその影響
+# 分析：情報格差と体験格差の関連（アプリの理論的裏付け）
 # =========================================================
 
 # 分析に必要な変数の抽出（Wave 1のデータを使用）
-columns_lesson = [
-    'ds0000000052_w1p', # 昨年の世帯収入（親）: 1(200万未満)〜10(2000万以上)
-    'ds0000000101_w1p', # 習い事やスポーツクラブに通っているか（親）: 1(行っている), 2(行ってない)
-    'ds0000000097_w1c', # （習い事）週に何回行くか（子）: 1(1回)〜7(7回以上), 8(行っていない)
-    'ds0000000363_w1c', # 性格・特性：難しいことや新しいことにいつも挑戦したい（子）: 1(とても)〜4(まったく)
-    'ds0000000210_w1c'  # 将来なりたい職業はあるか（子）: 1(ある), 2(ない)
+columns_relation = [
+    'ds0000000052_w1p', # 昨年の世帯収入（親）: 1(200万未満)〜10(2000万以上), 11(答えたくない) [4, 5]
+    
+    # 【情報格差の指標】親の能動的な進路情報源（複数選択） [1, 2]
+    'ds0000000559_w1p', # 情報源：インターネットの情報サイト (0:非選択, 1:選択) [2]
+    'ds0000000560_w1p', # 情報源：インターネットの掲示板・ブログ・SNS (0:非選択, 1:選択) [2]
+    'ds0000000557_w1p', # 情報源：書籍（専門書など） (0:非選択, 1:選択) [2]
+    'ds0000000554_w1p', # 情報源：学習塾の先生 (0:非選択, 1:選択) [2]
+    
+    # 【体験格差の指標】子どもの学校外でのリアル体験（複数選択） [3]
+    'ds0000000268_w1c', # 経験：家族で旅行をする (0:非選択, 1:選択) [3]
+    'ds0000000270_w1c', # 経験：自然の中で思いっきり遊ぶ (0:非選択, 1:選択) [3]
+    'ds0000000271_w1c', # 経験：美術館や博物館に行く (0:非選択, 1:選択) [3]
+    'ds0000000275_w1c', # 経験：地域の行事に参加する (0:非選択, 1:選択) [3]
+    'ds0000000276_w1c'  # 経験：ボランティア活動に参加する (0:非選択, 1:選択) [3]
 ]
 
-df_lesson = df[columns_lesson].copy()
+df_relation = df[columns_relation].copy()
 
-# 欠損値の処理 (7777, 8888, 9999 を NaN に置換して除外)
-# リストを使って一括で置換します
-for col in columns_lesson:
-    df_lesson[col] = df_lesson[col].replace(7777, np.nan)
-    df_lesson[col] = df_lesson[col].replace(8888, np.nan)
-    df_lesson[col] = df_lesson[col].replace(9999, np.nan)
+# 安全のため数値型に変換
+df_relation = df_relation.apply(pd.to_numeric, errors='coerce')
 
-df_lesson = df_lesson.dropna()
+# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外 [6]
+for col in columns_relation:
+    df_relation[col] = df_relation[col].replace(7777, np.nan)
+    df_relation[col] = df_relation[col].replace(8888, np.nan)
+    df_relation[col] = df_relation[col].replace(9999, np.nan)
 
-# ---------------------------------------------------------
-# データの加工
-# ---------------------------------------------------------
-# ①習い事に行っているかどうかのフラグを作成 (1:行っている->1, 2:行っていない->0)
-df_lesson['has_lesson'] = df_lesson['ds0000000101_w1p'].apply(lambda x: 1 if x == 1 else 0)
+# 世帯収入の「11:答えたくない」も数値分析から除外するためにNaNに置換 [5]
+df_relation['ds0000000052_w1p'] = df_relation['ds0000000052_w1p'].replace(11, np.nan)
 
-# ②習い事の回数を数値化 (8:行っていない -> 0回に変換、1〜7はそのまま)
-df_lesson['lesson_frequency'] = df_lesson['ds0000000097_w1c'].apply(lambda x: 0 if x == 8 else x)
-
-# ③挑戦意欲スコアの調整（値が大きいほど意欲が高いよう反転：5 - 現在の値）
-df_lesson['challenge_spirit'] = 5 - df_lesson['ds0000000363_w1c']
-
-# ④将来の夢のフラグ化 (1:ある->1, 2:ない->0)
-df_lesson['has_dream'] = df_lesson['ds0000000210_w1c'].apply(lambda x: 1 if x == 1 else 0)
+df_relation = df_relation.dropna()
 
 # ---------------------------------------------------------
-# グラフの描画と数値表の表示
+# 指標（スコア）の作成
 # ---------------------------------------------------------
-from IPython.display import display
+# ① 親の情報アクセス力スコア（0〜4点）
+# 能動的な情報源にいくつアクセスしているかを合算
+df_relation['parent_info_score'] = (
+    df_relation['ds0000000559_w1p'] + 
+    df_relation['ds0000000560_w1p'] + 
+    df_relation['ds0000000557_w1p'] + 
+    df_relation['ds0000000554_w1p']
+)
 
-# --- 分析①：世帯収入と「習い事」実施割合の関連 ---
-income_lesson = df_lesson.groupby('ds0000000052_w1p')['has_lesson'].mean().reset_index()
-
-plt.figure(figsize=(10, 5))
-sns.barplot(x='ds0000000052_w1p', y='has_lesson', data=income_lesson, color='skyblue')
-plt.title('親の世帯収入と子どもの「習い事」実施割合の関連')
-plt.xlabel('世帯収入カテゴリ (1: 200万円未満 ～ 10: 2000万円以上)')
-plt.ylabel('習い事に通っている割合')
-plt.ylim(0, 1)
-plt.show()
-
-print("■ 分析①：親の世帯収入カテゴリごとの「習い事」実施割合")
-income_lesson.columns = ['世帯収入(1〜10)', '習い事実施割合']
-display(income_lesson)
-
-
-# --- 分析②：習い事の頻度と「挑戦意欲」の関連 ---
-plt.figure(figsize=(8, 5))
-# barplotのデフォルト設定で各カテゴリの平均値とエラーバー（信頼区間）が表示されます
-sns.barplot(x='lesson_frequency', y='challenge_spirit', data=df_lesson, palette='Set2')
-plt.title('習い事の頻度と「難しいことに挑戦する意欲」の関連')
-plt.xlabel('習い事の頻度 (週0回 ～ 7回以上)')
-plt.ylabel('挑戦意欲スコアの平均 (高いほど意欲あり)')
-plt.ylim(2.5, 3.5)
-plt.show()
-
-print("■ 分析②：習い事の頻度(週0〜7回)ごとの「挑戦意欲」平均スコア")
-freq_challenge_mean = df_lesson.groupby('lesson_frequency')['challenge_spirit'].mean().reset_index()
-freq_challenge_mean.columns = ['習い事の頻度(回/週)', '挑戦意欲スコア平均']
-display(freq_challenge_mean)
-
-
-# --- 分析③：習い事の頻度と「将来の夢」の関連 ---
-lesson_dream = df_lesson.groupby('lesson_frequency')['has_dream'].mean().reset_index()
-
-plt.figure(figsize=(8, 5))
-sns.lineplot(x='lesson_frequency', y='has_dream', data=lesson_dream, marker='o', linewidth=2, color='coral')
-plt.title('習い事の頻度と「将来なりたい職業がある割合」の関連')
-plt.xlabel('習い事の頻度 (週0回 ～ 7回以上)')
-plt.ylabel('将来なりたい職業がある割合')
-plt.ylim(0, 1)
-plt.show()
-
-print("■ 分析③：習い事の頻度(週0〜7回)ごとの「将来なりたい職業がある割合」")
-lesson_dream.columns = ['習い事の頻度(回/週)', '将来の夢がある割合']
-display(lesson_dream)
-
-# %%
-# =========================================================
-# アイデア案：「塾のタイプ」による学習意欲の源泉の違い
-# =========================================================
-
-# 分析に必要な変数の抽出（Wave 6のデータを使用）
-columns_juku = [
-    'ds0000000121_w6p', # 現在学習塾に行っているか（親）: 1(行っている), 2(行っていない)
-    'ds0000000122_w6p', # どのような学習塾に通っているか（親）: 1(プリント), 2(補習塾), 3(進学塾)
-    'ds0000000154_w6c', # 勉強がどれくらい好きか（子）: 1(とても好き)〜4(まったく好きではない)
-    'ds0000000224_w6c', # 学習意欲：新しいことを知るのがうれしい（子）: 1(とても)〜4(まったく)
-    'ds0000000228_w6c'  # 学習意欲：希望する学校に進みたい（子）: 1(とても)〜4(まったく)
-]
-
-df_juku = df[columns_juku].copy()
-
-# 欠損値の処理 (7777, 8888, 9999 をまとめて NaN に置換)
-for col in columns_juku:
-    df_juku[col] = df_juku[col].replace(7777, np.nan)
-    df_juku[col] = df_juku[col].replace(8888, np.nan)
-    df_juku[col] = df_juku[col].replace(9999, np.nan)
-
-# 分析に必要な「子どもの意欲」の回答がないものを除外
-df_juku = df_juku.dropna(subset=['ds0000000121_w6p', 'ds0000000154_w6c', 'ds0000000224_w6c', 'ds0000000228_w6c'])
+# ② 子どもの社会体験スコア（0〜5点）
+# 学校外でのリアル体験の合計経験数
+df_relation['child_experience_score'] = (
+    df_relation['ds0000000268_w1c'] + 
+    df_relation['ds0000000270_w1c'] + 
+    df_relation['ds0000000271_w1c'] + 
+    df_relation['ds0000000275_w1c'] + 
+    df_relation['ds0000000276_w1c']
+)
 
 # ---------------------------------------------------------
-# データの加工
+# 分析①：親の情報アクセス力と子どもの体験の単純クロス集計
 # ---------------------------------------------------------
-# 塾のタイプを作成する関数
-def get_juku_type(row):
-    if row['ds0000000121_w6p'] == 2:
-        return '0: 行っていない'
-    elif row['ds0000000121_w6p'] == 1:
-        if row['ds0000000122_w6p'] == 1:
-            return '1: プリント教室'
-        elif row['ds0000000122_w6p'] == 2:
-            return '2: 補習塾'
-        elif row['ds0000000122_w6p'] == 3:
-            return '3: 進学塾'
-    return np.nan
-
-# 行単位で関数を適用し、新しい列「juku_type」を作成
-df_juku['juku_type'] = df_juku.apply(get_juku_type, axis=1)
-df_juku = df_juku.dropna(subset=['juku_type'])
-
-# スコアの反転（数値が大きいほど「好き」「あてはまる」にする：5 - 現在の値）
-df_juku['study_like'] = 5 - df_juku['ds0000000154_w6c']
-df_juku['motivation_curiosity'] = 5 - df_juku['ds0000000224_w6c']
-df_juku['motivation_entrance'] = 5 - df_juku['ds0000000228_w6c']
-
-# ---------------------------------------------------------
-# グラフの描画と数値表の表示
-# ---------------------------------------------------------
-from IPython.display import display
-
-# --- 塾のタイプ別の各スコア平均を算出 ---
-juku_grouped = df_juku.groupby('juku_type')[['study_like', 'motivation_curiosity', 'motivation_entrance']].mean().reset_index()
-
-# グラフで描きやすいようにデータ形式を変換（Long形式）
-df_melted = pd.melt(juku_grouped, id_vars=['juku_type'], 
-                    value_vars=['study_like', 'motivation_curiosity', 'motivation_entrance'],
-                    var_name='score_type', value_name='mean_score')
-
-# グラフの凡例用にラベルを変更
-label_map = {
-    'study_like': '勉強が好き',
-    'motivation_curiosity': '新しいことを知るのがうれしい',
-    'motivation_entrance': '希望する学校に進みたい'
-}
-df_melted['score_type'] = df_melted['score_type'].map(label_map)
-
-# 棒グラフの描画
-plt.figure(figsize=(12, 6))
-sns.barplot(x='juku_type', y='mean_score', hue='score_type', data=df_melted, palette='muted')
-plt.title('塾のタイプによる「勉強好き度」と「学習意欲の源泉」の違い')
-plt.xlabel('塾のタイプ')
-plt.ylabel('平均スコア (1〜4点: 高いほど当てはまる)')
-plt.legend(title='評価項目', bbox_to_anchor=(1.05, 1), loc='upper left')
-plt.ylim(2, 4)
-plt.tight_layout() # レイアウトの崩れを防ぐ
+plt.figure(figsize=(9, 5))
+sns.barplot(x='parent_info_score', y='child_experience_score', data=df_relation, palette='coolwarm')
+plt.title('親の情報アクセス力と子どものリアル体験の関連')
+plt.xlabel('親の情報アクセス力スコア (0〜4点: 能動的な進路情報源の利用数)')
+plt.ylabel('子どもの社会体験スコア平均 (0〜5点)')
+plt.ylim(1.5, 3.5)
 plt.show()
 
 # 数値表の表示
-print("■ 分析結果：塾のタイプごとの平均スコア")
-juku_grouped.columns = ['塾のタイプ', '勉強好き度', '新しいことを知る喜び', '希望校への進学意欲']
-display(juku_grouped)
+info_exp_table = df_relation.groupby('parent_info_score')['child_experience_score'].mean().reset_index()
+info_exp_table.columns = ['親の情報アクセス力スコア', '子どもの社会体験スコア平均']
+print("■ 集計①：親の情報収集行動の多さごとの、子どもの体験数平均")
+display(info_exp_table)
+
+
+# ---------------------------------------------------------
+# 分析②：経済力（収入）をコントロールした重回帰分析
+# ---------------------------------------------------------
+# 目的変数：子どもの社会体験スコア
+# 説明変数：親の世帯収入、親の情報アクセス力スコア
+X = df_relation[['ds0000000052_w1p', 'parent_info_score']]
+X = sm.add_constant(X) # 切片を追加
+y = df_relation['child_experience_score']
+
+model_relation = sm.OLS(y, X).fit()
+
+print("\n" + "="*60)
+print("重回帰分析による「体験格差」を決定づける要因の検証")
+print("="*60)
+print(model_relation.summary())
+print("\n※ ds0000000052_w1p = 世帯収入の影響（経済格差）")
+print("※ parent_info_score = 親の情報アクセス力の影響（情報格差）")
+print("※ P>|t| が 0.05 未満であれば、その要因は子どもの体験数に有意な影響を与えています。")
+
 
 # %%
-import scipy.stats as stats
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
-
-print("=========================================================")
-print("塾のタイプ間における各スコアの統計的有意差検定")
-print("=========================================================\n")
-
-# 検定対象のスコアとラベル
-scores_to_test = {
-    'study_like': '勉強が好き',
-    'motivation_curiosity': '新しいことを知るのがうれしい',
-    'motivation_entrance': '希望する学校に進みたい'
-}
-
-for score_col, score_name in scores_to_test.items():
-    print(f"■ 【{score_name}】の検定")
-    
-    # 各塾タイプのデータを抽出
-    group0 = df_juku[df_juku['juku_type'] == '0: 行っていない'][score_col]
-    group1 = df_juku[df_juku['juku_type'] == '1: プリント教室'][score_col]
-    group2 = df_juku[df_juku['juku_type'] == '2: 補習塾'][score_col]
-    group3 = df_juku[df_juku['juku_type'] == '3: 進学塾'][score_col]
-    
-    # 1. 一元配置分散分析 (ANOVA)
-    # 4つのグループの平均値に、少なくとも1つ以上の差があるかを検定します
-    f_val, p_val = stats.f_oneway(group0, group1, group2, group3)
-    
-    print(f"  [分散分析] p値 = {p_val:.4e}")
-    
-    if p_val < 0.05:
-        print("  => 全体として、少なくとも1つのグループ間に統計的に有意な差があります。")
-        print("  => どのグループ間に差があるか、多重比較検定を行います。\n")
-        
-        # 2. Tukeyの多重比較検定
-        # どの塾タイプとどの塾タイプの間に差があるのかを1対1で総当たりで検定します
-        tukey_result = pairwise_tukeyhsd(endog=df_juku[score_col], groups=df_juku['juku_type'], alpha=0.001)
-        print(tukey_result)
-        
-    else:
-        print("  => グループ間に統計的な有意差は見られませんでした。")
-        
-    print("\n" + "-"*60 + "\n")
-
-# %%
-import statsmodels.api as sm
-
 # =========================================================
-# アイデア案：「進学意欲と進学塾」の因果関係の切り分け
+# 分析①：身近な環境（親の学歴）による「見えない進路の壁」の可視化
 # =========================================================
 
-# 分析に必要な変数の抽出（Wave 1とWave 6のデータを結合して使用）
-columns_causal = [
-    'ds0000000371_w1c', # Wave1の進学意欲：入るのが難しいと言われる高校(大学)に入りたい
-    'ds0000000121_w1p', # Wave1の通塾：現在学習塾に行っているか
-    'ds0000000122_w1p', # Wave1の塾タイプ：どのような学習塾に通っているか
-    'ds0000000371_w6c', # Wave6の進学意欲：入るのが難しいと言われる高校(大学)に入りたい
-    'ds0000000121_w6p', # Wave6の通塾：現在学習塾に行っているか
-    'ds0000000122_w6p'  # Wave6の塾タイプ：どのような学習塾に通っているか
+# 分析に必要な変数の抽出
+columns_analysis1 = [
+    'ds0000000049_w1p', # 保護者最終学歴
+    'ds0000000046_w1p', # 配偶者最終学歴
+    'ds0000000198_w6c', # 子Wave6希望進学段階
+    'ds0000000371_w6c'  # 子Wave6難関校挑戦意欲
 ]
 
-df_causal = df[columns_causal].copy()
+df_analysis1 = df[columns_analysis1].copy()
 
-# 安全のため、すべて数値型に変換（文字列が混ざっているエラーを防ぐ）
-df_causal = df_causal.apply(pd.to_numeric, errors='coerce')
+# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外 [1]
+for col in columns_analysis1:
+    df_analysis1[col] = df_analysis1[col].replace(7777, np.nan)
+    df_analysis1[col] = df_analysis1[col].replace(8888, np.nan)
+    df_analysis1[col] = df_analysis1[col].replace(9999, np.nan)
 
-# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外
-for col in columns_causal:
-    df_causal[col] = df_causal[col].replace(7777, np.nan)
-    df_causal[col] = df_causal[col].replace(8888, np.nan)
-    df_causal[col] = df_causal[col].replace(9999, np.nan)
+# さらに希望進学段階の「9: まだ決めていない」「8:その他」もNaNに置換
+df_analysis1['ds0000000198_w6c'] = df_analysis1['ds0000000198_w6c'].replace([2, 3], np.nan)
 
-df_causal = df_causal.dropna()
-print(len(df_causal))
+df_analysis1 = df_analysis1.dropna()
+
 # ---------------------------------------------------------
 # データの加工
 # ---------------------------------------------------------
-# 進学意欲スコアの反転 (1:とても〜4:まったく を、数値が高いほど意欲が高いように反転)
-df_causal['motivation_w1'] = 5 - df_causal['ds0000000371_w1c']
-df_causal['motivation_w6'] = 5 - df_causal['ds0000000371_w6c']
+# ① 親の最終学歴が大卒以上（5:大学, 6:大学院）かどうか
+# どちらかが5または6なら1、そうでなければ0
+df_analysis1['has_univ_parent'] = df_analysis1.apply(
+    lambda row: 1 if row['ds0000000049_w1p'] in [5, 6] or row['ds0000000046_w1p'] in [5, 6] else 0, 
+    axis=1
+)
 
-# 各Waveで「進学塾に通っているか(1)」「それ以外(0)」のフラグを作成する関数
-def is_shingakujuku(row, w):
-    juku_exist = row[f'ds0000000121_w{w}p']
-    juku_type = row[f'ds0000000122_w{w}p']
-    # 塾に行っている(1) かつ 進学塾(3) の場合のみ 1 を返す
-    if juku_exist == 1 and juku_type == 3:
-        return 1
-    else:
-        return 0
+# ② 子どもの大学・大学院進学希望 (6:大学, 7:大学院 なら1, それ以外は0)
+df_analysis1['aim_univ'] = df_analysis1['ds0000000198_w6c'].apply(lambda x: 1 if x in [6, 7] else 0)
 
-df_causal['shingaku_w1'] = df_causal.apply(lambda row: is_shingakujuku(row, 1), axis=1)
-df_causal['shingaku_w6'] = df_causal.apply(lambda row: is_shingakujuku(row, 6), axis=1)
+# ③ 難関校挑戦意欲スコアの反転（値が大きいほど意欲が高いよう反転：5 - 現在の値）
+df_analysis1['challenge_spirit'] = 5 - df_analysis1['ds0000000371_w6c']
 
-# 純粋な効果を見るため、Wave1時点では進学塾に行っていなかった層のみに絞り込む
-df_causal_sub = df_causal[df_causal['shingaku_w1'] == 0].copy()
-
-# グラフ用のラベルを作成
-df_causal_sub['shingaku_label'] = df_causal_sub['shingaku_w6'].map({0: '行っていない/他の塾', 1: '進学塾に通っている'})
+# グラフ用ラベル
+df_analysis1['parent_edu_label'] = df_analysis1['has_univ_parent'].map(
+    {1: '大卒以上の親\n(ロールモデルあり)', 0: '非大卒の親\n(ロールモデルなし)'}
+)
 
 # ---------------------------------------------------------
-# 分析①：過去の意欲が未来の進学塾通いを決めるか？（選択効果）
+# グラフの描画と数値表の表示
 # ---------------------------------------------------------
-plt.figure(figsize=(8, 5))
-sns.barplot(x='motivation_w1', y='shingaku_w6', data=df_causal_sub, palette='Blues')
-plt.title('【選択効果】Wave 1(過去)の進学意欲と、Wave 6(未来)の進学塾通塾率の関連')
-plt.xlabel('Wave 1時点での進学意欲スコア (高いほど意欲あり)')
-plt.ylabel('Wave 6で進学塾に通っている割合')
+from IPython.display import display
+
+plt.figure(figsize=(12, 5))
+
+# グラフ①：進学希望割合の比較
+plt.subplot(1, 2, 1)
+sns.barplot(x='parent_edu_label', y='aim_univ', data=df_analysis1, palette='Set2')
+plt.title('親の学歴と子どもの大学・大学院進学希望割合')
+plt.xlabel('家庭の環境')
+plt.ylabel('大学・大学院進学を希望する割合')
+plt.ylim(0, 1)
+
+# グラフ②：挑戦意欲スコアの比較
+plt.subplot(1, 2, 2)
+sns.barplot(x='parent_edu_label', y='challenge_spirit', data=df_analysis1, palette='Set2')
+plt.title('親の学歴と子どもの難関校への挑戦意欲')
+plt.xlabel('家庭の環境')
+plt.ylabel('難難校挑戦意欲スコアの平均 (高いほど意欲あり)')
+plt.ylim(1, 4)
+
+plt.tight_layout()
 plt.show()
 
-# ---------------------------------------------------------
-# 分析②：進学塾に通うことが意欲を底上げするか？（因果効果）
-# ---------------------------------------------------------
-# 過去の意欲を揃えた上で、進学塾の有無でWave 6の意欲を比較するグラフ
-plt.figure(figsize=(10, 6))
-# pointplotを使って、意欲の推移の違いを線で表現します
-sns.pointplot(x='motivation_w1', y='motivation_w6', hue='shingaku_label', 
-              data=df_causal_sub, dodge=True, markers=['o', 's'], palette='Set1')
-plt.title('【因果効果】過去の意欲が同じでも、進学塾に行くことで未来の意欲は押し上げられるか？')
-plt.xlabel('Wave 1(過去)の進学意欲スコア')
-plt.ylabel('Wave 6(未来)の進学意欲スコア (平均)')
-plt.show()
+# 数値表の表示
+print("■ 集計結果：親の学歴環境ごとの、子どもの大学進学希望割合と挑戦意欲スコア平均")
+grouped1 = df_analysis1.groupby('parent_edu_label')[['aim_univ', 'challenge_spirit']].mean().reset_index()
+grouped1.columns = ['親の学歴環境', '大学進学希望割合', '難関校挑戦意欲スコア平均']
+display(grouped1)
 
-# 重回帰分析（OLS）による統計的な検証
-# W6の意欲を、W1の意欲とW6の進学塾ダミーで説明するモデル
-X = df_causal_sub[['motivation_w1', 'shingaku_w6']]
-X = sm.add_constant(X) # 切片を追加
-y = df_causal_sub['motivation_w6']
+# %%
+import scipy.stats as stats
+from IPython.display import display
 
-model = sm.OLS(y, X).fit()
+# =========================================================
+# 分析①のグラフの差に対する統計的仮説検定
+# =========================================================
 
-print("\n=========================================================")
-print("重回帰分析による進学塾の「純粋な押し上げ効果」の検証")
 print("=========================================================")
-print(model.summary())
-print("\n※ P>|t| が 0.05 より小さければ、その要因は統計的に意味のある影響を与えています。")
+print("分析①：親の学歴（ロールモデルの有無）による格差の統計的検証")
+print("=========================================================\n")
+
+# ---------------------------------------------------------
+# 検定①：大学・大学院進学希望割合の差（カイ二乗検定）
+# ---------------------------------------------------------
+# クロス集計表（分割表）を作成
+contingency_table = pd.crosstab(df_analysis1['has_univ_parent'], df_analysis1['aim_univ'])
+
+# 表示用に見やすいラベルを設定
+contingency_table_labeled = contingency_table.copy()
+contingency_table_labeled.index = ['非大卒の親 (ロールモデルなし)', '大卒以上の親 (ロールモデルあり)']
+contingency_table_labeled.columns = ['その他進路/未定', '大学・大学院進学希望']
+
+print("【検定①】進学希望に関するクロス集計表（実人数）:")
+display(contingency_table_labeled)
+
+# カイ二乗検定を実行
+chi2, p_value_chi2, dof, expected = stats.chi2_contingency(contingency_table)
+
+print("\n--- 独立性のカイ二乗検定 結果 ---")
+print(f"カイ二乗統計量 (Chi-squared): {chi2:.4f}")
+print(f"自由度 (dof): {dof}")
+print(f"p値 (p-value): {p_value_chi2:.4e}")  # 非常に小さいp値に対応するため指数表記
+
+if p_value_chi2 < 0.05:
+    print("⇒ 判定：【 統計的に有意な差あり (p < 0.05) 】")
+    print("  親が大卒以上かそうでないかによって、子どもの大学進学希望率には「明確な格差」が存在します。")
+else:
+    print("⇒ 判定：【 有意な差なし (p >= 0.05) 】")
+    print("  親の学歴による子どもの大学進学希望率の差は、誤差の範囲内である可能性があります。")
+
+
+print("\n" + "="*57 + "\n")
+
+# ---------------------------------------------------------
+# 検定②：難関校挑戦意欲スコアの平均値の差（ウェルチのt検定）
+# ---------------------------------------------------------
+# 2つのグループの意欲スコアデータを抽出
+group_univ = df_analysis1[df_analysis1['has_univ_parent'] == 1]['challenge_spirit']
+group_non_univ = df_analysis1[df_analysis1['has_univ_parent'] == 0]['challenge_spirit']
+
+print("【検定②】難関校挑戦意欲スコアの比較:")
+print(f"大卒親グループの意欲平均: {group_univ.mean():.4f}点 (サンプル数: {len(group_univ)}人)")
+print(f"非大卒親グループの意欲平均: {group_non_univ.mean():.4f}点 (サンプル数: {len(group_non_univ)}人)")
+
+# ウェルチのt検定を実行 (equal_var=False)
+t_stat, p_value_t = stats.ttest_ind(group_univ, group_non_univ, equal_var=False)
+
+print("\n--- ウェルチのt検定 (Welch's t-test) 結果 ---")
+print(f"t値 (t-statistic): {t_stat:.4f}")
+print(f"p値 (p-value): {p_value_t:.4e}")
+
+if p_value_t < 0.05:
+    print("⇒ 判定：【 統計的に有意な差あり (p < 0.05) 】")
+    print("  親の学歴の違いによって、子どもの難関校への挑戦意欲には統計的に「明確な格差」が存在します。")
+else:
+    print("⇒ 判定：【 有意な差なし (p >= 0.05) 】")
+    print("  挑戦意欲スコアの差は、統計的に確実な差とは言えず、偶然のばらつきの可能性があります。")
+print("=========================================================")
+
+
+# %%
+# =========================================================
+# 分析②：親以外の「外部ロールモデル接触」が意欲を底上げする効果の証明
+# =========================================================
+
+# 分析に必要な変数の抽出
+columns_analysis2 = [
+    'ds0000000052_w6p', # Wave6昨年の世帯収入
+    'ds0000000720_w3c', # Wave3親や先生以外の大人と話をする
+    'ds0000000363_w6c', # Wave6難しい・新しいことに挑戦したい（挑戦意欲）
+    'ds0000000368_w6c'  # Wave6将来の目標がはっきりしている（目標明確さ）
+]
+
+df_analysis2 = df[columns_analysis2].copy()
+
+# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外 [1]
+for col in columns_analysis2:
+    df_analysis2[col] = df_analysis2[col].replace(7777, np.nan)
+    df_analysis2[col] = df_analysis2[col].replace(8888, np.nan)
+    df_analysis2[col] = df_analysis2[col].replace(9999, np.nan)
+
+# 世帯収入の「11:答えたくない」も除外
+df_analysis2['ds0000000052_w6p'] = df_analysis2['ds0000000052_w6p'].replace(11, np.nan)
+
+df_analysis2 = df_analysis2.dropna()
+
+# ---------------------------------------------------------
+# データの加工
+# ---------------------------------------------------------
+# ① 中学時の外部大人との対話頻度（値が大きいほど会話が多いよう反転：5 - w3c）
+df_analysis2['adult_talk_freq'] = 5 - df_analysis2['ds0000000720_w3c']
+
+# ② 高校時の挑戦意欲スコアの反転（5 - w6c）
+df_analysis2['challenge_spirit_w6'] = 5 - df_analysis2['ds0000000363_w6c']
+
+# ③ 高校時の目標明確さスコアの反転（5 - w6c）
+df_analysis2['clear_target_w6'] = 5 - df_analysis2['ds0000000368_w6c']
+
+# ---------------------------------------------------------
+# グラフの描画と数値表の表示
+# ---------------------------------------------------------
+plt.figure(figsize=(12, 5))
+
+# グラフ①：外部大人との話す頻度と挑戦意欲
+plt.subplot(1, 2, 1)
+sns.barplot(x='adult_talk_freq', y='challenge_spirit_w6', data=df_analysis2, palette='Blues')
+plt.title('中学時の外部大人との対話頻度と高校時の挑戦意欲')
+plt.xlabel('親・先生以外の大人との対話頻度 (1:まったくない 〜 4:よくある)')
+plt.ylabel('高校時の挑戦意欲平均スコア')
+plt.ylim(1, 4)
+
+# グラフ②：外部大人との話す頻度と目標の明確さ
+plt.subplot(1, 2, 2)
+sns.barplot(x='adult_talk_freq', y='clear_target_w6', data=df_analysis2, palette='Blues')
+plt.title('中学時の外部大人との対話頻度と高校時の目標明確さ')
+plt.xlabel('親・先生以外の大人との対話頻度 (1:まったくない 〜 4:よくある)')
+plt.ylabel('高校時の目標の明確さ平均スコア')
+plt.ylim(1, 4)
+
+plt.tight_layout()
+plt.show()
+
+# ---------------------------------------------------------
+# 重回帰分析 OLS による統計的な検証
+# ---------------------------------------------------------
+import statsmodels.api as sm
+
+print("■ 分析②-1：高校時の「挑戦意欲」に対する、中学時の外部大人との対話効果（世帯収入をコントロール）")
+X1 = df_analysis2[['ds0000000052_w6p', 'adult_talk_freq']]
+X1 = sm.add_constant(X1)
+y1 = df_analysis2['challenge_spirit_w6']
+model1 = sm.OLS(y1, X1).fit()
+display(model1.summary())
+
+print("\n■ 分析②-2：高校時の「将来目標の明確さ」に対する、中学時の外部大人との対話効果（世帯収入をコントロール）")
+X2 = df_analysis2[['ds0000000052_w6p', 'adult_talk_freq']]
+X2 = sm.add_constant(X2)
+y2 = df_analysis2['clear_target_w6']
+model2 = sm.OLS(y2, X2).fit()
+display(model2.summary())
+
+# %%
+# =========================================================
+# 分析③：早期接触の因果関係（時間差効果）の証明
+# =========================================================
+
+# 分析に必要な変数の抽出
+columns_analysis3 = [
+    'ds0000000720_w3c', # Wave3親や先生以外の大人と話をする
+    'ds0000000280_w7c', # Wave7進路について深く考える（子経験）
+    'ds0000000336_w7c'  # Wave7自分で決めて行動すること（得意・苦手）
+]
+
+df_analysis3 = df[columns_analysis3].copy()
+
+# 欠損値（7777, 8888, 9999）を一括でNaNに置換して除外 [1]
+for col in columns_analysis3:
+    df_analysis3[col] = df_analysis3[col].replace(7777, np.nan)
+    df_analysis3[col] = df_analysis3[col].replace(8888, np.nan)
+    df_analysis3[col] = df_analysis3[col].replace(9999, np.nan)
+
+df_analysis3 = df_analysis3.dropna()
+
+# ---------------------------------------------------------
+# データの加工
+# ---------------------------------------------------------
+# ① 中学時の外部の大人との対話の有無 (1:よく話す, 2:ときどき話す なら「1:対話あり」、3, 4なら「0:対話なし」)
+df_analysis3['had_adult_talk_w3'] = df_analysis3['ds0000000720_w3c'].apply(lambda x: 1 if x in [1, 2] else 0)
+
+# ② 高校時の「自分で決めて行動すること」の得意スコアの反転（5 - w7c）
+df_analysis3['self_decision_skill_w7'] = 5 - df_analysis3['ds0000000336_w7c']
+
+# グラフ用ラベル
+df_analysis3['adult_talk_label'] = df_analysis3['had_adult_talk_w3'].map(
+    {1: '中学時：親・先生以外の大人との対話あり', 0: '中学時：対話なし'}
+)
+
+# ---------------------------------------------------------
+# グラフの描画と数値表の表示
+# ---------------------------------------------------------
+plt.figure(figsize=(12, 5))
+
+# グラフ①：進路について深く考える経験の比較
+plt.subplot(1, 2, 1)
+sns.barplot(x='adult_talk_label', y='ds0000000280_w7c', data=df_analysis3, palette='Pastel1')
+plt.title('中学時の外部大人との対話有無と、高校時の「進路を深く考える経験」割合')
+plt.xlabel('中学時の環境')
+plt.ylabel('高校時に進路について深く考えた割合')
+plt.ylim(0, 1)
+
+# グラフ②：自分で決めて行動することの得意スコアの比較
+plt.subplot(1, 2, 2)
+sns.barplot(x='adult_talk_label', y='self_decision_skill_w7', data=df_analysis3, palette='Pastel1')
+plt.title('中学時の外部大人との対話有無と、高校時の「自分で決めて行動する得意度」')
+plt.xlabel('中学時の環境')
+plt.ylabel('自分で決めて行動する得意スコア平均 (高いほど得意)')
+plt.ylim(1, 4)
+
+plt.tight_layout()
+plt.show()
+
+# 集計表の表示
+print("■ 集計結果：中学時の外部大人との対話有無による、高校時（Wave 7）のキャリア行動の差異")
+grouped3 = df_analysis3.groupby('adult_talk_label')[['ds0000000280_w7c', 'self_decision_skill_w7']].mean().reset_index()
+grouped3.columns = ['中学時の対話環境', '高校時：進路を深く考えた割合', '高校時：自律的決定の得意スコア平均']
+display(grouped3)
 
 
