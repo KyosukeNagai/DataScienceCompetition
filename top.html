@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="ja">
   <head>
@@ -554,30 +555,559 @@
             文科省『学校基本調査』およびベネッセ教育総合研究所の公開データを用いた実証分析結果です。
           </p>
         </div>
+=======
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>足跡 ~ Be Challenger | 中高生向けキャリアトラッキングサービス</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0084C9;
+      --primary-dark: #005F91;
+      --primary-light: #EBF6FC;
+      --accent: #FF7700;
+      --accent-hover: #E05F00;
+      --text-main: #1E293B;
+      --text-sub: #64748B;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --border: #E2E8F0;
+      --radius: 8px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 6px 20px rgba(0, 132, 201, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ヘッダー */
+    header {
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .header-utility {
+      background: #F1F5F9;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      padding: 0.3rem 1.5rem;
+    }
+
+    .header-utility-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .header-main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0.75rem 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .brand-title span {
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .nav-menu a {
+      color: var(--text-main);
+      transition: color 0.2s;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary);
+    }
+
+    .btn-cta-nav {
+      background: var(--accent);
+      color: #FFFFFF !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .btn-cta-nav:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ヒーローセクション */
+    .hero {
+      /* ブルーのグラデーションオーバーレイ ＋ フリー画像 */
+      background: 
+        linear-gradient(135deg, rgba(0, 95, 145, 0.22) 0%, rgba(0, 45, 75, 0.23) 100%),
+        url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80') center center / cover no-repeat;
+      color: #FFFFFF;
+      padding: 95px 0 85px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0, 30, 60, 0.6); /* バッジの背景を少し引き締め */
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.45;
+      margin-bottom: 1.25rem;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero h1 .highlight {
+      color: #FFD200;
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      max-width: 720px;
+      margin: 0 auto 2.25rem;
+      color: #FFFFFF;
+      line-height: 1.8;
+      font-weight: 500;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-main-action {
+      background: var(--accent);
+      color: #FFFFFF;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(255, 119, 0, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-main-action:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-sub-action {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid #FFFFFF;
+      color: #FFFFFF;
+      padding: 0.85rem 1.75rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .btn-sub-action:hover {
+      background: #FFFFFF;
+      color: var(--primary-dark);
+    }
+
+    /* 共通セクション */
+    section {
+      padding: 70px 0;
+    }
+
+    .section-title-wrap {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* 課題仮説フロー */
+    .problem-section {
+      background: #FFFFFF;
+    }
+
+    .flow-steps {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .flow-card {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .flow-card strong {
+      color: var(--primary-dark);
+      display: block;
+      font-size: 0.98rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-divider {
+      text-align: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin: -0.4rem 0;
+    }
+
+    .flow-card-conclusion {
+      border-left-color: var(--accent);
+      background: #FFF9F2;
+      border-color: #FED7AA;
+    }
+
+    .flow-card-conclusion strong {
+      color: var(--accent-hover);
+    }
+
+    /* データ検証カード */
+    .data-section {
+      background: #F1F5F9;
+    }
+
+    .data-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .data-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--primary);
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .data-card.accent-border {
+      border-top-color: var(--accent);
+    }
+
+    .data-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .data-stat {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .data-card.accent-border .data-stat {
+      color: var(--accent);
+    }
+
+    .data-desc {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* サービスの使い方（4ステップ） */
+    .how-section {
+      background: #FFFFFF;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .step-item {
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+    }
+
+    .step-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 1rem;
+    }
+
+    .step-item h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-item p {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* 下部CTAバナー */
+    .bottom-cta {
+      background: linear-gradient(135deg, #005F91 0%, #003653 100%);
+      color: #FFFFFF;
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .bottom-cta h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .bottom-cta p {
+      font-size: 0.9rem;
+      color: #E2F2FC;
+      margin-bottom: 1.75rem;
+    }
+
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 1.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ユーティリティバー -->
+  <aside class="header-utility">
+    <div class="header-utility-inner">
+      <span>中高生向け進路・キャリア伴走サービス［プロトタイプ］</span>
+      <span>3大学（関西・中央・法政）共催 データサイエンス・アイデアコンテスト2026</span>
+    </div>
+  </aside>
+
+  <!-- ヘッダー -->
+  <header>
+    <div class="header-main">
+      <a href="top.html" class="brand">
+        <span class="brand-icon">TRACK</span>
+        <div class="brand-title">足跡 <span>~ Be Challenger</span></div>
+      </a>
+      <nav class="nav-menu">
+        <a href="#problem">課題の背景</a>
+        <a href="#data">データ分析</a>
+        <a href="#how">使い方</a>
+        <!-- 先ほど作成した検索・詳細ページへ遷移 -->
+        <a href="search_results.html">先輩を探す</a>
+        <a href="search_results.html" class="btn-cta-nav">軌跡を検索する</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ヒーローエリア -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-badge">身近にロールモデルがいなくても大丈夫</span>
+      <h1>
+        あなたの悩みを、<br>
+        <span class="highlight">乗り越えた先輩の軌跡</span>が支える。
+      </h1>
+      <p>
+        「地方から首都圏の大学に行きたいが相談相手がいない」「模試の判定が落ちて諦めそう」――<br>
+        全国規模で集めた先輩たちの「つまずきと再起のストーリー」が、次の一歩を踏み出す挑戦心を後押しします。
+      </p>
+      <div class="hero-actions">
+        <!-- 検索結果・絞り込みページへ遷移 -->
+        <a href="search_results.html" class="btn-main-action">先輩の軌跡を探す（検索デモへ）</a>
+        <a href="#data" class="btn-sub-action">データ分析の根拠を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 課題意識（3つの仮説） -->
+  <section class="problem-section" id="problem">
+    <div class="container">
+      <div class="section-title-wrap">
+        <h2 class="section-title">なぜ「足跡」が必要なのか</h2>
+        <p class="section-sub">地方中高生が直面する構造的な機会格差を、データサイエンスに基づく3つの仮説で整理しました。</p>
+      </div>
+
+      <div class="flow-steps">
+        <div class="flow-card">
+          <strong>仮説①：地方の学生には身近なロールモデルが不足している</strong>
+          学校進学者の約70％が都市部に集中。都市部と地方では大学進学率に約30ポイントの開きがあり、多様な進路を歩む先輩に出会える機会が物理的に遮断されています。
+        </div>
+        <div class="flow-divider">↓</div>
+        <div class="flow-card">
+          <strong>仮説②：ロールモデルがいないと挫折時に立ち直りにくい</strong>
+          大きな失敗経験によるマイナス影響を制御しても、身近に相談相手がいることで自信を回復できる確率が統計的に有意（オッズ比約1.18倍）に高まることが判明しています。
+        </div>
+        <div class="flow-divider">↓</div>
+        <div class="flow-card">
+          <strong>仮説③：挫折を乗り越える経験こそが将来の挑戦意欲を伸ばす</strong>
+          7年追跡パネルデータより、順風満帆に育った層と比べても「挫折を乗り越えた経験を持つ層」は将来の挑戦意欲が約1.47倍（1%水準で有意）高いことが実証されています。
+        </div>
+        <div class="flow-divider">↓</div>
+        <div class="flow-card flow-card-conclusion">
+          <strong>結論：全国規模で「自分と同じ悩みから立ち直った先輩の軌跡」を届ける必要があります。</strong>
+          環境の格差によって挑戦を諦める生徒をなくし、誰もが立ち直れる社会を目指します。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- データ分析・統計的根拠 -->
+  <section class="data-section" id="data">
+    <div class="container">
+      <div class="section-title-wrap">
+        <h2 class="section-title">データが示す機会格差の実態</h2>
+        <p class="section-sub">文科省『学校基本調査』およびベネッセ教育総合研究所の公開データを用いた実証分析結果です。</p>
+      </div>
+>>>>>>> 4fde0afd10e476dfed028df8149db5587f4dbc07
 
       <div class="data-cards">
         <div class="data-card">
           <h3>進学先の都市部集中</h3>
+<<<<<<< HEAD
           <div class="data-stat">
             <span class="stat-sub">約</span>
             <span>70</span><span class="stat-unit">%</span>
           </div>
           <p class="data-desc">
             進学者の大半が都市部に集中しており、地方在住の中高生は生活圏内で多様なロールモデルに出会う機会を構造的に奪われています。
+=======
+          <div class="data-stat">約 70%</div>
+          <p class="data-desc">
+            大学進学者の大半が都市部に集中しており、地方在住の中高生は生活圏内で多様なロールモデルに出会う機会を構造的に奪われています。
+>>>>>>> 4fde0afd10e476dfed028df8149db5587f4dbc07
           </p>
         </div>
         <div class="data-card accent-border">
           <h3>ロールモデルと自信回復</h3>
+<<<<<<< HEAD
           <div class="data-stat">
             <span class="stat-sub">オッズ比</span>
             <span>1.18</span><span class="stat-unit">倍</span>
           </div>
           <p class="data-desc">
             挫折や困難に直面した際、相談できるロールモデルがいることで、自信を回復できる確率が有意に高まることが判明しました。
+=======
+          <div class="data-stat">オッズ比 1.18倍</div>
+          <p class="data-desc">
+            挫折や困難に直面した際、相談できるロールモデルの存在が立ち直る（自信を回復する）確率を有意に高めることが判明しました。
+>>>>>>> 4fde0afd10e476dfed028df8149db5587f4dbc07
           </p>
         </div>
         <div class="data-card">
           <h3>挫折克服と将来の挑戦心</h3>
+<<<<<<< HEAD
           <div class="data-stat">
             <span class="stat-sub">約</span>
             <span>1.47</span><span class="stat-unit">倍</span>
@@ -655,3 +1185,65 @@
     </footer>
   </body>
 </html>
+=======
+          <div class="data-stat">約 1.47倍</div>
+          <p class="data-desc">
+            パネルデータ分析より、壁にぶつかり乗り越えた経験を持つ層は、そうでない層と比較して将来の挑戦意欲が有意に高い状態が持続します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使い方（4ステップ） -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="section-title-wrap">
+        <h2 class="section-title">足跡（アシアト）の使い方</h2>
+        <p class="section-sub">アンケートによる周辺情報の登録から、最適な先輩のタイムライン閲覧までの流れです。</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <h4>状況・悩みを入力</h4>
+          <p>学年・地域・文理・直面している悩み（相談相手不在や模試判定など）を簡単に入力します。</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <h4>最適な先輩とマッチング</h4>
+          <p>データベースから、あなたと似た出発点やつまずきを経験した先輩の軌跡を抽出します。</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <h4>挫折と再起のプロセスを見る</h4>
+          <p>先輩が「いつ・何に悩み・どう行動して乗り越えたか」を時系列のタイムラインで確認できます。</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <h4>次の一歩を踏み出す</h4>
+          <p>同じ壁を乗り越えた具体的な足跡を知ることで、自分の進路選択に自信を持って挑戦できます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下部CTA -->
+  <section class="bottom-cta">
+    <div class="container">
+      <h2>あなたの一歩を、先輩の軌跡が後押しします。</h2>
+      <p>全国の先輩たちが乗り越えてきたリアルなストーリーを、今すぐチェックしてみましょう。</p>
+      <a href="search_results.html" class="btn-main-action">先輩の軌跡を探す（検索デモへ）</a>
+    </div>
+  </section>
+
+  <!-- フッター -->
+  <footer>
+    <div class="container">
+      3大学（関西・中央・法政）共催 データサイエンス・アイデアコンテスト2026 | キャリアトラッキングサービス『足跡 ~ Be Challenger』
+    </div>
+  </footer>
+
+</body>
+</html>
+>>>>>>> 4fde0afd10e476dfed028df8149db5587f4dbc07
