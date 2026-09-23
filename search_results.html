@@ -1,0 +1,1705 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>先輩を探す | 足跡 ~ Be Challenger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #0084c9;
+        --primary-dark: #005f91;
+        --primary-light: #ebf6fc;
+        --accent: #ff7700;
+        --accent-hover: #e05f00;
+        --tag-red: #e11d48;
+        --tag-green: #0d9488;
+        --text-main: #1e293b;
+        --text-sub: #64748b;
+        --bg-page: #f8fafc;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --radius: 8px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Noto Sans JP", sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-main);
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      header {
+        background: #ffffff;
+        border-bottom: 2px solid var(--primary);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+      }
+
+      .header-utility {
+        background: #f1f5f9;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.72rem;
+        color: var(--text-sub);
+        padding: 0.3rem 1.5rem;
+      }
+
+      .header-utility-inner {
+        max-width: 1240px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .header-main {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .brand:hover {
+        opacity: 0.85;
+      }
+
+      .brand-icon {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.85rem;
+        padding: 0.25rem 0.55rem;
+        border-radius: 4px;
+      }
+
+      .brand-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .brand-title span {
+        color: var(--accent);
+        font-size: 0.95rem;
+      }
+
+      .user-pill {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        padding: 0.35rem 0.8rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        transition: background 0.2s;
+      }
+      .user-pill:hover {
+        background: var(--primary-light);
+      }
+
+      .user-pill-avatar {
+        width: 24px;
+        height: 24px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+
+      .container {
+        max-width: 1240px;
+        margin: 1.5rem auto 3rem;
+        padding: 0 1.5rem;
+        display: grid;
+        grid-template-columns: 310px 1fr;
+        gap: 1.75rem;
+      }
+
+      /* 検索フィルターサイドバー */
+      .filter-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 90px;
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
+      }
+
+      .filter-header {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        border-bottom: 2px solid var(--primary-light);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .filter-reset {
+        font-size: 0.72rem;
+        color: var(--text-sub);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .filter-group {
+        margin-bottom: 1.15rem;
+      }
+
+      .filter-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.35rem;
+        display: block;
+      }
+
+      .select-control,
+      .input-control {
+        width: 100%;
+        padding: 0.5rem 0.65rem;
+        font-size: 0.8rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      .chips-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+
+      .chip-btn {
+        background: #f1f5f9;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0.3rem 0.55rem;
+        font-size: 0.74rem;
+        cursor: pointer;
+        color: var(--text-main);
+        transition: all 0.2s;
+      }
+
+      .chip-btn.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        font-weight: 700;
+      }
+
+      /* メインコンテンツ */
+      .content-area {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .summary-badge {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--accent);
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: var(--text-sub);
+      }
+      .summary-badge strong {
+        color: var(--text-main);
+      }
+
+      .count-bar {
+        font-size: 0.85rem;
+        color: var(--text-sub);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .count-bar span {
+        font-weight: 700;
+        color: var(--accent);
+        font-size: 1.1rem;
+      }
+
+      .cards-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+
+      .mentor-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.15rem 1.25rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s;
+      }
+
+      .mentor-card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .card-left {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      /* 先輩一覧カードのアイコン（LINE風の丸型） */
+      .avatar-box {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%; /* 四角から完全な丸型へ */
+        overflow: hidden;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+      }
+
+      .avatar-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 25%; /* ★上から15%の位置を基準にして頭の見切れを防ぐ */
+        display: block;
+
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: auto;
+        transform: translateZ(0);
+      }
+
+      /* モーダル詳細画面のアイコン（LINE風丸型） */
+      .detail-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 2px solid #bae6fd;
+      }
+
+      .detail-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 15%; /* ★同様に上部優先 */
+        display: block;
+      }
+
+      .card-meta h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.15rem;
+      }
+
+      .card-meta .affiliation {
+        font-size: 0.82rem;
+        color: var(--primary-dark);
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      .card-tags {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        font-size: 0.68rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        background: #f1f5f9;
+        color: var(--text-sub);
+      }
+      .tag-origin {
+        background: #e0f2fe;
+        color: #0284c7;
+        font-weight: 600;
+      }
+      .tag-trouble {
+        background: #ffe4e6;
+        color: #be123c;
+        font-weight: 600;
+      }
+      .tag-career {
+        background: #fef3c7;
+        color: #b45309;
+        font-weight: 600;
+      }
+
+      .card-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .match-percent {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .match-percent small {
+        font-size: 0.7rem;
+        color: var(--text-sub);
+        font-weight: 400;
+        margin-right: 2px;
+      }
+
+      .btn-detail {
+        background: var(--primary);
+        color: #ffffff;
+        border: none;
+        padding: 0.45rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-detail:hover {
+        background: var(--primary-dark);
+      }
+
+      .no-results {
+        padding: 3.5rem 1rem;
+        text-align: center;
+        background: #fff;
+        border: 1px dashed var(--border);
+        border-radius: var(--radius);
+        color: var(--text-sub);
+        font-size: 0.88rem;
+        display: none;
+      }
+
+      /* モーダル詳細画面 */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .detail-card {
+        background: #ffffff;
+        width: 100%;
+        max-width: 860px;
+        max-height: 90vh;
+        border-radius: var(--radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: modalFadeIn 0.2s ease-out;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .detail-header {
+        padding: 1.1rem 1.5rem;
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .btn-back {
+        background: none;
+        border: 1px solid var(--border);
+        padding: 0.35rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: var(--text-sub);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .btn-back:hover {
+        background: #f8fafc;
+        color: var(--text-main);
+      }
+
+      .detail-body {
+        padding: 1.5rem 1.75rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .detail-profile-box {
+        display: flex;
+        gap: 1.25rem;
+        align-items: flex-start;
+        padding-bottom: 1.2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .detail-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        background: var(--primary-light);
+        display: grid;
+        place-items: center;
+        font-size: 1.8rem;
+        flex-shrink: 0;
+      }
+
+      .detail-profile-info h2 {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 0.2rem;
+      }
+
+      .detail-affiliation {
+        font-size: 0.88rem;
+        color: var(--primary-dark);
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+      }
+
+      .detail-tags-row {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+
+      .section-head {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .timeline {
+        position: relative;
+        padding-left: 1.75rem;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: #cbd5e1;
+      }
+
+      .timeline-node {
+        position: relative;
+        margin-bottom: 1.25rem;
+      }
+      .timeline-node:last-child {
+        margin-bottom: 0;
+      }
+
+      .node-mark {
+        position: absolute;
+        left: -1.75rem;
+        top: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid #94a3b8;
+      }
+      .timeline-node.failure .node-mark {
+        border-color: var(--tag-red);
+        background: #ffe4e6;
+      }
+      .timeline-node.action .node-mark {
+        border-color: var(--accent);
+        background: #ffedd5;
+      }
+      .timeline-node.success .node-mark {
+        border-color: var(--tag-green);
+        background: #ccfbf1;
+      }
+
+      .node-time {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-sub);
+      }
+      .node-title {
+        font-size: 0.86rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+      .timeline-node.failure .node-title {
+        color: var(--tag-red);
+      }
+      .timeline-node.action .node-title {
+        color: var(--accent-hover);
+      }
+      .timeline-node.success .node-title {
+        color: var(--tag-green);
+      }
+
+      .node-desc {
+        font-size: 0.82rem;
+        background: #f8fafc;
+        border-radius: 6px;
+        padding: 0.7rem 0.85rem;
+        border-left: 3px solid #cbd5e1;
+        line-height: 1.6;
+      }
+      .timeline-node.failure .node-desc {
+        border-left-color: var(--tag-red);
+        background: #fff5f5;
+      }
+      .timeline-node.action .node-desc {
+        border-left-color: var(--accent);
+        background: #fff9f5;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .grid-item span.label {
+        color: var(--text-sub);
+        font-weight: 700;
+        display: block;
+        font-size: 0.72rem;
+        margin-bottom: 0.2rem;
+      }
+      .grid-item span.value {
+        font-weight: 500;
+        color: var(--text-main);
+        line-height: 1.5;
+      }
+
+      .detail-footer {
+        padding: 0.85rem 1.5rem;
+        border-top: 1px solid var(--border);
+        background: #f8fafc;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+      }
+
+      footer {
+        background: #ffffff;
+        border-top: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--text-sub);
+      }
+
+      @media (max-width: 900px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+        .filter-box {
+          position: static;
+          max-height: none;
+        }
+        .mentor-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .card-right {
+          width: 100%;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .detail-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="header-utility">
+      <div class="header-utility-inner">
+        <span
+          >中高生向け進路・キャリアトラッキングサービス［プロトタイプ］</span
+        >
+        <span
+          >3大学（関西・中央・法政）共催
+          データサイエンス・アイデアコンテスト2026</span
+        >
+      </div>
+    </aside>
+
+    <header>
+      <div class="header-main">
+        <a href="top.html" class="brand" title="トップページに戻る">
+          <span class="brand-icon">TRACK</span>
+          <div class="brand-title">足跡 <span>~ Be Challenger</span></div>
+        </a>
+        <a
+          href="mypage.html"
+          class="user-pill"
+          title="マイページで登録情報を確認・変更する"
+        >
+          <div class="user-pill-avatar" id="globalUserAvatar">高</div>
+          <span id="globalUserBadgeText">高校2年生（秋田県・理系志望）</span>
+          <span
+            style="
+              font-size: 0.7rem;
+              color: var(--primary);
+              font-weight: 700;
+              margin-left: 2px;
+            "
+            >設定 ⚙</span
+          >
+        </a>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- 拡充された検索・絞り込みサイドバー -->
+      <aside class="filter-box">
+        <div class="filter-header">
+          <span>条件から絞り込む</span>
+          <span class="filter-reset" onclick="resetFilters()"
+            >すべてリセット</span
+          >
+        </div>
+
+        <!-- 出身地域区分 -->
+        <div class="filter-group">
+          <label class="filter-label">① 出身地域区分</label>
+          <select
+            class="select-control"
+            id="regionSelect"
+            onchange="filterData()"
+          >
+            <option value="all">すべての地域</option>
+            <option value="local">地方部（東北・四国・山陰・九州など）</option>
+            <option value="city">大都市圏（東京・神奈川・大阪など）</option>
+          </select>
+        </div>
+
+        <!-- 出身高校の種別 -->
+        <div class="filter-group">
+          <label class="filter-label">② 出身高校の種別</label>
+          <select
+            class="select-control"
+            id="schoolTypeSelect"
+            onchange="filterData()"
+          >
+            <option value="all">すべての高校種別</option>
+            <option value="public_general">公立高校（普通科）</option>
+            <option value="private">私立高校（一貫校含む）</option>
+            <option value="vocational">専門学科（商業・工業・情報）</option>
+          </select>
+        </div>
+
+        <!-- 学問分野 -->
+        <div class="filter-group">
+          <label class="filter-label">③ 学問・進学分野</label>
+          <select
+            class="select-control"
+            id="majorSelect"
+            onchange="filterData()"
+          >
+            <option value="all">すべての分野</option>
+            <option value="science">理工・情報・自然科学</option>
+            <option value="cross">文理融合（情報デザイン・総合政策）</option>
+            <option value="humanities">人文・社会・法・経済</option>
+          </select>
+        </div>
+
+        <!-- 先輩の現在のステータス -->
+        <div class="filter-group">
+          <label class="filter-label">④ 先輩の現在の立場</label>
+          <select
+            class="select-control"
+            id="statusSelect"
+            onchange="filterData()"
+          >
+            <option value="all">すべて表示</option>
+            <option value="student">現役大学生（学部生・院生）</option>
+            <option value="worker">社会人（企業勤務・起業）</option>
+          </select>
+        </div>
+
+        <!-- 克服した悩み・壁（チップ選択） -->
+        <div class="filter-group">
+          <label class="filter-label">⑤ 当時ぶつかった悩み・壁</label>
+          <div class="chips-group" id="troubleChips">
+            <button
+              class="chip-btn active"
+              data-val="all"
+              onclick="setTrouble('all', this)"
+            >
+              すべて
+            </button>
+            <button
+              class="chip-btn"
+              data-val="no-model"
+              onclick="setTrouble('no-model', this)"
+            >
+              身近に相談相手不在
+            </button>
+            <button
+              class="chip-btn"
+              data-val="exam-failure"
+              onclick="setTrouble('exam-failure', this)"
+            >
+              模試E判定・学力の壁
+            </button>
+            <button
+              class="chip-btn"
+              data-val="ronin"
+              onclick="setTrouble('ronin', this)"
+            >
+              浪人・受験失敗
+            </button>
+            <button
+              class="chip-btn"
+              data-val="mismatch"
+              onclick="setTrouble('mismatch', this)"
+            >
+              文理・進路ミスマッチ
+            </button>
+            <button
+              class="chip-btn"
+              data-val="cost"
+              onclick="setTrouble('cost', this)"
+            >
+              学費・経済的自立の壁
+            </button>
+          </div>
+        </div>
+
+        <!-- 参考になった相談相手 -->
+        <div class="filter-group">
+          <label class="filter-label">⑥ 当時の主な相談相手</label>
+          <select
+            class="select-control"
+            id="adviserSelect"
+            onchange="filterData()"
+          >
+            <option value="all">指定なし</option>
+            <option value="online">ネット・合格ブログ・YouTube</option>
+            <option value="teacher">高校・予備校の教員</option>
+            <option value="senior">オープンキャンパス・部活の先輩</option>
+            <option value="none">相談相手がおらず独学</option>
+          </select>
+        </div>
+      </aside>
+
+      <main class="content-area">
+        <div class="summary-badge">
+          <div>
+            <strong>ロールモデル効果（実証済）:</strong>
+            身近に相談相手がいることで自信を回復できる確率が約18％増加することが証明されています。
+          </div>
+        </div>
+
+        <div class="count-bar">
+          <div>該当する先輩の足跡：<span id="resultCount">10</span> 件</div>
+          <div style="font-size: 0.75rem">※条件との一致度順に表示中</div>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid"></div>
+
+        <div class="no-results" id="noResults">
+          条件に一致する先輩が見つかりませんでした。<br />条件を広げて再検索してみてください。
+        </div>
+      </main>
+    </div>
+
+    <!-- 詳細モーダルカルテ -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="detail-card">
+        <div class="detail-header">
+          <button class="btn-back" onclick="closeDetail()">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            検索結果に戻る
+          </button>
+          <span
+            style="font-size: 0.8rem; font-weight: 700; color: var(--text-sub)"
+            >先輩の足跡カルテ</span
+          >
+        </div>
+
+        <div class="detail-body">
+          <div class="detail-profile-box">
+            <div class="detail-avatar" id="modalAvatar">🎓</div>
+            <div class="detail-profile-info">
+              <h2 id="modalName">先輩名</h2>
+              <div class="detail-affiliation" id="modalAffiliation">
+                所属情報
+              </div>
+              <div class="detail-tags-row" id="modalTags"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-head">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              つまずきと立ち直りのタイムライン
+            </div>
+            <div class="timeline" id="modalTimeline"></div>
+          </div>
+
+          <div>
+            <div class="section-head">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              当時のアンケート・振り返りデータ（参考）
+            </div>
+            <div class="detail-grid" id="modalSurveyGrid"></div>
+          </div>
+        </div>
+
+        <div class="detail-footer">
+          <button class="btn-back" onclick="closeDetail()">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        3大学（関西・中央・法政）共催 データサイエンス・アイデアコンテスト2026 |
+        キャリアトラッキングサービス『足跡 ~ Be Challenger』
+      </p>
+    </footer>
+
+    <script>
+      // 拡充された先輩データベース（10名）
+      const mentors = [
+        {
+          id: 1,
+          name: "先輩 N.K さん",
+          avatar: "image/counton_suit_man_mono.png",
+          univ: "中央大学 理工学部 情報工学科 3年",
+          career:
+            "秋田県立高校出身 ｜ IT企業でWebエンジニアとして長期インターン中",
+          region: "local",
+          schoolType: "public_general",
+          major: "science",
+          status: "student",
+          troubles: ["no-model", "exam-failure"],
+          adviserGroup: "online",
+          originText: "秋田県（地方公立高校）",
+          troubleText: "相談相手不在・模試E判定",
+          statusText: "現役大学生（学部3年）",
+          matchRate: 95,
+          timeline: [
+            {
+              type: "failure",
+              time: "高2 11月",
+              title: "地方校からの孤立と模試E判定",
+              desc: "東京の情報系学部に行きたかったのですが、高校から過去に進学した人がほとんどおらず、先生からも地元の国公立を勧められていました。秋の模試でもE判定を取ってしまい、『自分には高望みすぎるのかな』と落ち込みました。",
+            },
+            {
+              type: "action",
+              time: "高3 春",
+              title: "ネットの合格体験記を分析して計画を再構築",
+              desc: "同じように地方公立から独学で合格した人の勉強ブログを何本も読み込みました。学校のペースに合わせるだけでなく、基礎問題集を1冊完璧に解き直す習慣を作ったことで、少しずつ模試の点数が伸び始めました。",
+            },
+            {
+              type: "success",
+              time: "大学3年 現在",
+              title: "念願の学科に合格し、開発スキルを磨いています",
+              desc: "無事に第一志望に合格できました。大学の授業は専門的で大変ですが、サークルで仲間とWebサービスを作ったり、長期インターンに参加したりして、あのとき諦めずに挑戦して本当に良かったと思っています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "ネット上の合格体験ブログ、YouTubeの解説動画（身近に相談相手がいませんでした）",
+            decisionReason:
+              "地元にいた頃に感じていた『地域による情報アクセスの格差』を、ITの力で解決したいと思ったためです",
+            usefulInfo:
+              "地方公立から逆転合格した人の月別学習スケジュール、おすすめの基礎問題集",
+            activity:
+              "プログラミングサークルでのプログラミング学習、ハッカソン出場、居酒屋アルバイト",
+            highSchoolThought:
+              "『自分なんかが東京の大学で通用するのだろうか』といつも不安でした",
+            currentJob:
+              "大学3年（Web自社開発ベンチャーでエンジニアインターン中）",
+          },
+        },
+        {
+          id: 2,
+          name: "先輩 R.O さん",
+          avatar: "image/gats_suit_woman_mono.png",
+          univ: "関西大学 総合情報学部 2年",
+          career: "島根県立高校出身 ｜ Webデザイン・メディア情報専攻",
+          region: "local",
+          schoolType: "public_general",
+          major: "cross",
+          status: "student",
+          troubles: ["mismatch"],
+          adviserGroup: "senior",
+          originText: "島根県（地方公立高校）",
+          troubleText: "文理選択でのつまずき",
+          statusText: "現役大学生（学部2年）",
+          matchRate: 90,
+          timeline: [
+            {
+              type: "failure",
+              time: "高1 冬",
+              title: "周囲に合わせて選んだ理系で挫折",
+              desc: "『就職に有利だから』と周りの空気に流されて理系を選びましたが、数学IIで急についていけなくなりました。文系に変えようにも、学びたい分野がはっきりせず、進路が真っ白になって途方に暮れていました。",
+            },
+            {
+              type: "action",
+              time: "高2 夏",
+              title: "オンラインオープンキャンパスで文理融合を知る",
+              desc: "大学のオンライン説明会で『デザインとプログラミングを両方学べる学部』を知りました。先輩に『数学が特別得意でなくても、論理的に物事を組み立てるのが好きなら大丈夫』と声をかけてもらい、進路の視界が一気に開けました。",
+            },
+            {
+              type: "success",
+              time: "大学2年 現在",
+              title: "遠回りした経験が今の学びに活きています",
+              desc: "現在はWebサイトのUIデザインとデータ分析の基礎を学んでいます。高校時代に遠回りして悩んだからこそ、納得して自分のやりたい道を選べたと実感しています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "オンラインオープンキャンパスで話してくれた先輩大学生、進路指導の先生",
+            decisionReason:
+              "文系・理系の枠組みに縛られず、デザインとテクノロジーを横断して学べるカリキュラムだったからです",
+            usefulInfo:
+              "総合型選抜の志望理由書サンプル、先輩たちの卒業制作ギャラリー",
+            activity: "デザインサークルでのチラシ制作、学園祭実行委員",
+            highSchoolThought:
+              "『得意科目がない自分には、胸を張れる進路なんてないのかもしれない』と思い詰めていました",
+            currentJob: "大学2年（自治体と連携した広報ポスター制作に従事）",
+          },
+        },
+        {
+          id: 3,
+          name: "先輩 K.Y さん",
+          avatar: "image/guide_suit_woman_mono.png",
+          univ: "法政大学 経営学部 卒（24歳）",
+          career:
+            "神奈川県・私立高出身 ｜ 大手ITコンサルティング企業 勤務（2年目）",
+          region: "city",
+          schoolType: "private",
+          major: "humanities",
+          status: "worker",
+          troubles: ["ronin", "exam-failure"],
+          adviserGroup: "teacher",
+          originText: "神奈川県（都市部私立高）",
+          troubleText: "浪人・受験失敗の悔しさ",
+          statusText: "社会人（ITコンサル勤務）",
+          matchRate: 86,
+          timeline: [
+            {
+              type: "failure",
+              time: "高3 冬",
+              title: "部活引退後の追い込みが間に合わず全落ち",
+              desc: "夏までサッカー部に熱中していたため基礎が抜けており、一般受験した大学が全滅しました。同級生が大学生活を始めるなか、予備校に通うのが本当に辛く、最初の数ヶ月は塞ぎ込みがちでした。",
+            },
+            {
+              type: "action",
+              time: "浪人期 夏",
+              title: "がむしゃらをやめ、間違えた原因をノートに記録",
+              desc: "勉強時間を増やすことだけに満足せず、『なぜ間違えたのか』を一言でノートに残すようにしました。予備校のチューターさんに相談しながら、復習のペースを固定化しました。",
+            },
+            {
+              type: "success",
+              time: "社会人2年目",
+              title: "あの悔しさが、社会人になってからの粘り強さに",
+              desc: "大学では経営戦略のゼミに入り、現在は法人向けのITシステム導入を担当しています。仕事でつまずいても『原因を客観的に見直す』姿勢が身についているのは、浪人時代のおかげだと感じています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "予備校のチューターさん（自分と同じように1浪して合格した先輩）",
+            decisionReason:
+              "実際の企業のDX事例やマーケティングを実践的に学べる環境だったためです",
+            usefulInfo:
+              "模試の間違い直しノートのフォーマット、直前期のメンタル管理法",
+            activity: "フットサルサークル、カフェアルバイト、ゼミ長",
+            highSchoolThought:
+              "『部活だけやってきて、勉強のやり方を誰も教えてくれなかった』と周囲のせいにしていました",
+            currentJob:
+              "ITコンサルタント（企業の業務効率化システムの提案・導入支援）",
+          },
+        },
+        {
+          id: 4,
+          name: "先輩 S.T さん",
+          avatar: "image/idea_drawing_man_mono.png",
+          univ: "中央大学 理工学部 応用化学科 4年",
+          career: "山形県立高校出身 ｜ 大手化学メーカー 研究開発職 内定",
+          region: "local",
+          schoolType: "public_general",
+          major: "science",
+          status: "student",
+          troubles: ["no-model", "ronin"],
+          adviserGroup: "teacher",
+          originText: "山形県（地方公立高校）",
+          troubleText: "1浪経験・地元国立偏重の壁",
+          statusText: "現役大学生（学部4年）",
+          matchRate: 83,
+          timeline: [
+            {
+              type: "failure",
+              time: "高3 秋",
+              title: "私大理工系志望への情報不足と不合格",
+              desc: "研究設備が充実している首都圏の私大理工系に行きたかったのですが、高校では地元国立大志望が大多数で、私大受験の具体的な戦略や過去問情報が手に入らず現役時は不合格になりました。",
+            },
+            {
+              type: "action",
+              time: "浪人期",
+              title: "大学シラバスや研究室の論文を徹底リサーチ",
+              desc: "モチベーションを保つために、志望大学の教授陣の論文や学会発表実績をホームページで詳しく調べました。『受かったらこの実験をやりたい』と具体的にイメージすることで、単調な浪人生活を乗り切りました。",
+            },
+            {
+              type: "success",
+              time: "大学4年 現在",
+              title: "念願の研究室で新素材開発に没頭",
+              desc: "希望していた有機材料の研究室に配属され、充実した研究生活を送っています。就活でも研究内容を評価され、第一志望の化学メーカーから内定をいただくことができました。",
+            },
+          ],
+          survey: {
+            adviser: "高校時代の化学の先生、予備校の自習仲間",
+            decisionReason:
+              "民間企業との共同研究が多く、研究室ごとの特許出願実績が豊富だったからです",
+            usefulInfo:
+              "大学ホームページに掲載されているシラバス、各研究室の卒業生進路実績",
+            activity:
+              "学部実験のティーチングアシスタント（TA）、学園祭運営スタッフ",
+            highSchoolThought:
+              "『地元を出て私大に行くのは親に迷惑をかけるのではないか』とずっと葛藤していました",
+            currentJob:
+              "大学4年（大手化学メーカー内定・有機エレクトロニクス研究）",
+          },
+        },
+        {
+          id: 5,
+          name: "先輩 M.H さん",
+          avatar: "image/inspiration_mono.png",
+          univ: "関西大学 政策創造学部 3年",
+          career: "愛媛県立高校出身 ｜ まちづくり系NPO法人でインターン中",
+          region: "local",
+          schoolType: "public_general",
+          major: "humanities",
+          status: "student",
+          troubles: ["no-model", "mismatch"],
+          adviserGroup: "senior",
+          originText: "愛媛県（地方公立高校）",
+          troubleText: "進路の迷い・相談相手不在",
+          statusText: "現役大学生（学部3年）",
+          matchRate: 81,
+          timeline: [
+            {
+              type: "failure",
+              time: "高2 春",
+              title: "法学部志望への違和感と将来の見えなさ",
+              desc: "なんとなく法学部を目指していたものの、六法の暗記ばかりに思えて疑問を抱いていました。身近に公務員以外の文系職種で働く大人がおらず、大学を出て何がしたいのか分からなくなっていました。",
+            },
+            {
+              type: "action",
+              time: "高2 冬",
+              title: "学外の地域創生ワークショップに参加",
+              desc: "高校の外で開催された地域活性化イベントに参加し、『現場で課題を見つけて政策を創る』学問があることを知りました。大学生スタッフに相談し、政策創造学部への志望を固めました。",
+            },
+            {
+              type: "success",
+              time: "大学3年 現在",
+              title: "自治体と連携した商店街活性化を主導",
+              desc: "大学のゼミで、地方都市の空き店舗活用プロジェクトを進めています。高校の頃は受け身で悩んでいましたが、外の世界に自分から飛び出してみて本当に良かったと感じています。",
+            },
+          ],
+          survey: {
+            adviser: "高校生向けイベントで知り合った大学生スタッフ",
+            decisionReason:
+              "教室の中だけでなく、実際に地域に出て調査を行うフィールドワークが充実していたためです",
+            usefulInfo: "先輩たちの地域実習レポート、推薦入試の小論文過去問",
+            activity:
+              "商店街活性化ボランティア、模擬国連サークル、カフェアルバイト",
+            highSchoolThought:
+              "『進学校にいるんだから、良い大学に入ることだけ考えろ』と言われるのが息苦しかったです",
+            currentJob:
+              "大学3年（まちづくりNPOでインターン・観光振興施策を立案）",
+          },
+        },
+        {
+          id: 6,
+          name: "先輩 A.I さん",
+          avatar: "image/mask_suit_man_mono.png",
+          univ: "法政大学 情報科学部 2年",
+          career: "東京都立高校出身 ｜ データ分析・機械学習専攻",
+          region: "city",
+          schoolType: "public_general",
+          major: "science",
+          status: "student",
+          troubles: ["exam-failure"],
+          adviserGroup: "teacher",
+          originText: "東京都（都立普通科高校）",
+          troubleText: "部活引退後の模試E判定",
+          statusText: "現役大学生（学部2年）",
+          matchRate: 79,
+          timeline: [
+            {
+              type: "failure",
+              time: "高3 夏",
+              title: "部活引退直後の模試で壊滅的な判定",
+              desc: "夏まで野球部に打ち込んでいたため、引退直後の模試で思った以上に点数が取れずE判定でした。周りの友達はすでに受験モードに入っており、『今から追いつけるのか』と強い焦りを感じていました。",
+            },
+            {
+              type: "action",
+              time: "高3 秋",
+              title: "難しい参考書を捨て、頻出単元に集中",
+              desc: "焦って難しい応用問題集に手を出しそうになりましたが、学校の先生に相談して配点の高い数学II・Bと英語長文の基礎に絞りました。やることを削ぎ落としたことで、秋以降に着実に得点が安定してきました。",
+            },
+            {
+              type: "success",
+              time: "大学2年 現在",
+              title: "集中してやり切った経験が今の自信に",
+              desc: "無事に合格でき、今はプログラミングやデータサイエンスの基礎を学んでいます。高校時代に『焦らずに基礎を反復する大切さ』を知ったことが、大学の高度な数学の授業でも支えになっています。",
+            },
+          ],
+          survey: {
+            adviser: "部活を引退した1学年上の先輩、学校の数学の先生",
+            decisionReason:
+              "情報科学と統計学を実践的に融合して学べるカリキュラムに魅力を感じたためです",
+            usefulInfo:
+              "過去問10年分の出題傾向分析シート、先生が作ってくれた基礎計算プリント",
+            activity:
+              "草野球チーム、資格試験（基本情報技術者）の勉強、プログラミング講師バイト",
+            highSchoolThought:
+              "『夏まで部活を続けたのは間違いだったのだろうか』と後悔しかけていました",
+            currentJob: "大学2年（データサイエンスコンペへの挑戦準備中）",
+          },
+        },
+        {
+          id: 7,
+          name: "先輩 Y.M さん",
+          avatar: "image/operator_man_mono.png",
+          univ: "関西大学 化学生命工学部 卒（25歳）",
+          career:
+            "徳島県立高校出身 ｜ 食品・バイオメーカー 研究開発職（3年目）",
+          region: "local",
+          schoolType: "public_general",
+          major: "science",
+          status: "worker",
+          troubles: ["no-model", "cost"],
+          adviserGroup: "teacher",
+          originText: "徳島県（地方公立高校）",
+          troubleText: "相談相手不在・下宿学費の壁",
+          statusText: "社会人（バイオメーカー勤務）",
+          matchRate: 77,
+          timeline: [
+            {
+              type: "failure",
+              time: "高2 冬",
+              title: "県外私大への学費・生活費の不安",
+              desc: "食品バイオの研究がしたかったのですが、地方で私立大学に通いながら一人暮らしをする経済的ハードルが高く、親にも言い出せずに一人で抱え込んでいました。",
+            },
+            {
+              type: "action",
+              time: "高3 春",
+              title: "給付型奨学金制度と特待生入試を徹底調査",
+              desc: "学校の進路指導室に通い詰め、大学独自の学費減免制度や外部財団の給付型奨学金をリストアップしました。入試成績上位者への学費免除を狙って過去問演習に打ち込みました。",
+            },
+            {
+              type: "success",
+              time: "社会人3年目",
+              title: "自力で道を切り開いた経験が今の誇り",
+              desc: "学費半額免除を勝ち取って進学し、バイオ実験に明け暮れました。現在は希望していた食品メーカーで新製品の機能性成分の研究を担当しています。",
+            },
+          ],
+          survey: {
+            adviser: "高校の進路指導の先生、奨学金担当の事務員さん",
+            decisionReason:
+              "発酵バイオテクノロジーの実験施設が国内トップクラスだったためです",
+            usefulInfo:
+              "日本学生支援機構および大学独自の給付奨学金募集要項、特待生入試のボーダーライン",
+            activity:
+              "応用微生物学研究室、パン屋のアルバイト（生活費補填）、軽音楽部",
+            highSchoolThought:
+              "『お金のことで夢を諦めるしかないのかな』とやるせない気持ちでした",
+            currentJob:
+              "食品メーカー研究員（乳酸菌の機能性評価と新商品素材の開発）",
+          },
+        },
+        {
+          id: 8,
+          name: "先輩 H.T さん",
+          avatar: "image/point_man_mono.png",
+          univ: "中央大学 法学部 4年",
+          career: "長崎県立高校出身 ｜ 国家公務員（総合職）内定",
+          region: "local",
+          schoolType: "public_general",
+          major: "humanities",
+          status: "student",
+          troubles: ["no-model", "exam-failure"],
+          adviserGroup: "online",
+          originText: "長崎県（地方公立高校）",
+          troubleText: "身近に難関私大の受験仲間がいない",
+          statusText: "現役大学生（学部4年）",
+          matchRate: 75,
+          timeline: [
+            {
+              type: "failure",
+              time: "高3 春",
+              title: "難関法学部を目指すも、校内に仲間がおらず孤立",
+              desc: "中央大学法学部に憧れていましたが、高校の周囲の友達は九州内の大学志望ばかり。記述対策のレベル感も分からず、模試でもD判定が続いてモチベーションが低下していました。",
+            },
+            {
+              type: "action",
+              time: "高3 夏",
+              title: "SNSの勉強アカウントで全国の受験生と切磋琢磨",
+              desc: "勉強記録アプリ（Studyplus）を活用し、同じ大学を目指す全国の高校生と毎日の勉強時間を共有しました。『自分だけが戦っているのではない』と感じられたことで集中力を保てました。",
+            },
+            {
+              type: "success",
+              time: "大学4年 現在",
+              title: "法律の専門性を武器に国家公務員試験に合格",
+              desc: "高い志を持つ仲間に囲まれて4年間法律を学び、国家公務員総合職試験に合格できました。地方にいても情報と繋がりを自ら取りに行けば道は開けると実感しています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "勉強記録アプリで繋がった他県のライバルたち（校内には相談相手不在）",
+            decisionReason:
+              "司法試験や公務員試験の合格実績が圧倒的で、炎の塔などの学習環境が整っていたからです",
+            usefulInfo:
+              "難関私大記述模試の採点基準レポート、過去問の模範解答比較",
+            activity:
+              "法学部ゼミナール（行政法）、学術系サークル、居酒屋バイト",
+            highSchoolThought:
+              "『井の中の蛙のまま終わってしまうのではないか』という焦りがありました",
+            currentJob: "大学4年（国家公務員内定・政策立案部門配属予定）",
+          },
+        },
+        {
+          id: 9,
+          name: "先輩 S.K さん",
+          avatar: "image/smartphone_man_mono.png",
+          univ: "法政大学 キャリアデザイン学部 卒（26歳）",
+          career:
+            "高知県・公立商業高校出身 ｜ 人材育成・EdTech企業 勤務（4年目）",
+          region: "local",
+          schoolType: "vocational",
+          major: "cross",
+          status: "worker",
+          troubles: ["no-model", "mismatch"],
+          adviserGroup: "senior",
+          originText: "高知県（商業高校出身）",
+          troubleText: "商業科からの大学進学・進路の壁",
+          statusText: "社会人（EdTech企業勤務）",
+          matchRate: 73,
+          timeline: [
+            {
+              type: "failure",
+              time: "高2 秋",
+              title: "就職が当たり前の商業科で、大学進学への葛藤",
+              desc: "商業高校に通っており、同級生の8割は就職希望でした。教育や人の学びに関わる勉強がしたいと思っていましたが、『商業科から四大進学なんて前例が少ない』と周囲から浮いていました。",
+            },
+            {
+              type: "action",
+              time: "高3 春",
+              title: "商業科で取得した簿記資格を武器に総合型選抜へ",
+              desc: "一般入試ではなく、全商簿記1級などの取得資格と自分の課題意識を活かせる自己推薦入試にシフト。教育とキャリアを学べる学部を見つけ、志望理由書を何度も書き直しました。",
+            },
+            {
+              type: "success",
+              time: "社会人4年目",
+              title: "中高生向けキャリア支援アプリの開発ディレクターに",
+              desc: "大学で人材開発やキャリア論を学び、現在は中高生向けの探究学習サービスを提供する企業で働いています。商業科出身という特異な経歴が、現在の仕事での独自の視点になっています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "商業科の簿記担当の先生、オープンキャンパスで相談した学部長",
+            decisionReason:
+              "『働くこと・学ぶこと』を専門に探究できる日本で数少ない学部だったためです",
+            usefulInfo:
+              "商業高校生向けの特別選抜・総合型選抜の募集要項、小論文の過去問題",
+            activity:
+              "キャリア教育ボランティア、学生キャリアアドバイザー、カフェ店員",
+            highSchoolThought:
+              "『高校の進路指導のレールから外れるのが怖かった』です",
+            currentJob:
+              "EdTech企業ディレクター（中高生向け探究学習教材の企画開発）",
+          },
+        },
+        {
+          id: 10,
+          name: "先輩 E.N さん",
+          avatar: "image/woman_mitsuami_mono.png",
+          univ: "中央大学 国際情報学部 2年",
+          career: "富山県立高校出身 ｜ IT法・情報セキュリティ専攻",
+          region: "local",
+          schoolType: "public_general",
+          major: "cross",
+          status: "student",
+          troubles: ["no-model", "mismatch"],
+          adviserGroup: "online",
+          originText: "富山県（地方公立高校）",
+          troubleText: "文理選択ミスマッチ・相談相手不在",
+          statusText: "現役大学生（学部2年）",
+          matchRate: 71,
+          timeline: [
+            {
+              type: "failure",
+              time: "高1 冬",
+              title: "文系を選んだものの、プログラミングへの未練",
+              desc: "文系クラスに進んだものの、本当はITやテクノロジーに強い興味がありました。『文系だから理系職にはつけない』と思い込み、日々の授業に身が入らない時期が続きました。",
+            },
+            {
+              type: "action",
+              time: "高2 秋",
+              title: "「情報と法律・社会」を繋ぐ新学部を発見",
+              desc: "ネットで進路を調べていて、文系科目で受験でき、ITと法律の双方を学べる国際情報学部（iTL）の存在を知りました。市ヶ谷田町キャンパスのオンライン説明会に参加し、『ここしかない』と確信しました。",
+            },
+            {
+              type: "success",
+              time: "大学2年 現在",
+              title: "文系・理系の枠を超えてAI倫理を研究中",
+              desc: "プログラミング実習と著作権法やサイバーセキュリティの法律を並行して学んでいます。文系理系で悩んでいた高校時代の葛藤が、今の自分らしい専門性に繋がっています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "Webで見つけた大学紹介動画、独学プログラミングコミュニティの先輩",
+            decisionReason:
+              "テクノロジーの仕組みと、それを社会で運用するための法律を同時に学べるからです",
+            usefulInfo:
+              "都心型キャンパスの施設紹介、文理横断型の就職先ポートフォリオ",
+            activity:
+              "情報セキュリティ勉強会、英語ディベートサークル、Webサイト制作バイト",
+            highSchoolThought:
+              "『文系・理系の2択を迫られるシステムそのものが合わない』と感じていました",
+            currentJob:
+              "大学2年（情報セキュリティと著作権に関するゼミナールに所属）",
+          },
+        },
+      ];
+
+      let currentTrouble = "all";
+
+      function renderCards(list) {
+        const grid = document.getElementById("cardsGrid");
+        const noResults = document.getElementById("noResults");
+        const countEl = document.getElementById("resultCount");
+
+        grid.innerHTML = "";
+        countEl.textContent = list.length;
+
+        if (list.length === 0) {
+          noResults.style.display = "block";
+          return;
+        }
+        noResults.style.display = "none";
+
+        list.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "mentor-card";
+          card.innerHTML = `
+          <div class="card-left">
+            <div class="avatar-box">
+              <img src="${item.avatar}" alt="${item.name}">
+            </div>
+            <div class="card-meta">
+              <h3>${item.name}</h3>
+              <div class="affiliation">${item.univ}</div>
+              <div class="card-tags">
+                <span class="tag tag-origin">${item.originText}</span>
+                <span class="tag tag-trouble">${item.troubleText}</span>
+                <span class="tag tag-career">${item.statusText}</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-right">
+            <div class="match-percent"><small>共通度</small>${item.matchRate}%</div>
+            <button class="btn-detail" onclick="openDetail(${item.id})">足跡を見る →</button>
+          </div>
+        `;
+          grid.appendChild(card);
+        });
+      }
+
+      // 多面的な絞り込み処理
+      function filterData() {
+        const region = document.getElementById("regionSelect").value;
+        const schoolType = document.getElementById("schoolTypeSelect").value;
+        const major = document.getElementById("majorSelect").value;
+        const status = document.getElementById("statusSelect").value;
+        const adviser = document.getElementById("adviserSelect").value;
+
+        const filtered = mentors.filter((item) => {
+          const matchRegion = region === "all" || item.region === region;
+          const matchSchool =
+            schoolType === "all" || item.schoolType === schoolType;
+          const matchMajor = major === "all" || item.major === major;
+          const matchStatus = status === "all" || item.status === status;
+          const matchAdviser =
+            adviser === "all" || item.adviserGroup === adviser;
+          const matchTrouble =
+            currentTrouble === "all" || item.troubles.includes(currentTrouble);
+
+          return (
+            matchRegion &&
+            matchSchool &&
+            matchMajor &&
+            matchStatus &&
+            matchAdviser &&
+            matchTrouble
+          );
+        });
+
+        renderCards(filtered);
+      }
+
+      function setTrouble(val, el) {
+        document
+          .querySelectorAll("#troubleChips .chip-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        el.classList.add("active");
+        currentTrouble = val;
+        filterData();
+      }
+
+      function resetFilters() {
+        document.getElementById("regionSelect").value = "all";
+        document.getElementById("schoolTypeSelect").value = "all";
+        document.getElementById("majorSelect").value = "all";
+        document.getElementById("statusSelect").value = "all";
+        document.getElementById("adviserSelect").value = "all";
+        currentTrouble = "all";
+        document
+          .querySelectorAll("#troubleChips .chip-btn")
+          .forEach((btn, idx) => {
+            btn.classList.toggle("active", idx === 0);
+          });
+        filterData();
+      }
+
+      function openDetail(id) {
+        const mentor = mentors.find((m) => m.id === id);
+        if (!mentor) return;
+
+        // ★モーダルのアバターを img タグで描画
+        document.getElementById("modalAvatar").innerHTML =
+          `<img src="${mentor.avatar}" alt="${mentor.name}">`;
+
+        document.getElementById("modalName").textContent =
+          `${mentor.name}（${mentor.univ}）`;
+        document.getElementById("modalAffiliation").textContent = mentor.career;
+
+        const tagsContainer = document.getElementById("modalTags");
+        tagsContainer.innerHTML = `
+        <span class="tag tag-origin">${mentor.originText}</span>
+        <span class="tag tag-trouble">${mentor.troubleText}</span>
+        <span class="tag tag-career">${mentor.statusText}</span>
+      `;
+
+        const timelineContainer = document.getElementById("modalTimeline");
+        timelineContainer.innerHTML = mentor.timeline
+          .map(
+            (node) => `
+        <div class="timeline-node ${node.type}">
+          <div class="node-mark"></div>
+          <div class="node-time">${node.time}</div>
+          <div class="node-title">${node.title}</div>
+          <div class="node-desc">${node.desc}</div>
+        </div>
+      `,
+          )
+          .join("");
+
+        // 第10回資料の変数一覧に沿った生データ属性表示
+        const surveyContainer = document.getElementById("modalSurveyGrid");
+        surveyContainer.innerHTML = `
+        <div class="grid-item">
+          <span class="label">当時参考にした相談相手・人</span>
+          <span class="value">${mentor.survey.adviser}</span>
+        </div>
+        <div class="grid-item">
+          <span class="label">進路を決めた最大のきっかけ</span>
+          <span class="value">${mentor.survey.decisionReason}</span>
+        </div>
+        <div class="grid-item">
+          <span class="label">高校生の頃に悩んでいたこと・本音</span>
+          <span class="value">${mentor.survey.highSchoolThought}</span>
+        </div>
+        <div class="grid-item">
+          <span class="label">当時最も役に立った情報</span>
+          <span class="value">${mentor.survey.usefulInfo}</span>
+        </div>
+        <div class="grid-item">
+          <span class="label">大学時代の活動・部活・課外活動</span>
+          <span class="value">${mentor.survey.activity}</span>
+        </div>
+        <div class="grid-item">
+          <span class="label">現在の立場・職種・進路</span>
+          <span class="value">${mentor.survey.currentJob}</span>
+        </div>
+      `;
+
+        document.getElementById("detailModal").classList.add("active");
+      }
+
+      function closeDetail() {
+        document.getElementById("detailModal").classList.remove("active");
+      }
+
+      function syncUserPreferences() {
+        const stored = localStorage.getItem("ashiato_user");
+        if (!stored) return;
+
+        const user = JSON.parse(stored);
+        const avatarEl = document.getElementById("globalUserAvatar");
+        const badgeEl = document.getElementById("globalUserBadgeText");
+        if (avatarEl && user.name) avatarEl.textContent = user.name.charAt(0);
+        if (badgeEl)
+          badgeEl.textContent = `${user.grade}（${user.regionText}・${user.majorText}）`;
+
+        const regionSelect = document.getElementById("regionSelect");
+        const majorSelect = document.getElementById("majorSelect");
+
+        if (regionSelect && user.regionCategory)
+          regionSelect.value = user.regionCategory;
+        if (majorSelect && user.major) {
+          if (
+            user.major === "science" ||
+            user.major === "cross" ||
+            user.major === "humanities"
+          ) {
+            majorSelect.value = user.major;
+          }
+        }
+
+        if (user.trouble) {
+          currentTrouble = user.trouble;
+          document
+            .querySelectorAll("#troubleChips .chip-btn")
+            .forEach((btn) => {
+              btn.classList.toggle(
+                "active",
+                btn.getAttribute("data-val") === user.trouble,
+              );
+            });
+        }
+
+        filterData();
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        renderCards(mentors);
+        syncUserPreferences();
+      });
+    </script>
+  </body>
+</html>
