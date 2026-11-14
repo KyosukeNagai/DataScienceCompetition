@@ -1,0 +1,1973 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マイページ・登録情報設定 | 足跡 ~ Be Challenger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #0084c9;
+        --primary-dark: #005f91;
+        --primary-light: #ebf6fc;
+        --accent: #ff7700;
+        --accent-hover: #e05f00;
+        --text-main: #1e293b;
+        --text-sub: #64748b;
+        --bg-page: #f8fafc;
+        --bg-card: #ffffff;
+        --border: #cbd5e1;
+        --border-light: #e2e8f0;
+        --radius: 8px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+        --success: #0d9488;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Noto Sans JP", sans-serif;
+        background-color: var(--bg-page);
+        color: var(--text-main);
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      header {
+        background: #ffffff;
+        border-bottom: 2px solid var(--primary);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+      }
+
+      .header-utility {
+        background: #f1f5f9;
+        border-bottom: 1px solid var(--border-light);
+        font-size: 0.72rem;
+        color: var(--text-sub);
+        padding: 0.3rem 1.5rem;
+      }
+
+      .header-utility-inner {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .header-main {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+      }
+
+      .brand-icon {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 800;
+        font-size: 0.85rem;
+        padding: 0.25rem 0.55rem;
+        border-radius: 4px;
+      }
+
+      .brand-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+
+      .brand-title span {
+        color: var(--accent);
+        font-size: 0.95rem;
+      }
+
+      .header-link-btn {
+        font-size: 0.82rem;
+        color: var(--primary-dark);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        border: 1px solid var(--border-light);
+        background: #fff;
+      }
+
+      .header-link-btn:hover {
+        background: var(--primary-light);
+      }
+
+      .container {
+        max-width: 880px;
+        margin: 2rem auto 4rem;
+        padding: 0 1.5rem;
+      }
+
+      .toast-notice {
+        display: none;
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+        padding: 1rem 1.25rem;
+        border-radius: var(--radius);
+        margin-bottom: 1.5rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        align-items: center;
+        gap: 0.5rem;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .mypage-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+
+      .mypage-header {
+        background: #ffffff;
+        padding: 1.75rem 2rem;
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .avatar-large {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: var(--primary-light);
+        border: 2px solid #bae6fd;
+        color: var(--primary-dark);
+        font-size: 1.5rem;
+        font-weight: 800;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+
+      .header-texts h1 {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 0.2rem;
+      }
+
+      .header-texts p {
+        font-size: 0.82rem;
+        color: var(--text-sub);
+      }
+
+      .form-body {
+        padding: 2rem;
+      }
+
+      .form-section-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        border-left: 4px solid var(--primary);
+        padding-left: 0.6rem;
+        margin-bottom: 1.25rem;
+        margin-top: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .form-section-title:first-child {
+        margin-top: 0;
+      }
+
+      .section-note {
+        font-size: 0.75rem;
+        font-weight: normal;
+        color: var(--text-sub);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.4rem;
+      }
+
+      .form-label span.req {
+        background: #fee2e2;
+        color: #dc2626;
+        font-size: 0.68rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 3px;
+        margin-left: 0.3rem;
+      }
+
+      .form-label span.opt {
+        background: #f1f5f9;
+        color: var(--text-sub);
+        font-size: 0.68rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 3px;
+        margin-left: 0.3rem;
+        font-weight: normal;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: #ffffff;
+        font-family: inherit;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(0, 132, 201, 0.15);
+      }
+
+      .chips-select-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.5rem;
+        margin-top: 0.4rem;
+      }
+
+      .checkbox-item,
+      .radio-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: #f8fafc;
+        border: 1px solid var(--border-light);
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s;
+      }
+
+      .checkbox-item:hover,
+      .radio-item:hover {
+        background: #f1f5f9;
+        border-color: var(--border);
+      }
+
+      .checkbox-item input:checked + span,
+      .radio-item input:checked + span {
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+
+      .form-actions {
+        padding: 1.5rem 2rem;
+        background: #f8fafc;
+        border-top: 1px solid var(--border-light);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .btn-save {
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        padding: 0.75rem 2.2rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s;
+        box-shadow: 0 2px 6px rgba(255, 119, 0, 0.3);
+      }
+
+      .btn-save:hover {
+        background: var(--accent-hover);
+      }
+
+      .btn-cancel {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-sub);
+        padding: 0.7rem 1.4rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-cancel:hover {
+        background: #ffffff;
+        color: var(--text-main);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        font-size: 0.75rem;
+        color: var(--text-sub);
+        border-top: 1px solid var(--border-light);
+        background: #ffffff;
+      }
+
+      /* ロールモデル診断セクション */
+      .diag-box {
+        background: linear-gradient(135deg, #f0f9ff 0%, #fff7ed 100%);
+        border: 2px solid #bae6fd;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .diag-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .diag-header h2 {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+      }
+
+      .diag-badge {
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 50px;
+      }
+
+      .diag-lead {
+        font-size: 0.8rem;
+        color: var(--text-sub);
+        margin-bottom: 1rem;
+      }
+
+      .diag-question {
+        background: #ffffff;
+        border: 1px solid var(--border-light);
+        border-radius: 6px;
+        padding: 0.9rem 1.1rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .diag-q-title {
+        font-size: 0.84rem;
+        font-weight: 700;
+        margin-bottom: 0.55rem;
+        color: var(--text-main);
+      }
+
+      .diag-scale-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .diag-pole {
+        flex: 1;
+        font-size: 0.75rem;
+        color: var(--text-sub);
+        line-height: 1.4;
+      }
+
+      .diag-pole.left {
+        text-align: left;
+      }
+
+      .diag-pole.right {
+        text-align: right;
+      }
+
+      .diag-scale-options {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        flex-shrink: 0;
+      }
+
+      .diag-opt-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .diag-opt-label input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .diag-dot {
+        display: inline-block;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        background: #ffffff;
+        transition: all 0.15s;
+      }
+
+      .diag-opt-label[data-size="lg"] .diag-dot {
+        width: 26px;
+        height: 26px;
+      }
+      .diag-opt-label[data-size="md"] .diag-dot {
+        width: 21px;
+        height: 21px;
+      }
+      .diag-opt-label[data-size="sm"] .diag-dot {
+        width: 17px;
+        height: 17px;
+      }
+
+      .diag-opt-label[data-side="left"] .diag-dot {
+        border-color: #7dd3fc;
+      }
+      .diag-opt-label[data-side="right"] .diag-dot {
+        border-color: #fdba74;
+      }
+
+      .diag-opt-label input:checked + .diag-dot {
+        transform: scale(1.1);
+      }
+      .diag-opt-label[data-side="left"] input:checked + .diag-dot {
+        background: var(--primary);
+        border-color: var(--primary-dark);
+      }
+      .diag-opt-label[data-side="mid"] input:checked + .diag-dot {
+        background: #64748b;
+        border-color: #475569;
+      }
+      .diag-opt-label[data-side="right"] input:checked + .diag-dot {
+        background: var(--accent);
+        border-color: var(--accent-hover);
+      }
+
+      .diag-result-card {
+        background: #ffffff;
+        border: 2px solid var(--primary);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .diag-result-top {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+
+      .diag-type-badge {
+        background: var(--primary);
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 1.15rem;
+        letter-spacing: 0.12em;
+        padding: 0.3rem 0.9rem;
+        border-radius: 6px;
+      }
+
+      .diag-result-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+
+      .diag-result-desc {
+        font-size: 0.82rem;
+        color: var(--text-main);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .diag-axes-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      .diag-axis-item {
+        font-size: 0.74rem;
+      }
+
+      .diag-axis-labels {
+        display: flex;
+        justify-content: space-between;
+        color: var(--text-sub);
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+      }
+
+      .diag-axis-bar {
+        height: 8px;
+        background: #fed7aa;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .diag-axis-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+        transition: width 0.25s ease;
+      }
+
+      .diag-result-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border-light);
+      }
+
+      .diag-result-note {
+        font-size: 0.74rem;
+        color: var(--text-sub);
+      }
+
+      .btn-diag-jump {
+        background: var(--primary);
+        color: #ffffff;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 0.82rem;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .btn-diag-jump:hover {
+        background: var(--primary-dark);
+      }
+
+      @media (max-width: 640px) {
+        .header-utility {
+          display: none;
+        }
+        .header-main {
+          padding: 0.55rem 0.75rem;
+          gap: 0.5rem;
+        }
+        .brand {
+          gap: 0.45rem;
+        }
+        .brand-title {
+          font-size: 1.05rem;
+          line-height: 1.2;
+          white-space: nowrap;
+        }
+        .brand-title span {
+          font-size: 0.78rem;
+        }
+        .header-link-btn {
+          font-size: 0.72rem;
+          padding: 0.35rem 0.55rem;
+          white-space: nowrap;
+        }
+        .container {
+          margin: 0.75rem auto 2.5rem;
+          padding: 0 0.5rem;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+          gap: 0.9rem;
+        }
+        .mypage-header {
+          flex-direction: column;
+          text-align: center;
+          padding: 1.1rem 0.85rem;
+          gap: 0.75rem;
+        }
+        .form-body {
+          padding: 1rem 0.75rem;
+        }
+        .diag-box {
+          padding: 0.9rem 0.65rem;
+          margin-bottom: 1.5rem;
+        }
+        .diag-header h2 {
+          font-size: 0.95rem;
+        }
+        .diag-question {
+          padding: 0.75rem 0.7rem;
+          margin-bottom: 0.6rem;
+        }
+        .diag-scale-row {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.45rem;
+        }
+        .diag-pole.right {
+          text-align: right;
+        }
+        .diag-scale-options {
+          justify-content: center;
+          gap: 0.65rem;
+          padding: 0.15rem 0;
+        }
+        .diag-result-card {
+          padding: 0.9rem 0.75rem;
+        }
+        .diag-axes-grid {
+          grid-template-columns: 1fr;
+        }
+        .btn-diag-jump {
+          width: 100%;
+          text-align: center;
+        }
+        .form-actions {
+          padding: 1rem 0.75rem;
+          flex-direction: column-reverse;
+          align-items: stretch;
+          gap: 0.6rem;
+        }
+        .btn-save,
+        .btn-cancel {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="header-utility">
+      <div class="header-utility-inner">
+        <span
+          >中高生向け進路・キャリアトラッキングサービス［プロトタイプ］</span
+        >
+        <span
+          >3大学（関西・中央・法政）共催
+          データサイエンス・アイデアコンテスト2026</span
+        >
+      </div>
+    </aside>
+
+    <header>
+      <div class="header-main">
+        <a href="top.html" class="brand" title="トップページに戻る">
+          <span class="brand-icon">TRACK</span>
+          <div class="brand-title">足跡 <span>~ Be Challenger</span></div>
+        </a>
+        <a href="search_results.html" class="header-link-btn">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          先輩の足跡を探す画面へ戻る
+        </a>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="toast-notice" id="toastNotice">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <span
+          >登録情報を更新しました！マッチング条件に即座に反映されます。</span
+        >
+      </div>
+
+      <div class="mypage-card">
+        <div class="mypage-header">
+          <div class="avatar-large" id="displayAvatar">高</div>
+          <div class="header-texts">
+            <h1 id="displayName">中央 太郎 さん</h1>
+            <p id="displayBadgeText">
+              高校2年生（東京都・私立高校 / 理系志望）
+            </p>
+          </div>
+        </div>
+
+        <form id="profileForm" onsubmit="handleSave(event)">
+          <div class="form-body">
+            <!-- 0. 必要なロールモデル診断（MBTI風・全8問） -->
+            <div class="diag-box" id="diagnosisSection">
+              <div class="diag-header">
+                <h2>🧭 必要なロールモデル診断（MBTI風・全8問）</h2>
+                <span class="diag-badge">結果が先輩との一致度に自動反映</span>
+              </div>
+              <p class="diag-lead">
+                今のあなたの状況や考えに近い方を選ぶと、必要なロールモデル（4軸・16タイプ）が診断され、検索結果の一致度に反映されます。
+              </p>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q1. 進路や受験に関する周囲の環境はどちらに近いですか？（環境軸 L/C）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >目指す進路の先輩や情報が身近に少なく手探りだ</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q1" value="-2" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q1" value="-1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q1" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q1" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q1" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >周囲に同じ目標の仲間やライバルが多く刺激がある</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q2. 進路へ向き合うときのスタンスはどちらに近いですか？（環境軸 L/C）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >周囲の当たり前より自分だけの道を切り開きたい</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q2" value="-2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q2" value="-1" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q2" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q2" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q2" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >仲間やライバルと進捗を共有し競い合いたい</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q3. いま直面している壁の種類はどちらに近いですか？（課題軸 B/G）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >目標はあるが模試判定・学力・費用の壁が高い</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q3" value="-2" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q3" value="-1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q3" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q3" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q3" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >文理選択や学部などやりたいこと自体に迷いがある</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q4. どんな先輩のストーリーを最も読みたいですか？（課題軸 B/G）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >E判定やハンデからの逆転合格プロセスを知りたい</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q4" value="-2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q4" value="-1" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q4" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q4" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q4" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >進路の違和感から納得できる道を見つけた話を知りたい</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q5. 困ったときの解決アプローチはどちらが合いますか？（頼り方軸 D/M）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >合格体験記や勉強法データを集めて自分で計画したい</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q5" value="-2" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q5" value="-1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q5" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q5" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q5" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >先生・先輩・チューターに直接相談して助言を得たい</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q6. 先輩の記録で特に重視したいのはどちらですか？（頼り方軸 D/M）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >使った参考書や月別計画など再現性ある記録が欲しい</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q6" value="-2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q6" value="-1" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q6" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q6" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q6" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >不安なときの心の支えや視野を広げる対話が欲しい</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q7. 大学での学びの方向性はどちらに近いですか？（志向軸 S/V）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >特定の専門分野・研究・技術を深く極めたい</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q7" value="-2" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q7" value="-1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q7" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q7" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q7" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >文理の枠を超えて社会課題解決や企画に広く関わりたい</span
+                  >
+                </div>
+              </div>
+
+              <div class="diag-question">
+                <div class="diag-q-title">
+                  Q8. 将来のロールモデル像として惹かれるのはどちらですか？（志向軸 S/V）
+                </div>
+                <div class="diag-scale-row">
+                  <span class="diag-pole left"
+                    >エンジニアや研究者など確かな専門職の姿に惹かれる</span
+                  >
+                  <div class="diag-scale-options">
+                    <label class="diag-opt-label" data-size="lg" data-side="left"
+                      ><input type="radio" name="q8" value="-2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="left"
+                      ><input type="radio" name="q8" value="-1" checked /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="sm" data-side="mid"
+                      ><input type="radio" name="q8" value="0" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="md" data-side="right"
+                      ><input type="radio" name="q8" value="1" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                    <label class="diag-opt-label" data-size="lg" data-side="right"
+                      ><input type="radio" name="q8" value="2" /><span
+                        class="diag-dot"
+                      ></span
+                    ></label>
+                  </div>
+                  <span class="diag-pole right"
+                    >地域創生や企画・コンサルなど社会を動かす姿に惹かれる</span
+                  >
+                </div>
+              </div>
+
+              <!-- 診断結果カード -->
+              <div class="diag-result-card" id="diagResultCard">
+                <div class="diag-result-top">
+                  <span class="diag-type-badge" id="diagCode">LBDS</span>
+                  <div>
+                    <div
+                      style="
+                        font-size: 0.72rem;
+                        color: var(--text-sub);
+                        font-weight: 700;
+                      "
+                    >
+                      あなたに必要なロールモデルタイプ
+                    </div>
+                    <div class="diag-result-title" id="diagTitle">
+                      独学で壁を突破する逆転チャレンジャー型
+                    </div>
+                  </div>
+                </div>
+                <p class="diag-result-desc" id="diagDesc"></p>
+                <div class="diag-axes-grid" id="diagAxesBars"></div>
+                <div class="diag-result-actions">
+                  <span class="diag-result-note"
+                    >※回答を変えるとリアルタイムで診断結果が更新されます</span
+                  >
+                  <button
+                    type="button"
+                    class="btn-diag-jump"
+                    onclick="saveAndGoSearch()"
+                  >
+                    この診断結果で先輩を探す →
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1. 基本属性 -->
+            <div class="form-section-title">
+              <span>1. 基本属性</span>
+              <span class="section-note"
+                >正確な情報ほど似た境遇の先輩と出会いやすくなります</span
+              >
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="userName"
+                  >お名前 / ニックネーム <span class="req">必須</span></label
+                >
+                <input
+                  type="text"
+                  id="userName"
+                  class="form-control"
+                  value="中央 太郎"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="userGrade"
+                  >学年 <span class="req">必須</span></label
+                >
+                <select id="userGrade" class="form-control">
+                  <option value="中学1年生">中学1年生</option>
+                  <option value="中学2年生">中学2年生</option>
+                  <option value="中学3年生">中学3年生</option>
+                  <option value="高校1年生">高校1年生</option>
+                  <option value="高校2年生" selected>高校2年生</option>
+                  <option value="高校3年生">高校3年生</option>
+                  <option value="既卒・浪人生">既卒・浪人生</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="userBirthYear"
+                  >生年月 <span class="opt">任意</span></label
+                >
+                <input
+                  type="month"
+                  id="userBirthYear"
+                  class="form-control"
+                  value="2009-04"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label"
+                  >性別 <span class="opt">任意</span></label
+                >
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.4rem">
+                  <label class="radio-item"
+                    ><input
+                      type="radio"
+                      name="userGender"
+                      value="male"
+                      checked
+                    />
+                    <span>男性</span></label
+                  >
+                  <label class="radio-item"
+                    ><input type="radio" name="userGender" value="female" />
+                    <span>女性</span></label
+                  >
+                  <label class="radio-item"
+                    ><input type="radio" name="userGender" value="other" />
+                    <span>その他・無回答</span></label
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="userRegion"
+                  >お住まいの地域 / 高校所在地
+                  <span class="req">必須</span></label
+                >
+                <select id="userRegion" class="form-control">
+                  <option value="local_hokkaido">北海道</option>
+                  <option value="local_tohoku" selected>
+                    東北地方（秋田・青森・岩手・山形・宮城・福島）
+                  </option>
+                  <option value="city_kanto_tokyo">東京都（都市部）</option>
+                  <option value="city_kanto_other">
+                    首都圏近郊（神奈川・埼玉・千葉）
+                  </option>
+                  <option value="local_chubu">中部・北陸地方</option>
+                  <option value="city_kansai">
+                    関西都市部（大阪・京都・兵庫）
+                  </option>
+                  <option value="local_chugoku">中国地方（山陰・山陽）</option>
+                  <option value="local_shikoku">四国地方</option>
+                  <option value="local_kyushu">九州・沖縄地方</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="schoolType"
+                  >学校種別 <span class="req">必須</span></label
+                >
+                <select id="schoolType" class="form-control">
+                  <option value="public_general" selected>
+                    公立高校（普通科）
+                  </option>
+                  <option value="public_science">
+                    公立高校（理数科・スーパーサイエンス）
+                  </option>
+                  <option value="private_combined">私立中高一貫校</option>
+                  <option value="private_general">私立高校（普通科）</option>
+                  <option value="vocational">
+                    専門学科（工業・商業・情報等）
+                  </option>
+                  <option value="correspondence">通信制・定時制高校</option>
+                </select>
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label"
+                  >文系 / 理系 / 志望系統 <span class="req">必須</span></label
+                >
+                <div class="chips-select-grid">
+                  <label class="radio-item">
+                    <input
+                      type="radio"
+                      name="majorGroup"
+                      value="science"
+                      checked
+                    />
+                    <span>理系（工学・情報・理学）</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="majorGroup" value="medical" />
+                    <span>医療・看護・薬学・農学</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="majorGroup" value="cross" />
+                    <span>文理融合（情報デザイン・総合情報）</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="majorGroup" value="humanities" />
+                    <span>文系（経済・経営・法・人文）</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" name="majorGroup" value="undecided" />
+                    <span>文理未定・迷っている</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. 直面している悩み -->
+            <div class="form-section-title">
+              <span>2. 直面している悩み・課題</span>
+              <span class="section-note"
+                >先輩カルテとの推薦マッチングに最も強く連動します</span
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"
+                >現在もっとも悩んでいること
+                <span class="req">必須</span></label
+              >
+              <div style="display: flex; flex-direction: column; gap: 0.4rem">
+                <label class="radio-item">
+                  <input
+                    type="radio"
+                    name="troubleType"
+                    value="no-model"
+                    checked
+                  />
+                  <span
+                    >身近に目指す進路の先輩・相談できる大人がいない（情報不足・孤立感）</span
+                  >
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="troubleType" value="exam-failure" />
+                  <span
+                    >模試の判定（E判定など）が伸びず、目標を下げようか迷っている（学力の壁）</span
+                  >
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="troubleType" value="ronin" />
+                  <span
+                    >浪人・受験失敗への恐怖やプレッシャーがある（進路の不安）</span
+                  >
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="troubleType" value="mismatch" />
+                  <span
+                    >現在の文理選択や科目選びにミスマッチ・違和感を感じている</span
+                  >
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"
+                >日常・過去・将来の具体的な悩み（複数選択可）
+                <span class="opt">任意</span></label
+              >
+              <div class="chips-select-grid">
+                <label class="checkbox-item"
+                  ><input
+                    type="checkbox"
+                    name="subTrouble"
+                    value="local_bias"
+                    checked
+                  />
+                  <span>地元の進学圧力が強い</span></label
+                >
+                <label class="checkbox-item"
+                  ><input
+                    type="checkbox"
+                    name="subTrouble"
+                    value="study_method"
+                    checked
+                  />
+                  <span>独学の勉強法が合っているか不安</span></label
+                >
+                <label class="checkbox-item"
+                  ><input type="checkbox" name="subTrouble" value="cost" />
+                  <span>一人暮らしや学費の不安</span></label
+                >
+                <label class="checkbox-item"
+                  ><input
+                    type="checkbox"
+                    name="subTrouble"
+                    value="motivation"
+                  />
+                  <span>勉強へのやる気が続かない</span></label
+                >
+                <label class="checkbox-item"
+                  ><input
+                    type="checkbox"
+                    name="subTrouble"
+                    value="future_job"
+                  />
+                  <span>将来の具体的な仕事が見えない</span></label
+                >
+                <label class="checkbox-item"
+                  ><input
+                    type="checkbox"
+                    name="subTrouble"
+                    value="club_balance"
+                  />
+                  <span>部活と勉強の両立に苦戦している</span></label
+                >
+              </div>
+            </div>
+
+            <!-- 3. 興味・希望 -->
+            <div class="form-section-title">
+              <span>3. 興味・希望分野</span>
+              <span class="section-note">進路選びのキーワードを設定します</span>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">興味のある業界（複数選択可）</label>
+                <div class="chips-select-grid">
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="it"
+                      checked
+                    />
+                    <span>IT・ソフトウェア・Web</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="ai_data"
+                      checked
+                    />
+                    <span>AI・データサイエンス</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="maker"
+                    />
+                    <span>メーカー・ものづくり</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="medical"
+                    />
+                    <span>医療・福祉・バイオ</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="design"
+                    />
+                    <span>デザイン・クリエイティブ</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="consulting"
+                    />
+                    <span>ビジネス・コンサル・金融</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="education"
+                    />
+                    <span>教育・地域活性・公務員</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="interestIndustry"
+                      value="undecided"
+                    />
+                    <span>まだ決まっていない</span></label
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="targetJob"
+                  >興味のある職業・やってみたい仕事</label
+                >
+                <input
+                  type="text"
+                  id="targetJob"
+                  class="form-control"
+                  value="Webエンジニア、データサイエンティスト"
+                  placeholder="例: システムエンジニア、プロダクトデザイナー、研究者"
+                />
+
+                <label
+                  class="form-label"
+                  for="targetCompany"
+                  style="margin-top: 0.75rem"
+                  >興味のある企業・大学（任意）</label
+                >
+                <input
+                  type="text"
+                  id="targetCompany"
+                  class="form-control"
+                  value="自社Webサービス企業、首都圏私立大学情報学部"
+                  placeholder="例: IT系ベンチャー、中央大学、法政大学、関西大学"
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="futureHope"
+                  >将来やってみたいこと・志望動機メモ
+                  <span class="opt">任意</span></label
+                >
+                <textarea
+                  id="futureHope"
+                  class="form-control"
+                  rows="2"
+                  placeholder="例: 地方にいても最先端の技術を学べる環境をつくりたい、身近な課題をアプリで解決したい..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- 4. 現在の経験 -->
+            <div class="form-section-title">
+              <span>4. 現在の経験・活動状況</span>
+              <span class="section-note"
+                >自己分析や課外活動のログとして蓄積されます</span
+              >
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="clubActivity"
+                  >所属している部活動</label
+                >
+                <input
+                  type="text"
+                  id="clubActivity"
+                  class="form-control"
+                  value="バドミントン部"
+                  placeholder="例: サッカー部、バスケットボール部、吹奏楽部"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="certifications"
+                  >保有資格・検定</label
+                >
+                <input
+                  type="text"
+                  id="certifications"
+                  class="form-control"
+                  value="英検2級、ITパスポート勉強中"
+                  placeholder="例: 英検2級、漢検準2級、簿記3級"
+                />
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label"
+                  >学外活動・その他の経験（当てはまるもの）</label
+                >
+                <div class="chips-select-grid">
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="activities"
+                      value="student_council"
+                      checked
+                    />
+                    <span>生徒会・学級役員</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="activities"
+                      value="volunteer"
+                    />
+                    <span>ボランティア活動</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="activities"
+                      value="event_contest"
+                    />
+                    <span>コンテスト・ハッカソン参加</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="activities"
+                      value="study_abroad"
+                    />
+                    <span>留学・語学研修経験</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input
+                      type="checkbox"
+                      name="activities"
+                      value="internship"
+                    />
+                    <span>職場体験・インターンシップ</span></label
+                  >
+                  <label class="checkbox-item"
+                    ><input type="checkbox" name="activities" value="lessons" />
+                    <span>習い事（ピアノ・武道など）</span></label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-cancel"
+              onclick="location.href = 'search_results.html'"
+            >
+              変更せず戻る
+            </button>
+            <button type="submit" class="btn-save">
+              変更を保存して反映する
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container">
+        3大学（関西・中央・法政）共催 データサイエンス・アイデアコンテスト2026 |
+        キャリアトラッキングサービス『足跡 ~ Be Challenger』
+      </div>
+    </footer>
+
+    <script>
+      const ROLEMODEL_TYPES = {
+        LBDS: {
+          title: "独学で壁を突破する逆転チャレンジャー型",
+          desc: "身近に相談できる先輩が少なくても、合格体験記や学習データを武器に自分の専門分野へ突き進む先輩の軌跡が最も力になります。",
+        },
+        LBDV: {
+          title: "情報戦略で逆境を超えるビジョン開拓型",
+          desc: "地方や孤立した環境からでも、ネット上の情報や記録を分析して高い壁を乗り越え、社会・文理横断の道へ進んだ先輩が理想です。",
+        },
+        LBMS: {
+          title: "対話と実践で専門の壁を破る不屈の研究者型",
+          desc: "情報が乏しい環境からでも、先生や学外の大人と対話を重ねて学力・費用の壁を乗り越え、専門性を極めた先輩の足跡が合います。",
+        },
+        LBMV: {
+          title: "人の支えで難関を切り開く社会派チャレンジャー型",
+          desc: "地域や環境のハンデを抱えながら、周囲の大人や先輩の助言を得て逆境を突破し、広い視野で活躍する先輩の軌跡が参考になります。",
+        },
+        LGDS: {
+          title: "情報収集で自分だけの専門を見つける探究型",
+          desc: "今の進路への違和感を出発点に、自ら大学シラバスやweb情報を調べて納得できる専門分野へ軌道修正した先輩がフィットします。",
+        },
+        LGDV: {
+          title: "自分の問いから文理を越境するパイオニア型",
+          desc: "既存の文理枠にとらわれず、webやオンライン説明会などから情報を集めて自分らしい学際的な進路を選んだ先輩がぴったりです。",
+        },
+        LGMS: {
+          title: "外の世界との出会いで専門に目覚める転機型",
+          desc: "身近な枠に収まらず、オープンキャンパスや学外イベントで出会った先輩との対話をきっかけに自分の専門を見つけた先輩が最適です。",
+        },
+        LGMV: {
+          title: "遠回りを糧に自分の軸を掴むストーリー転換型",
+          desc: "進路選択で一度立ち止まったり悩んだりしながらも、先輩や先生との対話を通じて社会とつながる道を見つけた軌跡が力になります。",
+        },
+        CBDS: {
+          title: "仲間と競いデータで専門を極める実戦型",
+          desc: "周囲の刺激を力に変えつつ、模試分析や学習計画などの客観的なデータで弱点を克服し、理工・専門分野へ進んだ先輩が参考になります。",
+        },
+        CBDV: {
+          title: "全国・仲間の情報網で壁を超える戦略家型",
+          desc: "同じ志を持つ仲間と切磋琢磨しながら、合格記録や模範解答の比較を活かして文系難関や総合分野の壁を突破した先輩が合います。",
+        },
+        CBMS: {
+          title: "伴走者との二人三脚で逆転する集中突破型",
+          desc: "部活引退後の遅れやスランプも、先生・チューターの指導と仲間の存在で乗り越え、専門分野に合格した先輩の記録がぴったりです。",
+        },
+        CBMV: {
+          title: "仲間の刺激と助言で粘り勝つチームリーダー型",
+          desc: "浪人や受験失敗の悔しさを、予備校のチューターや仲間との振り返りで成長に変え、ビジネス・社会分野で活躍する先輩が理想です。",
+        },
+        CGDS: {
+          title: "環境を活かしながら自分の専門を見極める型",
+          desc: "周囲の進路や環境から刺激を受けつつ、自分の興味データを整理して本当に学びたい専門分野へ踏み出した先輩の足跡が役立ちます。",
+        },
+        CGDV: {
+          title: "多様な選択肢を比較して横断的に選ぶ分析型",
+          desc: "文理や学部の選択肢を広く比較検討し、自分の関心と社会のつながりを言語化して納得の進路を選んだ先輩がフィットします。",
+        },
+        CGMS: {
+          title: "先生や先輩との対話で強みを掘り起こす型",
+          desc: "身近な仲間や教員との対話の中で自分の適性に気づき、迷いを払拭して特定の専門分野への挑戦を始めた先輩が参考になります。",
+        },
+        CGMV: {
+          title: "人とのつながりから新たな進路を創る共創型",
+          desc: "周囲の友人やメンターとの対話・ワークショップ体験を通じて視野を広げ、文理横断や社会課題の領域へ進んだ先輩が最適です。",
+        },
+      };
+
+      const DEFAULT_USER = {
+        name: "中央 太郎",
+        grade: "高校2年生",
+        birthYear: "2009-04",
+        gender: "male",
+        regionVal: "local_tohoku",
+        schoolType: "public_general",
+        major: "science",
+        trouble: "no-model",
+        subTroubles: ["local_bias", "study_method"],
+        industries: ["it", "ai_data"],
+        targetJob: "Webエンジニア、データサイエンティスト",
+        targetCompany: "自社Webサービス企業、首都圏私立大学情報学部",
+        futureHope:
+          "地方にいても最新の技術や情報にアクセスできる仕組みをつくりたいです。",
+        clubActivity: "バドミントン部",
+        certifications: "英検2級、ITパスポート勉強中",
+        activities: ["student_council"],
+        diagnosis: {
+          answers: [-2, -1, -2, -1, -2, -1, -2, -1],
+          code: "LBDS",
+          axes: { L: 88, B: 88, D: 88, S: 88 },
+        },
+      };
+
+      function loadUserData() {
+        const stored = localStorage.getItem("ashiato_user");
+        return stored ? JSON.parse(stored) : DEFAULT_USER;
+      }
+
+      function calculateDiagnosisFromForm() {
+        const answers = [];
+        for (let i = 1; i <= 8; i++) {
+          const checked = document.querySelector(`input[name="q${i}"]:checked`);
+          answers.push(checked ? Number(checked.value) : 0);
+        }
+
+        const axisConfigs = [
+          { key: "L", left: "L", right: "C", leftLabel: "L 独り開拓", rightLabel: "C 切磋琢磨", sum: answers[0] + answers[1] },
+          { key: "B", left: "B", right: "G", leftLabel: "B 壁突破", rightLabel: "G 模索転換", sum: answers[2] + answers[3] },
+          { key: "D", left: "D", right: "M", leftLabel: "D 独学ログ", rightLabel: "M 伴走対話", sum: answers[4] + answers[5] },
+          { key: "S", left: "S", right: "V", leftLabel: "S 専門探究", rightLabel: "V 社会横断", sum: answers[6] + answers[7] },
+        ];
+
+        const axes = {};
+        let code = "";
+        const barsHtml = [];
+
+        axisConfigs.forEach((ax) => {
+          const leftPct = Math.round(((4 - ax.sum) / 8) * 100);
+          axes[ax.key] = leftPct;
+          const letter = ax.sum <= 0 ? ax.left : ax.right;
+          code += letter;
+          const rightPct = 100 - leftPct;
+          barsHtml.push(`
+            <div class="diag-axis-item">
+              <div class="diag-axis-labels">
+                <span>${ax.leftLabel} (${leftPct}%)</span>
+                <span>${ax.rightLabel} (${rightPct}%)</span>
+              </div>
+              <div class="diag-axis-bar">
+                <div class="diag-axis-fill" style="width: ${leftPct}%"></div>
+              </div>
+            </div>
+          `);
+        });
+
+        const typeInfo = ROLEMODEL_TYPES[code] || ROLEMODEL_TYPES.LBDS;
+        const codeEl = document.getElementById("diagCode");
+        const titleEl = document.getElementById("diagTitle");
+        const descEl = document.getElementById("diagDesc");
+        const barsEl = document.getElementById("diagAxesBars");
+
+        if (codeEl) codeEl.textContent = code;
+        if (titleEl) titleEl.textContent = typeInfo.title;
+        if (descEl) descEl.textContent = typeInfo.desc;
+        if (barsEl) barsEl.innerHTML = barsHtml.join("");
+
+        return { answers, code, axes };
+      }
+
+      function populateForm(user) {
+        document.getElementById("userName").value = user.name || "";
+        document.getElementById("userGrade").value = user.grade || "高校2年生";
+        document.getElementById("userBirthYear").value = user.birthYear || "";
+        document.getElementById("userRegion").value =
+          user.regionVal || "local_tohoku";
+        document.getElementById("schoolType").value =
+          user.schoolType || "public_general";
+        document.getElementById("targetJob").value = user.targetJob || "";
+        document.getElementById("targetCompany").value =
+          user.targetCompany || "";
+        document.getElementById("futureHope").value = user.futureHope || "";
+        document.getElementById("clubActivity").value = user.clubActivity || "";
+        document.getElementById("certifications").value =
+          user.certifications || "";
+
+        // ラジオ
+        const genderEl = document.querySelector(
+          `input[name="userGender"][value="${user.gender}"]`,
+        );
+        if (genderEl) genderEl.checked = true;
+
+        const majorEl = document.querySelector(
+          `input[name="majorGroup"][value="${user.major}"]`,
+        );
+        if (majorEl) majorEl.checked = true;
+
+        const troubleEl = document.querySelector(
+          `input[name="troubleType"][value="${user.trouble}"]`,
+        );
+        if (troubleEl) troubleEl.checked = true;
+
+        // 診断8問の復元
+        const diagAnswers =
+          user.diagnosis && Array.isArray(user.diagnosis.answers)
+            ? user.diagnosis.answers
+            : DEFAULT_USER.diagnosis.answers;
+        diagAnswers.forEach((val, idx) => {
+          const qEl = document.querySelector(
+            `input[name="q${idx + 1}"][value="${val}"]`,
+          );
+          if (qEl) qEl.checked = true;
+        });
+
+        // チェックボックス群
+        restoreCheckboxes("subTrouble", user.subTroubles);
+        restoreCheckboxes("interestIndustry", user.industries);
+        restoreCheckboxes("activities", user.activities);
+
+        const diag = calculateDiagnosisFromForm();
+        updateHeaderSummary({ ...user, diagnosis: diag });
+      }
+
+      function restoreCheckboxes(name, arr) {
+        if (!arr) return;
+        document.querySelectorAll(`input[name="${name}"]`).forEach((cb) => {
+          cb.checked = arr.includes(cb.value);
+        });
+      }
+
+      function collectCheckboxes(name) {
+        return Array.from(
+          document.querySelectorAll(`input[name="${name}"]:checked`),
+        ).map((cb) => cb.value);
+      }
+
+      function updateHeaderSummary(user) {
+        document.getElementById("displayName").textContent =
+          `${user.name} さん`;
+        document.getElementById("displayAvatar").textContent =
+          user.name.charAt(0);
+
+        const regionText = user.regionVal.startsWith("city")
+          ? "都市部"
+          : "地方公立高校";
+        const majorText =
+          user.major === "science"
+            ? "理系志望"
+            : user.major === "cross"
+              ? "文理融合"
+              : user.major === "humanities"
+                ? "文系志望"
+                : "志望未定";
+        const diagCode =
+          (user.diagnosis && user.diagnosis.code) ||
+          document.getElementById("diagCode")?.textContent ||
+          "LBDS";
+        document.getElementById("displayBadgeText").textContent =
+          `${user.grade}（${regionText} / ${majorText}）｜診断：${diagCode}型`;
+      }
+
+      function buildUserFromForm() {
+        const regionVal = document.getElementById("userRegion").value;
+        const isLocal = regionVal.startsWith("local");
+        const major = document.querySelector(
+          'input[name="majorGroup"]:checked',
+        ).value;
+        const trouble = document.querySelector(
+          'input[name="troubleType"]:checked',
+        ).value;
+        const diagnosis = calculateDiagnosisFromForm();
+
+        return {
+          name: document.getElementById("userName").value.trim() || "ゲスト",
+          grade: document.getElementById("userGrade").value,
+          birthYear: document.getElementById("userBirthYear").value,
+          gender: document.querySelector('input[name="userGender"]:checked')
+            .value,
+          regionVal: regionVal,
+          regionCategory: isLocal ? "local" : "city",
+          regionText: isLocal ? "地方" : "都市部",
+          schoolType: document.getElementById("schoolType").value,
+          major: major,
+          majorText:
+            major === "science"
+              ? "理系志望"
+              : major === "cross"
+                ? "文理融合"
+                : major === "humanities"
+                  ? "文系志望"
+                  : "志望未定",
+          trouble: trouble,
+          subTroubles: collectCheckboxes("subTrouble"),
+          industries: collectCheckboxes("interestIndustry"),
+          targetJob: document.getElementById("targetJob").value.trim(),
+          targetCompany: document.getElementById("targetCompany").value.trim(),
+          futureHope: document.getElementById("futureHope").value.trim(),
+          clubActivity: document.getElementById("clubActivity").value.trim(),
+          certifications: document
+            .getElementById("certifications")
+            .value.trim(),
+          activities: collectCheckboxes("activities"),
+          diagnosis: diagnosis,
+        };
+      }
+
+      function handleSave(e) {
+        e.preventDefault();
+        const updatedUser = buildUserFromForm();
+        localStorage.setItem("ashiato_user", JSON.stringify(updatedUser));
+        updateHeaderSummary(updatedUser);
+
+        const toast = document.getElementById("toastNotice");
+        toast.style.display = "flex";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 4000);
+      }
+
+      function saveAndGoSearch() {
+        const updatedUser = buildUserFromForm();
+        localStorage.setItem("ashiato_user", JSON.stringify(updatedUser));
+        location.href = "search_results.html";
+      }
+
+      function captureApiKeyFromUrl() {
+        try {
+          const params = new URLSearchParams(window.location.search || "");
+          const key = (params.get("k") || params.get("key") || "").trim();
+          if (key) {
+            localStorage.setItem("ashiato_gemini_api_key", key);
+            params.delete("k");
+            params.delete("key");
+            if (window.history && window.history.replaceState) {
+              const qs = params.toString();
+              const cleanUrl =
+                (window.location.pathname || "") +
+                (qs ? "?" + qs : "") +
+                (window.location.hash || "");
+              window.history.replaceState({}, document.title || "", cleanUrl);
+            }
+          }
+        } catch (e) {}
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        captureApiKeyFromUrl();
+        const user = loadUserData();
+        populateForm(user);
+
+        for (let i = 1; i <= 8; i++) {
+          document.querySelectorAll(`input[name="q${i}"]`).forEach((radio) => {
+            radio.addEventListener("change", () => {
+              const diag = calculateDiagnosisFromForm();
+              updateHeaderSummary({
+                ...buildUserFromForm(),
+                diagnosis: diag,
+              });
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

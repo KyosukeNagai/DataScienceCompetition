@@ -673,6 +673,311 @@
         color: var(--text-sub);
       }
 
+      /* 診断連動バナー */
+      .diag-banner {
+        background: linear-gradient(135deg, #ebf6fc 0%, #fff7ed 100%);
+        border: 1px solid #93c5fd;
+        border-left: 5px solid var(--primary);
+        border-radius: var(--radius);
+        padding: 0.9rem 1.15rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .diag-banner-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .diag-banner-code {
+        background: var(--primary);
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        padding: 0.25rem 0.65rem;
+        border-radius: 5px;
+      }
+
+      .diag-banner-text strong {
+        display: block;
+        font-size: 0.88rem;
+        color: #0f172a;
+      }
+
+      .diag-banner-text span {
+        font-size: 0.75rem;
+        color: var(--text-sub);
+      }
+
+      .diag-banner-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .btn-banner {
+        background: #ffffff;
+        border: 1px solid var(--primary);
+        color: var(--primary-dark);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.4rem 0.75rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-banner:hover {
+        background: var(--primary);
+        color: #ffffff;
+      }
+      .btn-banner.secondary {
+        border-color: var(--border);
+        color: var(--text-sub);
+      }
+      .btn-banner.secondary:hover {
+        background: #f1f5f9;
+        color: var(--text-main);
+      }
+
+      .tag-mbti {
+        background: #ede9fe;
+        color: #6d28d9;
+        font-weight: 700;
+      }
+
+      /* AI先輩に質問チャット */
+      .ai-chat-section {
+        border: 2px solid #bae6fd;
+        border-radius: var(--radius);
+        background: #f0f9ff;
+        padding: 1.15rem;
+        margin-top: 0.25rem;
+      }
+
+      .ai-chat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .ai-chat-title {
+        font-size: 0.92rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .btn-api-key {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.3rem 0.65rem;
+        border-radius: 50px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .btn-api-key:hover {
+        border-color: var(--primary);
+        background: #f8fafc;
+      }
+
+      .api-status-dot.connected {
+        color: #10b981;
+      }
+      .api-status-dot.demo {
+        color: var(--primary);
+      }
+
+      .api-key-box {
+        display: none;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.75rem;
+        margin: 0.65rem 0;
+      }
+      .api-key-box.open {
+        display: block;
+      }
+
+      .api-key-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 0.4rem;
+      }
+
+      .api-key-row input {
+        flex: 1;
+        min-width: 180px;
+        padding: 0.42rem 0.6rem;
+        font-size: 0.78rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+      }
+
+      .api-key-note {
+        font-size: 0.7rem;
+        color: var(--text-sub);
+        margin-top: 0.4rem;
+      }
+
+      .ai-quick-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.65rem;
+      }
+
+      .ai-chip {
+        background: #ffffff;
+        border: 1px solid #bae6fd;
+        color: var(--primary-dark);
+        font-size: 0.73rem;
+        font-weight: 600;
+        padding: 0.32rem 0.65rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .ai-chip:hover {
+        background: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+      }
+
+      .ai-messages {
+        max-height: 280px;
+        overflow-y: auto;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.85rem;
+        margin: 0.65rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+
+      .ai-msg {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.55rem;
+      }
+
+      .ai-msg.user {
+        justify-content: flex-end;
+      }
+
+      .ai-msg-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #e2e8f0;
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .ai-msg-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 20%;
+        display: block;
+      }
+
+      .ai-bubble {
+        max-width: 82%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .ai-msg.mentor .ai-bubble {
+        background: #f1f5f9;
+        color: var(--text-main);
+        border-top-left-radius: 2px;
+      }
+
+      .ai-msg.user .ai-bubble {
+        background: var(--primary);
+        color: #ffffff;
+        border-top-right-radius: 2px;
+      }
+
+      .ai-msg-mode {
+        font-size: 0.65rem;
+        color: var(--text-sub);
+        margin-top: 0.25rem;
+      }
+
+      .ai-input-row {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .ai-input-row input {
+        flex: 1;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.82rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: #ffffff;
+        font-family: inherit;
+      }
+
+      .ai-send-btn {
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        padding: 0.55rem 1.1rem;
+        border-radius: 4px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .ai-send-btn:hover {
+        background: var(--accent-hover);
+      }
+      .ai-send-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .avatar-box,
+      .detail-avatar,
+      .ai-msg-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: var(--primary-dark);
+      }
+
+      .ai-msg-avatar {
+        font-size: 0.9rem;
+      }
+
       @media (max-width: 900px) {
         .container {
           grid-template-columns: 1fr;
@@ -693,6 +998,137 @@
         }
         .detail-grid {
           grid-template-columns: 1fr;
+        }
+        .ai-bubble {
+          max-width: 90%;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .header-utility {
+          display: none;
+        }
+        .header-main {
+          padding: 0.55rem 0.75rem;
+          gap: 0.4rem;
+        }
+        .brand {
+          gap: 0.45rem;
+        }
+        .brand-title {
+          font-size: 1.05rem;
+          white-space: nowrap;
+        }
+        .brand-title span {
+          font-size: 0.78rem;
+        }
+        .user-pill {
+          padding: 0.28rem 0.55rem;
+          font-size: 0.72rem;
+          max-width: 58vw;
+        }
+        #globalUserBadgeText {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .container {
+          margin: 0.75rem auto 2rem;
+          padding: 0 0.5rem;
+          gap: 1rem;
+        }
+        .filter-box {
+          padding: 0.9rem 0.75rem;
+        }
+        .diag-banner {
+          padding: 0.75rem 0.8rem;
+          gap: 0.65rem;
+        }
+        .mentor-card {
+          padding: 0.9rem 0.85rem;
+        }
+        .modal-overlay {
+          padding: 0.35rem;
+        }
+        .detail-card {
+          max-height: 95vh;
+          border-radius: 6px;
+        }
+        .detail-header {
+          padding: 0.7rem 0.85rem;
+        }
+        .detail-body {
+          padding: 0.85rem 0.7rem;
+          gap: 1.1rem;
+        }
+        .detail-profile-box {
+          gap: 0.75rem;
+          padding-bottom: 0.85rem;
+        }
+        .detail-avatar {
+          width: 50px;
+          height: 50px;
+        }
+        .detail-profile-info h2 {
+          font-size: 1rem;
+        }
+        .timeline {
+          padding-left: 1.35rem;
+        }
+        .node-mark {
+          left: -1.35rem;
+        }
+        .detail-grid {
+          padding: 0.75rem;
+          gap: 0.65rem;
+        }
+        .ai-chat-section {
+          padding: 0.75rem 0.6rem;
+        }
+        .ai-quick-chips {
+          gap: 0.35rem;
+          margin-top: 0.5rem;
+        }
+        .ai-chip {
+          font-size: 0.72rem;
+          padding: 0.32rem 0.6rem;
+          text-align: left;
+          line-height: 1.35;
+          border-radius: 6px;
+          width: 100%;
+        }
+        .ai-messages {
+          padding: 0.55rem 0.45rem;
+          margin: 0.5rem 0;
+          max-height: 300px;
+          gap: 0.5rem;
+        }
+        .ai-msg {
+          gap: 0.4rem;
+        }
+        .ai-msg-avatar {
+          width: 26px;
+          height: 26px;
+        }
+        .ai-bubble {
+          max-width: 92%;
+          padding: 0.5rem 0.65rem;
+          font-size: 0.8rem;
+        }
+        .ai-input-row {
+          gap: 0.35rem;
+        }
+        .ai-input-row input {
+          padding: 0.5rem 0.6rem;
+          font-size: 0.8rem;
+          min-width: 0;
+        }
+        .ai-send-btn {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.78rem;
+        }
+        .detail-footer {
+          padding: 0.65rem 0.85rem;
         }
       }
     </style>
@@ -871,8 +1307,41 @@
       </aside>
 
       <main class="content-area">
+        <div class="diag-banner" id="diagnosisBanner">
+          <div class="diag-banner-info">
+            <span class="diag-banner-code" id="bannerTypeCode">LBDS</span>
+            <div class="diag-banner-text">
+              <strong id="bannerTypeTitle"
+                >診断結果：独学で壁を突破する逆転チャレンジャー型</strong
+              >
+              <span id="bannerTypeDesc"
+                >マイページの診断結果と登録属性から、共通度をリアルタイム算出しています。</span
+              >
+            </div>
+          </div>
+          <div class="diag-banner-actions">
+            <button
+              type="button"
+              class="btn-banner"
+              onclick="applyDiagnosisFilter()"
+            >
+              診断タイプに合う条件で絞り込む
+            </button>
+            <button
+              type="button"
+              class="btn-banner secondary"
+              onclick="resetFilters()"
+            >
+              全20件を表示
+            </button>
+            <a href="mypage.html" class="btn-banner secondary"
+              >再診断する (マイページ)</a
+            >
+          </div>
+        </div>
+
         <div class="count-bar">
-          <div>該当する先輩の足跡：<span id="resultCount">10</span> 件</div>
+          <div>該当する先輩の足跡：<span id="resultCount">20</span> 件</div>
           <div style="font-size: 0.75rem">※条件との一致度順に表示中</div>
         </div>
 
@@ -956,6 +1425,69 @@
             </div>
             <div class="detail-grid" id="modalSurveyGrid"></div>
           </div>
+
+          <div class="ai-chat-section" id="aiChatSection">
+            <div class="ai-chat-top">
+              <div class="ai-chat-title" id="aiChatMentorTitle">
+                💬 AI先輩に質問・相談する
+              </div>
+              <button
+                type="button"
+                class="btn-api-key"
+                onclick="toggleApiKeyBox()"
+              >
+                <span class="api-status-dot demo" id="apiStatusDot">●</span>
+                <span id="apiStatusText">デモ応答モード</span>
+                <span>｜ 🔑 API設定</span>
+              </button>
+            </div>
+
+            <div class="api-key-box" id="apiKeyBox">
+              <div style="font-size: 0.76rem; font-weight: 700">
+                Gemini API キー設定（このブラウザの localStorage にのみ保存）
+              </div>
+              <div class="api-key-row">
+                <input
+                  type="password"
+                  id="geminiApiKeyInput"
+                  placeholder="AIza... から始まる Gemini API キーを入力"
+                />
+                <button
+                  type="button"
+                  class="btn-banner"
+                  onclick="saveApiKey()"
+                >
+                  保存
+                </button>
+                <button
+                  type="button"
+                  class="btn-banner secondary"
+                  onclick="clearApiKey()"
+                >
+                  削除
+                </button>
+              </div>
+              <div class="api-key-note">
+                ※キー未入力のときはオフラインのデモ応答モードで動作します。コード内にはキーを保存しません。
+              </div>
+            </div>
+
+            <div class="ai-quick-chips" id="aiQuickChips"></div>
+
+            <div class="ai-messages" id="aiChatMessages"></div>
+
+            <form class="ai-input-row" onsubmit="handleAskAi(event)">
+              <input
+                type="text"
+                id="aiQuestionInput"
+                placeholder="この先輩に質問してみる（例：模試E判定のとき何から始めましたか？）"
+                required
+              />
+              <button type="submit" class="ai-send-btn" id="aiSendBtn">
+                質問する
+              </button>
+            </form>
+          </div>
         </div>
 
         <div class="detail-footer">
@@ -972,7 +1504,7 @@
     </footer>
 
     <script>
-      // 拡充された先輩データベース（10名）
+      // 拡充された先輩データベース（20名・全16タイプ網羅）
       const mentors = [
         {
           id: 1,
@@ -991,6 +1523,8 @@
           troubleText: "相談相手不在・模試E判定",
           statusText: "現役大学生（学部3年）",
           matchRate: 95,
+          mbtiType: "LBDS",
+          axes: { L: 95, B: 90, D: 95, S: 90 },
           timeline: [
             {
               type: "failure",
@@ -1042,6 +1576,8 @@
           troubleText: "文理選択でのつまずき",
           statusText: "現役大学生（学部2年）",
           matchRate: 90,
+          mbtiType: "LGMV",
+          axes: { L: 75, B: 20, D: 35, S: 40 },
           timeline: [
             {
               type: "failure",
@@ -1092,6 +1628,8 @@
           troubleText: "浪人・受験失敗の悔しさ",
           statusText: "社会人（ITコンサル勤務）",
           matchRate: 86,
+          mbtiType: "CBMV",
+          axes: { L: 25, B: 85, D: 45, S: 30 },
           timeline: [
             {
               type: "failure",
@@ -1142,6 +1680,8 @@
           troubleText: "1浪経験・地元国立偏重の壁",
           statusText: "現役大学生（学部4年）",
           matchRate: 83,
+          mbtiType: "LBMS",
+          axes: { L: 85, B: 85, D: 55, S: 95 },
           timeline: [
             {
               type: "failure",
@@ -1192,6 +1732,8 @@
           troubleText: "進路の迷い・相談相手不在",
           statusText: "現役大学生（学部3年）",
           matchRate: 81,
+          mbtiType: "LGMV",
+          axes: { L: 80, B: 15, D: 20, S: 15 },
           timeline: [
             {
               type: "failure",
@@ -1241,6 +1783,8 @@
           troubleText: "部活引退後の模試E判定",
           statusText: "現役大学生（学部2年）",
           matchRate: 79,
+          mbtiType: "CBMS",
+          axes: { L: 20, B: 90, D: 40, S: 85 },
           timeline: [
             {
               type: "failure",
@@ -1291,6 +1835,8 @@
           troubleText: "相談相手不在・下宿学費の壁",
           statusText: "社会人（バイオメーカー勤務）",
           matchRate: 77,
+          mbtiType: "LBMS",
+          axes: { L: 85, B: 90, D: 45, S: 85 },
           timeline: [
             {
               type: "failure",
@@ -1341,6 +1887,8 @@
           troubleText: "身近に難関私大の受験仲間がいない",
           statusText: "現役大学生（学部4年）",
           matchRate: 75,
+          mbtiType: "CBDV",
+          axes: { L: 65, B: 85, D: 80, S: 30 },
           timeline: [
             {
               type: "failure",
@@ -1392,6 +1940,8 @@
           troubleText: "商業科からの大学進学・進路の壁",
           statusText: "社会人（EdTech企業勤務）",
           matchRate: 73,
+          mbtiType: "LGMV",
+          axes: { L: 85, B: 35, D: 25, S: 25 },
           timeline: [
             {
               type: "failure",
@@ -1443,6 +1993,8 @@
           troubleText: "文理選択ミスマッチ・相談相手不在",
           statusText: "現役大学生（学部2年）",
           matchRate: 71,
+          mbtiType: "LGDV",
+          axes: { L: 80, B: 25, D: 85, S: 55 },
           timeline: [
             {
               type: "failure",
@@ -1478,9 +2030,623 @@
               "大学2年（情報セキュリティと著作権に関するゼミナールに所属）",
           },
         },
+        {
+          id: 11,
+          name: "先輩 T.M さん",
+          avatar: "image/counton_suit_man_mono.png",
+          univ: "地方国立K大学 法文学部 総合政策コース 3年",
+          career:
+            "岩手県立高校出身 ｜ 地方自治体のオープンデータ活用プロジェクト参加中",
+          region: "local",
+          schoolType: "public_general",
+          major: "cross",
+          status: "student",
+          troubles: ["no-model", "exam-failure"],
+          adviserGroup: "online",
+          originText: "岩手県（地方公立高校）",
+          troubleText: "5教科7科目の壁・情報不足",
+          statusText: "現役大学生（地方国立・3年）",
+          matchRate: 88,
+          mbtiType: "LBDV",
+          axes: { L: 90, B: 85, D: 90, S: 20 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 冬",
+              title: "多科目受験のペース配分とE判定",
+              desc: "地方から国公立大を目指したものの、共通テスト5教科7科目の学習バランスが掴めず模試でE判定が続きました。周囲に文理横断の総合政策系へ進んだ先輩もおらず、勉強法の手がかりがない状態でした。",
+            },
+            {
+              type: "action",
+              time: "高校3年生 春",
+              title: "合格者の得点配分データを分析し科目別戦略を策定",
+              desc: "志望校の合格最低点と科目別配点比率を過去5年分書き出し、配点の高い英語・社会と記述対策に時間を集中させました。オンライン上の合格者ブログの模試推移表を参考に月単位の目標を数値で管理しました。",
+            },
+            {
+              type: "success",
+              time: "大学3年生 現在",
+              title: "地方国立大で地域データ分析と政策立案を横断研究中",
+              desc: "現在は法律・経済・データサイエンスを組み合わせ、自治体のオープンデータを使った地域交通や人口動態の課題分析に取り組んでいます。データで逆算した高校時代の経験がそのまま研究に活きています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "ネット上の国公立合格体験記・入試データまとめサイト（校内には同系統の志望者が不在）",
+            decisionReason:
+              "文系の政策学とデータ分析を一体で学べ、地方にいながら実践的な地域課題に取り組める点に惹かれたためです",
+            usefulInfo:
+              "共通テストと二次試験の配点比較表、合格者の模試得点推移データ",
+            activity:
+              "自治体連携データ分析サークル、模擬議会プロジェクト、塾講師アルバイト",
+            highSchoolThought:
+              "『科目数が多すぎて地方公立から本当に間に合うのか』と毎晩焦っていました",
+            currentJob:
+              "大学3年（自治体オープンデータ活用プロジェクト参加・地域課題解決ゼミ所属）",
+          },
+        },
+        {
+          id: 12,
+          name: "先輩 M.A さん",
+          avatar: "image/gats_suit_woman_mono.png",
+          univ: "地方国立S大学 教育学部 卒（25歳）",
+          career:
+            "宮崎県立高校出身 ｜ 地域教育コーディネーター・NPO職員（3年目）",
+          region: "local",
+          schoolType: "public_general",
+          major: "humanities",
+          status: "worker",
+          troubles: ["cost", "exam-failure"],
+          adviserGroup: "teacher",
+          originText: "宮崎県（地方公立高校）",
+          troubleText: "経済的制約・共通テストの壁",
+          statusText: "社会人（教育系NPO勤務）",
+          matchRate: 84,
+          mbtiType: "LBMV",
+          axes: { L: 88, B: 85, D: 20, S: 20 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校3年生 秋",
+              title: "国立一本勝負のプレッシャーと模試スランプ",
+              desc: "家庭の経済的事情から進学先は学費の抑えられる国立大学一択でしたが、秋以降のマーク模試で点数が急に落ち込みました。『失敗したら後がない』という重圧で、問題集を開いても頭に入らない時期が続きました。",
+            },
+            {
+              type: "action",
+              time: "高校3年生 冬",
+              title: "担任・教科担当との毎日の添削面談で記述力を強化",
+              desc: "一人で抱え込むのをやめ、高校の担任と現代文・小論文担当の先生に毎日10分だけ質問と添削をお願いしました。対話を通じて自分の弱点を言語化してもらえたことで、焦りが具体的な課題へと変わりました。",
+            },
+            {
+              type: "success",
+              time: "社会人3年目",
+              title: "地方国立大での学びを活かし中高生の探究学習を支援",
+              desc: "地方国立S大学を卒業後、地域の教育NPOに就職しました。現在は過疎地域の中高生が地域の大人とつながり進路を描けるよう、探究学習のコーディネートを担当しています。",
+            },
+          ],
+          survey: {
+            adviser: "高校3年次の担任の先生、放課後に添削してくれた国語科の先生",
+            decisionReason:
+              "学費負担を抑えつつ教育学と地域連携の実習を深く学べる地方国立大学の環境に魅力を感じたためです",
+            usefulInfo:
+              "先生からの記述答案フィードバック、給付奨学金・授業料免除制度の申請スケジュール",
+            activity:
+              "地域子ども食堂ボランティア、教育実習サークル、学内生協学生委員会",
+            highSchoolThought:
+              "『私立を併願できないぶん、絶対に落とせない』という重圧がずっとありました",
+            currentJob:
+              "教育系NPO職員（地域教育コーディネーターとして中高生の探究・進路支援を担当）",
+          },
+        },
+        {
+          id: 13,
+          name: "先輩 R.K さん",
+          avatar: "image/idea_drawing_man_mono.png",
+          univ: "国立T大学 農学部 応用生物科学科 4年",
+          career: "長野県立高校出身 ｜ 森林生態・スマート林業の研究室に所属",
+          region: "local",
+          schoolType: "public_general",
+          major: "science",
+          status: "student",
+          troubles: ["mismatch", "no-model"],
+          adviserGroup: "online",
+          originText: "長野県（地方公立高校）",
+          troubleText: "工学部志望からの方向転換",
+          statusText: "現役大学生（国立・学部4年）",
+          matchRate: 86,
+          mbtiType: "LGDS",
+          axes: { L: 85, B: 20, D: 88, S: 90 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 夏",
+              title: "周囲に合わせた工学部志望への違和感",
+              desc: "理系クラス男子の多くが機械工学科を目指す空気の中で、なんとなく自分も工学部を志望校に書いていました。しかし物理の力学問題よりも生物や自然環境への関心が強く、勉強への手応えを感じられずにいました。",
+            },
+            {
+              type: "action",
+              time: "高校2年生 冬",
+              title: "全国の国立大農学部の研究要覧をWebで比較調査",
+              desc: "思い切って全国の国立大学の農学部・環境系学科の研究室リストやシラバスを片っ端から読み込みました。生物学とドローン・データ計測技術を掛け合わせた『スマート林業』の研究に出会えたことで、進路が一気に明確になりました。",
+            },
+            {
+              type: "success",
+              time: "大学4年生 現在",
+              title: "ドローンとセンサーを用いた森林解析研究に没頭",
+              desc: "現在は国立T大学の研究室で、山林の3D計測データをもとに生態系を保全する研究に取り組んでいます。周囲に流されず自分で調べ直した高校2年の決断が、充実した研究生活につながっています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "各国立大学農学部の公式サイト・公開研究要覧（身近に農学系の先輩がいませんでした）",
+            decisionReason:
+              "広大な演習林フィールドと最新のバイオ・計測実験設備の両方を備えた国立大学だったためです",
+            usefulInfo:
+              "国立大学ごとの研究室キーワード検索結果、共通テスト理科2科目の配点比較表",
+            activity: "ワンダーフォーゲル部、森林ボランティア、GIS解析TAバイト",
+            highSchoolThought:
+              "『理系だから工学部という枠に自分を当てはめなくていいのかも』と気づいてから楽になりました",
+            currentJob:
+              "大学4年（森林生態・スマート林業研究室所属／大学院進学予定）",
+          },
+        },
+        {
+          id: 14,
+          name: "先輩 Y.S さん",
+          avatar: "image/woman_mitsuami_mono.png",
+          univ: "地方国立H大学 水産学部 海洋生物科学科 3年",
+          career: "鳥取県立高校出身 ｜ 海洋生態系モニタリング研究に従事",
+          region: "local",
+          schoolType: "public_general",
+          major: "science",
+          status: "student",
+          troubles: ["mismatch", "no-model"],
+          adviserGroup: "senior",
+          originText: "鳥取県（地方公立高校）",
+          troubleText: "やりたい専門が見つからない迷い",
+          statusText: "現役大学生（地方国立・3年）",
+          matchRate: 82,
+          mbtiType: "LGMS",
+          axes: { L: 90, B: 20, D: 20, S: 88 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校1年生 秋",
+              title: "理系に進んだものの目標学部が定まらず低迷",
+              desc: "理科は好きだったものの、医学部や薬学部のように明確な資格目標が見えず、なぜ勉強しているのか実感が湧かないままでした。地方の進学校で周りと同じように有名大の名前だけ追うことにも疲れを感じていました。",
+            },
+            {
+              type: "action",
+              time: "高校2年生 夏",
+              title: "地方国立大の公開臨海実習で大学院生の先輩と対話",
+              desc: "思い切って夏休みに地方国立大が主催する高校生向けの海洋生物学体験イベントに参加しました。調査船に乗る大学院生の先輩から研究の面白さを直接聞いた瞬間、『ここで海の研究がしたい』と目標が決まりました。",
+            },
+            {
+              type: "success",
+              time: "大学3年生 現在",
+              title: "フィールド調査船での海洋観測と研究を満喫",
+              desc: "地方国立H大学の水産学部に進学し、沿岸の海洋生態系を調べる調査船実習に夢中になっています。実際に研究現場の先輩と話して自分の目で確かめたことが何よりの原動力になりました。",
+            },
+          ],
+          survey: {
+            adviser: "高校生向け臨海実習イベントで案内してくれた大学院生の先輩",
+            decisionReason:
+              "全国から海好きが集まり、学部生のうちから調査船を使ったフィールド研究ができるからです",
+            usefulInfo:
+              "地方国立大学の高大連携オープンキャンパス・公開実験プログラム情報",
+            activity:
+              "スキューバダイビング部、水族館解説ボランティア、水産学ゼミ",
+            highSchoolThought:
+              "『偏差値表の並びだけで進路を決めてもワクワクできない』と感じていました",
+            currentJob:
+              "大学3年（海洋生態系モニタリング研究室に所属し沿岸調査を実施中）",
+          },
+        },
+        {
+          id: 15,
+          name: "先輩 D.N さん",
+          avatar: "image/mask_suit_man_mono.png",
+          univ: "国立C大学 工学部 情報工学科 卒（24歳）",
+          career:
+            "埼玉県立高校出身 ｜ 製造業向けAIソリューション企業 エンジニア（2年目）",
+          region: "city",
+          schoolType: "public_general",
+          major: "science",
+          status: "worker",
+          troubles: ["exam-failure", "ronin"],
+          adviserGroup: "online",
+          originText: "埼玉県（都市部公立高）",
+          troubleText: "国立理系二次試験の得点伸び悩み",
+          statusText: "社会人（AIエンジニア）",
+          matchRate: 80,
+          mbtiType: "CBDS",
+          axes: { L: 15, B: 88, D: 90, S: 92 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校3年生 秋",
+              title: "周囲の進学校仲間に圧倒され冠模試でD判定",
+              desc: "都心近郊の公立進学校に通っていたため周囲のレベルが高く、同じ国立理系を目指す友人と自分を比べて焦るばかりでした。国立二次試験の数学・物理の記述問題で点が伸びず、現役時は惜しくも不合格となりました。",
+            },
+            {
+              type: "action",
+              time: "浪人期 春",
+              title: "過去15年分の二次試験得点データと弱点単元をスプレッドシート管理",
+              desc: "感情で落ち込むのをやめ、冠模試や過去問15年分の単元別正答率をスプレッドシートで可視化しました。仲間の勉強ペースにも刺激を受けつつ、頻出の微積分と電磁気の失点パターンを徹底的に潰しました。",
+            },
+            {
+              type: "success",
+              time: "社会人2年目",
+              title: "国立大で培った数理モデリング力を武器にAI開発に従事",
+              desc: "国立C大学工学部で機械学習と制御理論を学び、現在は工場の異常検知AIを開発しています。周囲と競い合いながらデータで自己分析を続けた受験期の姿勢が、エンジニアとしての基盤になっています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "予備校で切磋琢磨した国立理系志望の友人、オンライン上の合格者得点開示データ",
+            decisionReason:
+              "情報工学と数理科学のカリキュラムが体系的で、国立大学ならではの少人数研究指導を受けられるためです",
+            usefulInfo:
+              "大学公式の合格者平均点・最低点開示データ、単元別弱点管理表",
+            activity: "競技プログラミング研究会、数学塾講師アルバイト",
+            highSchoolThought:
+              "『できる友人と比べるほど、自分の伸びなさばかりに目がいって苦しかった』です",
+            currentJob:
+              "AIエンジニア（製造ラインの画像検査・異常検知モデルの開発担当）",
+          },
+        },
+        {
+          id: 16,
+          name: "先輩 K.F さん",
+          avatar: "image/operator_man_mono.png",
+          univ: "地方公立A大学 システム科学技術学部 2年",
+          career:
+            "千葉県・私立高校出身 ｜ 再生可能エネルギー・スマートグリッド専攻",
+          region: "city",
+          schoolType: "private",
+          major: "science",
+          status: "student",
+          troubles: ["mismatch"],
+          adviserGroup: "online",
+          originText: "千葉県（都市部私立高）",
+          troubleText: "知名度重視の進路選びへの違和感",
+          statusText: "現役大学生（地方公立・2年）",
+          matchRate: 78,
+          mbtiType: "CGDS",
+          axes: { L: 20, B: 20, D: 85, S: 88 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 秋",
+              title: "首都圏の有名私大ばかり目指す周囲の空気への違和感",
+              desc: "都市部の私立高校では『とりあえず偏差値の高い首都圏有名大を受ける』という空気がありました。しかし自分は少人数環境でエネルギー工学の実験をじっくりやりたい思いが強く、進路希望調査で悩んでいました。",
+            },
+            {
+              type: "action",
+              time: "高校3年生 春",
+              title: "少人数制と実験環境をデータで比較し地方公立大を第一志望に決定",
+              desc: "教員1人あたりの学生数（ST比）、実験予算、卒業研究の配属時期などを比較表に整理し、東北の地方公立A大学に辿り着きました。両親にもデータをもとにプレゼンし、納得して応援してもらえました。",
+            },
+            {
+              type: "success",
+              time: "大学2年生 現在",
+              title: "1年次から風力発電ラボのプロジェクトに参加",
+              desc: "現在は地方公立A大学で再生可能エネルギーと地域電力網の制御を学んでいます。知名度ではなく学びの中身と環境データで選んだおかげで、1年生から希望の研究プロジェクトに関われています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "大学ポートレートや文科省の大学比較データ、研究室紹介動画",
+            decisionReason:
+              "全寮制・少人数教育と再生可能エネルギーの実証フィールドが全国屈指だったためです",
+            usefulInfo:
+              "各大学の教員1人あたり学生数・研究設備データ、公立大の中期日程入試情報",
+            activity: "ロボット製作サークル、風力エネルギー研究会、地元飲食店バイト",
+            highSchoolThought:
+              "『みんなと同じ首都圏志望に合わせて選ぶことが本当に正解なのか』と疑問でした",
+            currentJob:
+              "大学2年（スマートグリッドと再生可能エネルギー研究室の学生プロジェクトに所属）",
+          },
+        },
+        {
+          id: 17,
+          name: "先輩 A.W さん",
+          avatar: "image/guide_suit_woman_mono.png",
+          univ: "地方公立N大学 国際教養学部 4年",
+          career: "大阪府立高校出身 ｜ 商社・グローバル物流企業 内定",
+          region: "city",
+          schoolType: "public_general",
+          major: "cross",
+          status: "student",
+          troubles: ["mismatch"],
+          adviserGroup: "online",
+          originText: "大阪府（都市部公立高）",
+          troubleText: "文系学部の違いが分からず迷走",
+          statusText: "現役大学生（地方公立・4年）",
+          matchRate: 76,
+          mbtiType: "CGDV",
+          axes: { L: 18, B: 18, D: 88, S: 18 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 春",
+              title: "経済・法・外国語のどれに進むべきか決められず停滞",
+              desc: "大阪の公立進学校で文系を選びましたが、法学部も経済学部も外国語学部もピンと来ませんでした。どれか1つに絞らないといけないと思い込み、志望理由も曖昧なまま時間が過ぎていきました。",
+            },
+            {
+              type: "action",
+              time: "高校2年生 秋",
+              title: "全国の国公立大カリキュラムと留学要件を一覧表にして比較分析",
+              desc: "文理・専門を最初から1つに絞らないリベラルアーツ系や国際教養系の国公立大学を徹底比較しました。英語での授業比率、データリテラシー必修の有無、交換留学実績を表で比べ、地方公立N大学を第一志望に決めました。",
+            },
+            {
+              type: "success",
+              time: "大学4年生 現在",
+              title: "地方公立大の少人数英語教育と統計分析を武器に第一志望内定",
+              desc: "英語でのディスカッションと国際経済・統計分析を横断して学び、1年間の海外留学も経験しました。就活では多様な視点を組み合わせる強みを評価され、商社・物流企業から内定を得ました。",
+            },
+          ],
+          survey: {
+            adviser: "国公立大学のシラバス比較記事、国際教養系学部の卒業生ブログ",
+            decisionReason:
+              "英語でリベラルアーツと経済統計を少人数で学べ、留学制度が極めて充実している地方公立大だったためです",
+            usefulInfo:
+              "全授業英語実施率や交換留学提携校数などの定量データ、公立大の英語小論文過去問",
+            activity: "国際交流学生団体代表、模擬国連、英語塾オンライン講師",
+            highSchoolThought:
+              "『文系の学部名が似ていて、何が違うのか外からは全然見えない』と感じていました",
+            currentJob:
+              "大学4年（グローバル物流・商社系企業内定／国際貿易データゼミ所属）",
+          },
+        },
+        {
+          id: 18,
+          name: "先輩 H.O さん",
+          avatar: "image/point_man_mono.png",
+          univ: "国立O大学 基礎工学部 情報科学科 3年",
+          career: "兵庫県・私立高校出身 ｜ 医療画像AI解析の研究プロジェクト参加",
+          region: "city",
+          schoolType: "private",
+          major: "science",
+          status: "student",
+          troubles: ["mismatch", "exam-failure"],
+          adviserGroup: "teacher",
+          originText: "兵庫県（都市部私立高）",
+          troubleText: "医学部か工学系かで揺れた進路選択",
+          statusText: "現役大学生（国立・学部3年）",
+          matchRate: 74,
+          mbtiType: "CGMS",
+          axes: { L: 15, B: 22, D: 18, S: 90 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 冬",
+              title: "親の勧める医学部志望と自分の興味のギャップで成績低下",
+              desc: "周囲に医者志望が多い私立進学校で親からも医学部を期待されていましたが、自分は臨床よりもコンピュータや数学の仕組みに興味がありました。納得感のないまま対策していたため、模試の点数も思うように上がりませんでした。",
+            },
+            {
+              type: "action",
+              time: "高校3年生 春",
+              title: "物理の先生やOBとの面談で『工学から医療を支える道』を発見",
+              desc: "高校の物理の先生と国立O大学に進学した部活OBに本音を相談したところ、『生体医工学や医療AIなら、好きな情報工学で医療に貢献できる』と教えてもらいました。親とも話し合い、基礎工学部志望へ切り替えました。",
+            },
+            {
+              type: "success",
+              time: "大学3年生 現在",
+              title: "国立大の研究室で医療支援AIの共同研究に参画中",
+              desc: "現在は国立O大学で病院のCT・MRI画像をAIで解析する研究プロジェクトに参加しています。先生やOBとの対話を通じて、自分の関心と医療への貢献を両立できる最適解を見つけられました。",
+            },
+          ],
+          survey: {
+            adviser: "高校の物理担当の先生、国立O大学へ進学した同じ部活のOB先輩",
+            decisionReason:
+              "理学と工学を融合し、情報科学を基盤に医療・生体分野とも連携できる国立O大学基礎工学部の研究体制に惹かれたためです",
+            usefulInfo:
+              "OBが教えてくれた大学での学際研究事例、国立前期二次試験の物理記述対策メモ",
+            activity: "AI医療応用研究会、硬式テニスサークル、プログラミング教室講師",
+            highSchoolThought:
+              "『期待に応えないといけないけれど、本当はプログラミングがやりたい』と板挟みでした",
+            currentJob:
+              "大学3年（国立大研究室にて医療画像AI解析プロジェクトに参画中）",
+          },
+        },
+        {
+          id: 19,
+          name: "先輩 N.U さん",
+          avatar: "image/inspiration_mono.png",
+          univ: "地方私立F大学 地域政策学部 卒（25歳）",
+          career:
+            "愛知県立高校出身 ｜ 地方銀行 地域商社・起業支援部門 勤務（3年目）",
+          region: "city",
+          schoolType: "public_general",
+          major: "humanities",
+          status: "worker",
+          troubles: ["mismatch"],
+          adviserGroup: "senior",
+          originText: "愛知県（都市部公立高）",
+          troubleText: "やりたいことが見つからない焦り",
+          statusText: "社会人（地方銀行・地域支援）",
+          matchRate: 72,
+          mbtiType: "CGMV",
+          axes: { L: 15, B: 15, D: 15, S: 15 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 夏",
+              title: "偏差値だけで地元私大を選んでよいのか疑問を抱く",
+              desc: "名古屋近郊の高校に通い、友人の多くが地元の有名私立大を目標にしていましたが、自分は何を学びたいのか決められず漠然と不安を感じていました。『とりあえず名前で選ぶ』進路に納得できませんでした。",
+            },
+            {
+              type: "action",
+              time: "高校2年生 冬",
+              title: "先輩に誘われた地域フィールドワーク説明会で地方私立大の魅力を知る",
+              desc: "学園祭で出会った大学生の先輩に誘われて地域の商店と協働するワークショップに参加し、地方私立F大学の地域政策学部の実践的な雰囲気に触れました。『地域のリアルな課題に人と関わりながら向き合える』と志望を決めました。",
+            },
+            {
+              type: "success",
+              time: "社会人3年目",
+              title: "大学時代に培った地域連携の経験を活かし地元企業の事業開発を支援",
+              desc: "大学時代は地方自治体や中小企業との共創プロジェクトを数多く経験し、現在は地方銀行の地域商社部門で地元の起業家支援や新事業伴走を担当しています。",
+            },
+          ],
+          survey: {
+            adviser:
+              "学園祭のブースで声をかけてくれた大学生の先輩、地域ワークショップのメンター",
+            decisionReason:
+              "地域社会の現場に出向いて企業や住民と共創するゼミ・実習が1年次から組み込まれている地方私立大学だったためです",
+            usefulInfo:
+              "学生が企画した地域連携プロジェクトの成果報告会、推薦入試のグループワーク体験談",
+            activity: "地域活性化ゼミ幹事、まちづくりイベント企画、カフェアルバイト",
+            highSchoolThought:
+              "『自分の軸がないまま大学に入って大丈夫だろうか』といつも迷っていました",
+            currentJob:
+              "地方銀行員（地域商社・スタートアップ起業支援・産学官連携担当）",
+          },
+        },
+        {
+          id: 20,
+          name: "先輩 G.I さん",
+          avatar: "image/smartphone_man_mono.png",
+          univ: "地方国立M大学 工学部 機械知能システム工学科 4年",
+          career:
+            "熊本県・公立工業高校出身 ｜ 農業ロボティクス開発企業 内定",
+          region: "local",
+          schoolType: "vocational",
+          major: "science",
+          status: "student",
+          troubles: ["no-model", "cost"],
+          adviserGroup: "none",
+          originText: "熊本県（工業高校出身）",
+          troubleText: "工業科からの国立大進学・独学の壁",
+          statusText: "現役大学生（地方国立・4年）",
+          matchRate: 85,
+          mbtiType: "LBDS",
+          axes: { L: 88, B: 85, D: 85, S: 88 },
+          timeline: [
+            {
+              type: "failure",
+              time: "高校2年生 秋",
+              title: "就職主流の工業高校で国立大工学部を目指す前例がなく孤立",
+              desc: "公立工業高校の機械科に通っており、卒業生のほとんどが地元メーカーへ就職していました。ロボット制御を深く学びたくて地方国立大への進学を希望しましたが、校内に数IIIや受験物理を教えてくれる仲間や前例がなく完全に孤立していました。",
+            },
+            {
+              type: "action",
+              time: "高校3年生 春",
+              title: "専門高校特別選抜の過去問と数III独学カリキュラムを自力で構築",
+              desc: "経済的な負担も抑えるため地方国立大学の専門高校推薦・特別選抜の募集要項を徹底調査しました。市販の動画講義と基礎問題集を組み合わせて数III・物理を独学し、工業高校で培った旋盤・CADの製作実績もポートフォリオにまとめました。",
+            },
+            {
+              type: "success",
+              time: "大学4年生 現在",
+              title: "工業高校でのものづくり経験と国立大の制御工学を融合し開発職内定",
+              desc: "地方国立M大学に合格し、ロボコンや自動運転農機の研究に取り組んでいます。工業高校での実践力と大学の理論を組み合わせた経験が高く評価され、農業ロボティクス企業の開発職に内定しました。",
+            },
+          ],
+          survey: {
+            adviser:
+              "相談相手はおらず、公開されている入試過去問・動画教材・技術書のみで独学",
+            decisionReason:
+              "専門高校出身者向けの特別選抜枠があり、学費を抑えながらロボット・知能機械の研究設備をフル活用できる地方国立大だったためです",
+            usefulInfo:
+              "国立大学工学部の専門高校等対象入試過去問、数III・物理の独学ロードマップ",
+            activity:
+              "学生ロボコンチーム（機構・制御班リーダー）、高専・工業生向け技術ブログ執筆",
+            highSchoolThought:
+              "『工業高校から国立大学なんて無謀だと言われるのではないか』と周りに言い出せずにいました",
+            currentJob:
+              "大学4年（農業ロボティクス企業 開発職内定／自動走行ロボット制御研究）",
+          },
+        },
+      ];
+
+      const ROLEMODEL_TYPES = {
+        LBDS: { title: "独学で壁を突破する逆転チャレンジャー型", desc: "身近に相談できる先輩が少なくても、合格体験記や学習データを武器に専門分野へ突き進む先輩と相性抜群です。" },
+        LBDV: { title: "情報戦略で逆境を超えるビジョン開拓型", desc: "地方や孤立した環境からでも、ネット上の情報や記録を分析して高い壁を乗り越えた先輩が理想です。" },
+        LBMS: { title: "対話と実践で専門の壁を破る不屈の研究者型", desc: "情報が乏しい環境からでも、先生や学外の大人と対話を重ねて壁を乗り越えた専門系の先輩が合います。" },
+        LBMV: { title: "人の支えで難関を切り開く社会派チャレンジャー型", desc: "環境のハンデを抱えながら周囲の助言を得て逆境を突破し、広い視野で活躍する先輩の軌跡が参考になります。" },
+        LGDS: { title: "情報収集で自分だけの専門を見つける探究型", desc: "今の進路への違和感から、自ら情報を調べて納得できる専門分野へ軌道修正した先輩がフィットします。" },
+        LGDV: { title: "自分の問いから文理を越境するパイオニア型", desc: "既存の文理枠にとらわれず、自ら情報を集めて自分らしい学際的な進路を選んだ先輩がぴったりです。" },
+        LGMS: { title: "外の世界との出会いで専門に目覚める転機型", desc: "オープンキャンパスや学外イベントで出会った先輩との対話をきっかけに専門を見つけた先輩が最適です。" },
+        LGMV: { title: "遠回りを糧に自分の軸を掴むストーリー転換型", desc: "進路選択で一度立ち止まりながらも、対話を通じて社会とつながる道を見つけた先輩の軌跡が力になります。" },
+        CBDS: { title: "仲間と競いデータで専門を極める実戦型", desc: "周囲の刺激を力に変えつつ、模試分析や計画などの客観データで専門分野へ進んだ先輩が参考になります。" },
+        CBDV: { title: "全国・仲間の情報網で壁を超える戦略家型", desc: "同じ志を持つ仲間と切磋琢磨しながら、合格記録や比較分析で難関を突破した先輩が合います。" },
+        CBMS: { title: "伴走者との二人三脚で逆転する集中突破型", desc: "部活引退後の遅れやスランプも、先生や仲間の支えで乗り越え専門分野に合格した先輩がぴったりです。" },
+        CBMV: { title: "仲間の刺激と助言で粘り勝つチームリーダー型", desc: "浪人や失敗の悔しさをチューターや仲間との振り返りで成長に変えた先輩が理想です。" },
+        CGDS: { title: "環境を活かしながら自分の専門を見極める型", desc: "周囲の刺激を受けつつ自分の興味データを整理して専門分野へ踏み出した先輩の足跡が役立ちます。" },
+        CGDV: { title: "多様な選択肢を比較して横断的に選ぶ分析型", desc: "文理や学部の選択肢を広く比較検討し、納得の進路を選んだ先輩がフィットします。" },
+        CGMS: { title: "先生や先輩との対話で強みを掘り起こす型", desc: "身近な仲間や教員との対話の中で自分の適性に気づき、専門分野へ踏み出した先輩が参考になります。" },
+        CGMV: { title: "人とのつながりから新たな進路を創る共創型", desc: "周囲のメンターとの対話・ワークショップを通じて視野を広げ、社会課題の領域へ進んだ先輩が最適です。" },
+      };
+
+      const DEFAULT_USER_FALLBACK = {
+        name: "中央 太郎",
+        grade: "高校2年生",
+        regionCategory: "local",
+        regionText: "地方",
+        major: "science",
+        majorText: "理系志望",
+        trouble: "no-model",
+        diagnosis: {
+          answers: [-2, -1, -2, -1, -2, -1, -2, -1],
+          code: "LBDS",
+          axes: { L: 88, B: 88, D: 88, S: 88 },
+        },
+      };
+
+      const GEMINI_KEY_STORAGE = "ashiato_gemini_api_key";
+      const QUICK_QUESTIONS = [
+        "当時いちばん辛かった挫折をどう乗り越えましたか？",
+        "模試の判定や周囲とのギャップで不安だったときの対策は？",
+        "今の高校生の私が今日からできる最初の一歩は何ですか？",
+        "進路や学部を選ぶときに一番重視したポイントを教えてください",
       ];
 
       let currentTrouble = "all";
+      let currentUser = DEFAULT_USER_FALLBACK;
+      let currentMentor = null;
+      let chatHistory = [];
+
+      function calculateMatchRates(user) {
+        const u = user || DEFAULT_USER_FALLBACK;
+        const userAxes =
+          (u.diagnosis && u.diagnosis.axes) ||
+          DEFAULT_USER_FALLBACK.diagnosis.axes;
+        const userCode =
+          (u.diagnosis && u.diagnosis.code) ||
+          DEFAULT_USER_FALLBACK.diagnosis.code;
+
+        mentors.forEach((m) => {
+          const axisSum = ["L", "B", "D", "S"].reduce((acc, k) => {
+            const uVal =
+              typeof userAxes[k] === "number" ? userAxes[k] : 50;
+            return acc + (100 - Math.abs(uVal - m.axes[k]));
+          }, 0);
+          let score = (axisSum / 4) * 0.6;
+
+          for (let i = 0; i < 4; i++) {
+            if (userCode[i] === m.mbtiType[i]) score += 2;
+          }
+
+          if (u.regionCategory && m.region === u.regionCategory) {
+            score += 10;
+          }
+          if (u.major) {
+            if (m.major === u.major) {
+              score += 10;
+            } else if (
+              m.major === "cross" ||
+              u.major === "cross" ||
+              u.major === "undecided"
+            ) {
+              score += 6;
+            }
+          }
+          if (u.trouble && m.troubles.includes(u.trouble)) {
+            score += 10;
+          }
+
+          m.matchRate = Math.max(52, Math.min(98, Math.round(score)));
+        });
+      }
 
       function renderCards(list) {
         const grid = document.getElementById("cardsGrid");
@@ -1502,12 +2668,13 @@
           card.innerHTML = `
           <div class="card-left">
             <div class="avatar-box">
-              <img src="${item.avatar}" alt="${item.name}">
+              <img src="${item.avatar}" alt="${item.name}" onerror="this.style.display='none';this.parentNode.textContent='🎓'">
             </div>
             <div class="card-meta">
               <h3>${item.name}</h3>
               <div class="affiliation">${item.univ}</div>
               <div class="card-tags">
+                <span class="tag tag-mbti">相性: ${item.mbtiType}型</span>
                 <span class="tag tag-origin">${item.originText}</span>
                 <span class="tag tag-trouble">${item.troubleText}</span>
                 <span class="tag tag-career">${item.statusText}</span>
@@ -1523,7 +2690,7 @@
         });
       }
 
-      // 多面的な絞り込み処理
+      // 多面的な絞り込み処理（常に一致度順にソート）
       function filterData() {
         const region = document.getElementById("regionSelect").value;
         const schoolType = document.getElementById("schoolTypeSelect").value;
@@ -1552,6 +2719,7 @@
           );
         });
 
+        filtered.sort((a, b) => b.matchRate - a.matchRate);
         renderCards(filtered);
       }
 
@@ -1579,13 +2747,280 @@
         filterData();
       }
 
+      function applyDiagnosisFilter() {
+        const code =
+          (currentUser.diagnosis && currentUser.diagnosis.code) || "LBDS";
+        const targetRegion = code[0] === "L" ? "local" : "city";
+        let targetMajor =
+          code[3] === "S"
+            ? "science"
+            : currentUser.major === "humanities"
+              ? "humanities"
+              : "cross";
+        let targetTrouble =
+          code[1] === "G" ? "mismatch" : currentUser.trouble || "all";
+
+        const countMatches = (r, maj, tr) =>
+          mentors.filter(
+            (m) =>
+              (r === "all" || m.region === r) &&
+              (maj === "all" || m.major === maj) &&
+              (tr === "all" || m.troubles.includes(tr)),
+          ).length;
+
+        if (countMatches(targetRegion, targetMajor, targetTrouble) === 0) {
+          targetTrouble = "all";
+        }
+        if (countMatches(targetRegion, targetMajor, targetTrouble) === 0) {
+          targetMajor = "all";
+        }
+
+        document.getElementById("regionSelect").value = targetRegion;
+        document.getElementById("schoolTypeSelect").value = "all";
+        document.getElementById("majorSelect").value = targetMajor;
+        document.getElementById("statusSelect").value = "all";
+        document.getElementById("adviserSelect").value = "all";
+        currentTrouble = targetTrouble;
+        document
+          .querySelectorAll("#troubleChips .chip-btn")
+          .forEach((btn) => {
+            btn.classList.toggle(
+              "active",
+              btn.getAttribute("data-val") === targetTrouble,
+            );
+          });
+        filterData();
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function updateApiKeyStatus() {
+        const key = (localStorage.getItem(GEMINI_KEY_STORAGE) || "").trim();
+        const dot = document.getElementById("apiStatusDot");
+        const text = document.getElementById("apiStatusText");
+        const input = document.getElementById("geminiApiKeyInput");
+        if (input && key) input.value = key;
+        if (!dot || !text) return;
+        if (key) {
+          dot.className = "api-status-dot connected";
+          text.textContent = "Gemini AI 接続中";
+        } else {
+          dot.className = "api-status-dot demo";
+          text.textContent = "デモ応答モード";
+        }
+      }
+
+      function toggleApiKeyBox() {
+        const box = document.getElementById("apiKeyBox");
+        if (box) box.classList.toggle("open");
+      }
+
+      function saveApiKey() {
+        const input = document.getElementById("geminiApiKeyInput");
+        const val = input ? input.value.trim() : "";
+        if (val) {
+          localStorage.setItem(GEMINI_KEY_STORAGE, val);
+        } else {
+          localStorage.removeItem(GEMINI_KEY_STORAGE);
+        }
+        updateApiKeyStatus();
+        const box = document.getElementById("apiKeyBox");
+        if (box) box.classList.remove("open");
+      }
+
+      function clearApiKey() {
+        localStorage.removeItem(GEMINI_KEY_STORAGE);
+        const input = document.getElementById("geminiApiKeyInput");
+        if (input) input.value = "";
+        updateApiKeyStatus();
+      }
+
+      function appendChatMessage(role, text, modeNote) {
+        const box = document.getElementById("aiChatMessages");
+        if (!box) return null;
+        const row = document.createElement("div");
+        row.className = `ai-msg ${role}`;
+        if (role === "mentor" && currentMentor) {
+          row.innerHTML = `
+            <div class="ai-msg-avatar"><img src="${currentMentor.avatar}" alt="${escapeHtml(currentMentor.name)}" onerror="this.style.display='none';this.parentNode.textContent='🎓'"></div>
+            <div class="ai-bubble">${escapeHtml(text)}${modeNote ? `<div class="ai-msg-mode">${escapeHtml(modeNote)}</div>` : ""}</div>
+          `;
+        } else {
+          row.innerHTML = `<div class="ai-bubble">${escapeHtml(text)}</div>`;
+        }
+        box.appendChild(row);
+        box.scrollTop = box.scrollHeight;
+        return row;
+      }
+
+      function generateFallbackAnswer(mentor, questionText, user) {
+        const q = questionText || "";
+        const uGrade = (user && user.grade) || "高校生";
+        const failure = mentor.timeline[0];
+        const action = mentor.timeline[1];
+        const success = mentor.timeline[2];
+
+        if (/挫折|辛|つら|失敗|壁|落ち/.test(q)) {
+          return `${uGrade}のときは本当に不安になりますよね。私も「${failure.title}」（${failure.time}）ではかなり落ち込みました。\n\n転機になったのは「${action.title}」です。${action.desc}\n\n当時は「${mentor.survey.adviser}」を参考にしながら、できることから小さく積み直しました。焦りすぎず、まずは目の前の1ステップだけに絞ってみるのがおすすめです！`;
+        }
+        if (/模試|判定|不安|焦|ギャップ|周囲|独学/.test(q)) {
+          return `私も高校時代は${mentor.survey.highSchoolThought}という本音を抱えていました。\n\nそこで意識したのが「${action.title}」です。特に役立ったのは「${mentor.survey.usefulInfo}」でした。周囲と比べるより、${action.time}に自分が取り組んだように再現性のある行動を決めてしまうと気持ちが落ち着きますよ。`;
+        }
+        if (/一歩|最初|今日|始め|なに|何から/.test(q)) {
+          return `もし今の${uGrade}のあなたに1つだけ勧めるなら、私が${action.time}に行った「${action.title}」を今日から小さく真似してみることです。\n\n具体的には「${mentor.survey.usefulInfo}」をまず調べてみたり、「${mentor.survey.adviser}」のような情報源に1つアクセスしてみてください。小さな一歩が「${success.title}」につながりました！`;
+        }
+        if (/進路|学部|選|決|理由|大学/.test(q)) {
+          return `私が${mentor.univ}を選んだ最大の理由は、${mentor.survey.decisionReason}。\n\n高校時代は「${mentor.troubleText}」に悩みましたが、今の立場（${mentor.survey.currentJob}）になってみて、遠回りや悩みも含めて納得して選んだ道は強いと感じています。`;
+        }
+        return `ご質問ありがとうございます！${uGrade}の時期は「${mentor.troubleText}」などで迷うことも多いですよね。\n\n私の場合は「${failure.title}」という壁にぶつかりましたが、${action.time}に「${action.title}」へ踏み出したことで状況が変わりました。現在の「${mentor.survey.currentJob}」につながった一番の支えは、${mentor.survey.decisionReason}という軸を見つけたことです。応援しています！`;
+      }
+
+      async function askGeminiApi(mentor, questionText, user, history) {
+        const apiKey = (localStorage.getItem(GEMINI_KEY_STORAGE) || "").trim();
+        if (!apiKey) {
+          throw new Error("NO_API_KEY");
+        }
+
+        const diagCode =
+          (user && user.diagnosis && user.diagnosis.code) || "LBDS";
+        const systemPrompt = [
+          `あなたは「${mentor.name}」（所属・経歴: ${mentor.univ} / ${mentor.career}）本人として、進路に悩む中高生に優しく寄り添って回答するロールモデル先輩です。`,
+          `一人称は「私」、丁寧かつ親しみやすい敬語（〜ですよ、〜してみてください）で、200〜350文字程度に分かりやすく答えてください。`,
+          `【あなたの経歴・足跡データ】`,
+          `- 出身・壁: ${mentor.originText} / ${mentor.troubleText} / 現在の立場: ${mentor.statusText}`,
+          `- タイムライン①（挫折）: ${mentor.timeline[0].time}「${mentor.timeline[0].title}」${mentor.timeline[0].desc}`,
+          `- タイムライン②（行動）: ${mentor.timeline[1].time}「${mentor.timeline[1].title}」${mentor.timeline[1].desc}`,
+          `- タイムライン③（現在）: ${mentor.timeline[2].time}「${mentor.timeline[2].title}」${mentor.timeline[2].desc}`,
+          `- 当時の相談相手: ${mentor.survey.adviser}`,
+          `- 進路を決めたきっかけ: ${mentor.survey.decisionReason}`,
+          `- 役立った情報: ${mentor.survey.usefulInfo}`,
+          `- 高校時代の本音: ${mentor.survey.highSchoolThought}`,
+          `- 現在の活動・職種: ${mentor.survey.currentJob}`,
+          `【相談者（中高生）のプロフィール】`,
+          `- 学年: ${(user && user.grade) || "高校2年生"} / 地域: ${(user && user.regionText) || "地方"} / 志望: ${(user && user.majorText) || "理系志望"} / ロールモデル診断タイプ: ${diagCode}型`,
+          `事実として上記データにある経験をもとに回答し、データにない大学・企業事実を断定しないでください。`,
+        ].join("\n");
+
+        const contents = history.slice(-6).map((item) => ({
+          role: item.role === "user" ? "user" : "model",
+          parts: [{ text: item.text }],
+        }));
+        contents.push({ role: "user", parts: [{ text: questionText }] });
+
+        const payload = {
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents,
+          generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+        };
+
+        const models = [
+          "gemini-3.5-flash-lite",
+          "gemini-2.5-flash-lite",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash",
+        ];
+        let lastError = null;
+        for (const model of models) {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (res.status === 404 || res.status === 429) {
+            lastError = new Error(`Model ${model} unavailable (${res.status})`);
+            continue;
+          }
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          const data = await res.json();
+          const reply =
+            data &&
+            data.candidates &&
+            data.candidates[0] &&
+            data.candidates[0].content &&
+            data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.map((p) => p.text || "").join("");
+          if (reply && reply.trim()) {
+            return { text: reply.trim(), model };
+          }
+          throw new Error("Empty Gemini response");
+        }
+        throw lastError || new Error("Gemini request failed");
+      }
+
+      async function sendAiQuestion(questionText) {
+        if (!currentMentor || !questionText.trim()) return;
+        const q = questionText.trim();
+        const inputEl = document.getElementById("aiQuestionInput");
+        const sendBtn = document.getElementById("aiSendBtn");
+
+        appendChatMessage("user", q);
+        if (inputEl) inputEl.value = "";
+        if (sendBtn) {
+          sendBtn.disabled = true;
+          sendBtn.textContent = "考え中...";
+        }
+
+        const loadingRow = appendChatMessage("mentor", "回答を考えています...");
+        const apiKey = (localStorage.getItem(GEMINI_KEY_STORAGE) || "").trim();
+
+        let replyText = "";
+        let modeNote = "";
+        if (apiKey) {
+          try {
+            const res = await askGeminiApi(
+              currentMentor,
+              q,
+              currentUser,
+              chatHistory,
+            );
+            replyText = res.text;
+            modeNote = "AI先輩からの回答（Gemini AI）";
+          } catch (err) {
+            replyText = generateFallbackAnswer(currentMentor, q, currentUser);
+            modeNote = "AI先輩からの回答（足跡カルテデータに基づく応答）";
+          }
+        } else {
+          await new Promise((r) => setTimeout(r, 450));
+          replyText = generateFallbackAnswer(currentMentor, q, currentUser);
+          modeNote = "AI先輩からの回答（足跡カルテデータに基づく応答）";
+        }
+
+        if (loadingRow) loadingRow.remove();
+        appendChatMessage("mentor", replyText, modeNote);
+        chatHistory.push({ role: "user", text: q });
+        chatHistory.push({ role: "model", text: replyText });
+
+        if (sendBtn) {
+          sendBtn.disabled = false;
+          sendBtn.textContent = "質問する";
+        }
+      }
+
+      function handleAskAi(e) {
+        e.preventDefault();
+        const inputEl = document.getElementById("aiQuestionInput");
+        if (inputEl) sendAiQuestion(inputEl.value);
+      }
+
       function openDetail(id) {
         const mentor = mentors.find((m) => m.id === id);
         if (!mentor) return;
+        currentMentor = mentor;
+        chatHistory = [];
 
         // ★モーダルのアバターを img タグで描画
         document.getElementById("modalAvatar").innerHTML =
-          `<img src="${mentor.avatar}" alt="${mentor.name}">`;
+          `<img src="${mentor.avatar}" alt="${mentor.name}" onerror="this.style.display='none';this.parentNode.textContent='🎓'">`;
 
         document.getElementById("modalName").textContent =
           `${mentor.name}（${mentor.univ}）`;
@@ -1593,6 +3028,7 @@
 
         const tagsContainer = document.getElementById("modalTags");
         tagsContainer.innerHTML = `
+        <span class="tag tag-mbti">相性: ${mentor.mbtiType}型 (${mentor.matchRate}%)</span>
         <span class="tag tag-origin">${mentor.originText}</span>
         <span class="tag tag-trouble">${mentor.troubleText}</span>
         <span class="tag tag-career">${mentor.statusText}</span>
@@ -1641,6 +3077,33 @@
         </div>
       `;
 
+        // AI先輩チャット初期化
+        const titleEl = document.getElementById("aiChatMentorTitle");
+        if (titleEl)
+          titleEl.textContent = `💬 ${mentor.name}（AI）に質問・相談する`;
+
+        const chipsEl = document.getElementById("aiQuickChips");
+        if (chipsEl) {
+          chipsEl.innerHTML = QUICK_QUESTIONS.map(
+            (q, idx) =>
+              `<button type="button" class="ai-chip" data-qidx="${idx}">${escapeHtml(q)}</button>`,
+          ).join("");
+          chipsEl.querySelectorAll(".ai-chip").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const qIdx = Number(btn.getAttribute("data-qidx"));
+              sendAiQuestion(QUICK_QUESTIONS[qIdx]);
+            });
+          });
+        }
+
+        const msgBox = document.getElementById("aiChatMessages");
+        if (msgBox) msgBox.innerHTML = "";
+        updateApiKeyStatus();
+        appendChatMessage(
+          "mentor",
+          `こんにちは！${mentor.univ}の${mentor.name.replace("先輩 ", "")}です。私の「${mentor.troubleText}」の経験や進路選びについて、気になることがあれば下のボタンか入力欄から気軽に質問してくださいね！`,
+        );
+
         document.getElementById("detailModal").classList.add("active");
       }
 
@@ -1648,49 +3111,58 @@
         document.getElementById("detailModal").classList.remove("active");
       }
 
-      function syncUserPreferences() {
-        const stored = localStorage.getItem("ashiato_user");
-        if (!stored) return;
+      function captureApiKeyFromUrl() {
+        try {
+          const params = new URLSearchParams(window.location.search || "");
+          const key = (params.get("k") || params.get("key") || "").trim();
+          if (key) {
+            localStorage.setItem(GEMINI_KEY_STORAGE, key);
+            params.delete("k");
+            params.delete("key");
+            if (window.history && window.history.replaceState) {
+              const qs = params.toString();
+              const cleanUrl =
+                (window.location.pathname || "") +
+                (qs ? "?" + qs : "") +
+                (window.location.hash || "");
+              window.history.replaceState({}, document.title || "", cleanUrl);
+            }
+          }
+        } catch (e) {}
+      }
 
-        const user = JSON.parse(stored);
+      function syncUserPreferences() {
+        captureApiKeyFromUrl();
+        const stored = localStorage.getItem("ashiato_user");
+        currentUser = stored
+          ? { ...DEFAULT_USER_FALLBACK, ...JSON.parse(stored) }
+          : DEFAULT_USER_FALLBACK;
+
+        calculateMatchRates(currentUser);
+
         const avatarEl = document.getElementById("globalUserAvatar");
         const badgeEl = document.getElementById("globalUserBadgeText");
-        if (avatarEl && user.name) avatarEl.textContent = user.name.charAt(0);
+        const diagCode =
+          (currentUser.diagnosis && currentUser.diagnosis.code) || "LBDS";
+        const typeInfo = ROLEMODEL_TYPES[diagCode] || ROLEMODEL_TYPES.LBDS;
+
+        if (avatarEl && currentUser.name)
+          avatarEl.textContent = currentUser.name.charAt(0);
         if (badgeEl)
-          badgeEl.textContent = `${user.grade}（${user.regionText}・${user.majorText}）`;
+          badgeEl.textContent = `${currentUser.grade}（${currentUser.regionText}・${currentUser.majorText}｜${diagCode}型）`;
 
-        const regionSelect = document.getElementById("regionSelect");
-        const majorSelect = document.getElementById("majorSelect");
+        const codeEl = document.getElementById("bannerTypeCode");
+        const titleEl = document.getElementById("bannerTypeTitle");
+        const descEl = document.getElementById("bannerTypeDesc");
+        if (codeEl) codeEl.textContent = diagCode;
+        if (titleEl) titleEl.textContent = `診断結果：${typeInfo.title}`;
+        if (descEl) descEl.textContent = typeInfo.desc;
 
-        if (regionSelect && user.regionCategory)
-          regionSelect.value = user.regionCategory;
-        if (majorSelect && user.major) {
-          if (
-            user.major === "science" ||
-            user.major === "cross" ||
-            user.major === "humanities"
-          ) {
-            majorSelect.value = user.major;
-          }
-        }
-
-        if (user.trouble) {
-          currentTrouble = user.trouble;
-          document
-            .querySelectorAll("#troubleChips .chip-btn")
-            .forEach((btn) => {
-              btn.classList.toggle(
-                "active",
-                btn.getAttribute("data-val") === user.trouble,
-              );
-            });
-        }
-
-        filterData();
+        updateApiKeyStatus();
+        resetFilters();
       }
 
       window.addEventListener("DOMContentLoaded", () => {
-        renderCards(mentors);
         syncUserPreferences();
       });
     </script>
