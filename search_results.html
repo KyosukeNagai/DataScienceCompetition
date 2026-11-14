@@ -778,7 +778,7 @@
         gap: 0.4rem;
       }
 
-      .btn-api-key {
+      .ai-status-badge {
         background: #ffffff;
         border: 1px solid var(--border);
         color: var(--text-main);
@@ -786,55 +786,28 @@
         font-weight: 700;
         padding: 0.3rem 0.65rem;
         border-radius: 50px;
-        cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 0.35rem;
-      }
-      .btn-api-key:hover {
-        border-color: var(--primary);
-        background: #f8fafc;
+        user-select: none;
       }
 
       .api-status-dot.connected {
         color: #10b981;
       }
       .api-status-dot.demo {
-        color: var(--primary);
+        color: #94a3b8;
       }
 
-      .api-key-box {
-        display: none;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 0.75rem;
-        margin: 0.65rem 0;
+      body.modal-open {
+        overflow: hidden;
       }
-      .api-key-box.open {
-        display: block;
-      }
-
-      .api-key-row {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        margin-top: 0.4rem;
-      }
-
-      .api-key-row input {
-        flex: 1;
-        min-width: 180px;
-        padding: 0.42rem 0.6rem;
-        font-size: 0.78rem;
-        border: 1px solid var(--border);
-        border-radius: 4px;
-      }
-
-      .api-key-note {
-        font-size: 0.7rem;
-        color: var(--text-sub);
-        margin-top: 0.4rem;
+      body.modal-open header,
+      body.modal-open .header-utility,
+      body.modal-open .container,
+      body.modal-open footer {
+        pointer-events: none;
+        user-select: none;
       }
 
       .ai-quick-chips {
@@ -1048,18 +1021,34 @@
           padding: 0.9rem 0.85rem;
         }
         .modal-overlay {
-          padding: 0.35rem;
+          padding: 0;
+          background: #ffffff;
+          backdrop-filter: none;
+          width: 100vw;
+          height: 100vh;
+          height: 100dvh;
+          overscroll-behavior: contain;
         }
         .detail-card {
-          max-height: 95vh;
-          border-radius: 6px;
+          width: 100%;
+          max-width: 100%;
+          height: 100vh;
+          height: 100dvh;
+          max-height: 100vh;
+          max-height: 100dvh;
+          border-radius: 0;
+          box-shadow: none;
         }
         .detail-header {
-          padding: 0.7rem 0.85rem;
+          padding: 0.75rem 0.85rem;
+          flex-shrink: 0;
         }
         .detail-body {
           padding: 0.85rem 0.7rem;
           gap: 1.1rem;
+          flex: 1;
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
         }
         .detail-profile-box {
           gap: 0.75rem;
@@ -1129,6 +1118,7 @@
         }
         .detail-footer {
           padding: 0.65rem 0.85rem;
+          flex-shrink: 0;
         }
       }
     </style>
@@ -1431,44 +1421,9 @@
               <div class="ai-chat-title" id="aiChatMentorTitle">
                 💬 AI先輩に質問・相談する
               </div>
-              <button
-                type="button"
-                class="btn-api-key"
-                onclick="toggleApiKeyBox()"
-              >
+              <div class="ai-status-badge" id="aiStatusBadge">
                 <span class="api-status-dot demo" id="apiStatusDot">●</span>
-                <span id="apiStatusText">デモ応答モード</span>
-                <span>｜ 🔑 API設定</span>
-              </button>
-            </div>
-
-            <div class="api-key-box" id="apiKeyBox">
-              <div style="font-size: 0.76rem; font-weight: 700">
-                Gemini API キー設定（このブラウザの localStorage にのみ保存）
-              </div>
-              <div class="api-key-row">
-                <input
-                  type="password"
-                  id="geminiApiKeyInput"
-                  placeholder="AIza... から始まる Gemini API キーを入力"
-                />
-                <button
-                  type="button"
-                  class="btn-banner"
-                  onclick="saveApiKey()"
-                >
-                  保存
-                </button>
-                <button
-                  type="button"
-                  class="btn-banner secondary"
-                  onclick="clearApiKey()"
-                >
-                  削除
-                </button>
-              </div>
-              <div class="api-key-note">
-                ※キー未入力のときはオフラインのデモ応答モードで動作します。コード内にはキーを保存しません。
+                <span id="apiStatusText">オフラインモード</span>
               </div>
             </div>
 
@@ -2604,6 +2559,7 @@
       let currentUser = DEFAULT_USER_FALLBACK;
       let currentMentor = null;
       let chatHistory = [];
+      let apiForceOffline = false;
 
       function calculateMatchRates(user) {
         const u = user || DEFAULT_USER_FALLBACK;
@@ -2805,41 +2761,14 @@
         const key = (localStorage.getItem(GEMINI_KEY_STORAGE) || "").trim();
         const dot = document.getElementById("apiStatusDot");
         const text = document.getElementById("apiStatusText");
-        const input = document.getElementById("geminiApiKeyInput");
-        if (input && key) input.value = key;
         if (!dot || !text) return;
-        if (key) {
+        if (key && !apiForceOffline) {
           dot.className = "api-status-dot connected";
-          text.textContent = "Gemini AI 接続中";
+          text.textContent = "AI接続中";
         } else {
           dot.className = "api-status-dot demo";
-          text.textContent = "デモ応答モード";
+          text.textContent = "オフラインモード";
         }
-      }
-
-      function toggleApiKeyBox() {
-        const box = document.getElementById("apiKeyBox");
-        if (box) box.classList.toggle("open");
-      }
-
-      function saveApiKey() {
-        const input = document.getElementById("geminiApiKeyInput");
-        const val = input ? input.value.trim() : "";
-        if (val) {
-          localStorage.setItem(GEMINI_KEY_STORAGE, val);
-        } else {
-          localStorage.removeItem(GEMINI_KEY_STORAGE);
-        }
-        updateApiKeyStatus();
-        const box = document.getElementById("apiKeyBox");
-        if (box) box.classList.remove("open");
-      }
-
-      function clearApiKey() {
-        localStorage.removeItem(GEMINI_KEY_STORAGE);
-        const input = document.getElementById("geminiApiKeyInput");
-        if (input) input.value = "";
-        updateApiKeyStatus();
       }
 
       function appendChatMessage(role, text, modeNote) {
@@ -2917,44 +2846,42 @@
         const payload = {
           systemInstruction: { parts: [{ text: systemPrompt }] },
           contents,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 600 },
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 600,
+            thinkingConfig: {
+              thinkingLevel: "low",
+            },
+          },
         };
 
-        const models = [
-          "gemini-3.5-flash-lite",
-          "gemini-2.5-flash-lite",
-          "gemini-2.5-flash",
-          "gemini-2.0-flash",
-        ];
-        let lastError = null;
-        for (const model of models) {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          if (res.status === 404 || res.status === 429) {
-            lastError = new Error(`Model ${model} unavailable (${res.status})`);
-            continue;
-          }
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-          }
-          const data = await res.json();
-          const reply =
-            data &&
-            data.candidates &&
-            data.candidates[0] &&
-            data.candidates[0].content &&
-            data.candidates[0].content.parts &&
-            data.candidates[0].content.parts.map((p) => p.text || "").join("");
-          if (reply && reply.trim()) {
-            return { text: reply.trim(), model };
-          }
-          throw new Error("Empty Gemini response");
+        const model = "gemini-3.5-flash-lite";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
         }
-        throw lastError || new Error("Gemini request failed");
+        const data = await res.json();
+        const parts =
+          data &&
+          data.candidates &&
+          data.candidates[0] &&
+          data.candidates[0].content &&
+          Array.isArray(data.candidates[0].content.parts)
+            ? data.candidates[0].content.parts
+            : [];
+        const reply = parts
+          .filter((p) => !p.thought)
+          .map((p) => p.text || "")
+          .join("");
+        if (reply && reply.trim()) {
+          return { text: reply.trim(), model };
+        }
+        throw new Error("Empty Gemini response");
       }
 
       async function sendAiQuestion(questionText) {
@@ -2975,7 +2902,7 @@
 
         let replyText = "";
         let modeNote = "";
-        if (apiKey) {
+        if (apiKey && !apiForceOffline) {
           try {
             const res = await askGeminiApi(
               currentMentor,
@@ -2983,16 +2910,21 @@
               currentUser,
               chatHistory,
             );
+            apiForceOffline = false;
+            updateApiKeyStatus();
             replyText = res.text;
             modeNote = "AI先輩からの回答（Gemini AI）";
           } catch (err) {
+            apiForceOffline = true;
+            updateApiKeyStatus();
             replyText = generateFallbackAnswer(currentMentor, q, currentUser);
-            modeNote = "AI先輩からの回答（足跡カルテデータに基づく応答）";
+            modeNote = "AI先輩からの回答（オフラインモード）";
           }
         } else {
+          updateApiKeyStatus();
           await new Promise((r) => setTimeout(r, 450));
           replyText = generateFallbackAnswer(currentMentor, q, currentUser);
-          modeNote = "AI先輩からの回答（足跡カルテデータに基づく応答）";
+          modeNote = "AI先輩からの回答（オフラインモード）";
         }
 
         if (loadingRow) loadingRow.remove();
@@ -3105,10 +3037,14 @@
         );
 
         document.getElementById("detailModal").classList.add("active");
+        document.body.classList.add("modal-open");
+        const detailBody = document.querySelector("#detailModal .detail-body");
+        if (detailBody) detailBody.scrollTop = 0;
       }
 
       function closeDetail() {
         document.getElementById("detailModal").classList.remove("active");
+        document.body.classList.remove("modal-open");
       }
 
       function captureApiKeyFromUrl() {
@@ -3117,6 +3053,7 @@
           const key = (params.get("k") || params.get("key") || "").trim();
           if (key) {
             localStorage.setItem(GEMINI_KEY_STORAGE, key);
+            apiForceOffline = false;
             params.delete("k");
             params.delete("key");
             if (window.history && window.history.replaceState) {
