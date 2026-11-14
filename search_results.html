@@ -427,9 +427,11 @@
       .modal-overlay {
         position: fixed;
         top: 0;
+        right: 0;
+        bottom: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background: rgba(15, 23, 42, 0.6);
         backdrop-filter: blur(4px);
         z-index: 1000;
@@ -437,6 +439,7 @@
         align-items: center;
         justify-content: center;
         padding: 1.5rem;
+        overscroll-behavior: none;
       }
       .modal-overlay.active {
         display: flex;
@@ -473,6 +476,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-shrink: 0;
+        touch-action: none;
       }
 
       .btn-back {
@@ -498,6 +503,11 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+        flex: 1;
+        min-height: 0;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
       }
 
       .detail-profile-box {
@@ -662,6 +672,8 @@
         display: flex;
         justify-content: flex-end;
         gap: 0.75rem;
+        flex-shrink: 0;
+        touch-action: none;
       }
 
       footer {
@@ -799,8 +811,11 @@
         color: #94a3b8;
       }
 
+      html.modal-open,
       body.modal-open {
-        overflow: hidden;
+        overflow: hidden !important;
+        height: 100% !important;
+        overscroll-behavior: none !important;
       }
       body.modal-open header,
       body.modal-open .header-utility,
@@ -1020,22 +1035,31 @@
         .mentor-card {
           padding: 0.9rem 0.85rem;
         }
+        body.modal-open header,
+        body.modal-open .header-utility,
+        body.modal-open .container,
+        body.modal-open footer {
+          display: none !important;
+        }
         .modal-overlay {
           padding: 0;
           background: #ffffff;
           backdrop-filter: none;
-          width: 100vw;
-          height: 100vh;
-          height: 100dvh;
-          overscroll-behavior: contain;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          align-items: stretch;
+          justify-content: stretch;
+          overscroll-behavior: none;
         }
         .detail-card {
           width: 100%;
           max-width: 100%;
-          height: 100vh;
-          height: 100dvh;
-          max-height: 100vh;
-          max-height: 100dvh;
+          height: 100%;
+          max-height: 100%;
           border-radius: 0;
           box-shadow: none;
         }
@@ -2560,6 +2584,7 @@
       let currentMentor = null;
       let chatHistory = [];
       let apiForceOffline = false;
+      let savedScrollY = 0;
 
       function calculateMatchRates(user) {
         const u = user || DEFAULT_USER_FALLBACK;
@@ -3036,15 +3061,27 @@
           `こんにちは！${mentor.univ}の${mentor.name.replace("先輩 ", "")}です。私の「${mentor.troubleText}」の経験や進路選びについて、気になることがあれば下のボタンか入力欄から気軽に質問してくださいね！`,
         );
 
+        savedScrollY =
+          window.scrollY ||
+          (document.documentElement && document.documentElement.scrollTop) ||
+          0;
         document.getElementById("detailModal").classList.add("active");
+        if (document.documentElement) {
+          document.documentElement.classList.add("modal-open");
+        }
         document.body.classList.add("modal-open");
+        window.scrollTo(0, 0);
         const detailBody = document.querySelector("#detailModal .detail-body");
         if (detailBody) detailBody.scrollTop = 0;
       }
 
       function closeDetail() {
         document.getElementById("detailModal").classList.remove("active");
+        if (document.documentElement) {
+          document.documentElement.classList.remove("modal-open");
+        }
         document.body.classList.remove("modal-open");
+        window.scrollTo(0, savedScrollY);
       }
 
       function captureApiKeyFromUrl() {
@@ -3101,6 +3138,19 @@
 
       window.addEventListener("DOMContentLoaded", () => {
         syncUserPreferences();
+        document
+          .querySelectorAll(
+            "#detailModal .detail-header, #detailModal .detail-footer",
+          )
+          .forEach((bar) => {
+            bar.addEventListener(
+              "touchmove",
+              (e) => {
+                e.preventDefault();
+              },
+              { passive: false },
+            );
+          });
       });
     </script>
   </body>
