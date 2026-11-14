@@ -34,6 +34,12 @@
         margin: 0;
         padding: 0;
       }
+      html,
+      body {
+        overflow-x: hidden;
+        overflow-x: clip;
+        max-width: 100%;
+      }
       body {
         font-family: "Noto Sans JP", sans-serif;
         background-color: var(--bg-page);
@@ -133,6 +139,16 @@
         place-items: center;
         font-size: 0.7rem;
         font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .user-pill-setting {
+        font-size: 0.7rem;
+        color: var(--primary);
+        font-weight: 700;
+        margin-left: 2px;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
 
       .container {
@@ -968,11 +984,17 @@
 
       @media (max-width: 900px) {
         .container {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
         }
         .filter-box {
           position: static;
           max-height: none;
+          min-width: 0;
+          max-width: 100%;
+        }
+        .content-area {
+          min-width: 0;
+          max-width: 100%;
         }
         .mentor-card {
           flex-direction: column;
@@ -997,28 +1019,44 @@
           display: none;
         }
         .header-main {
-          padding: 0.55rem 0.75rem;
+          padding: 0.5rem 0.65rem;
           gap: 0.4rem;
         }
         .brand {
-          gap: 0.45rem;
+          gap: 0.38rem;
+          flex-shrink: 0;
+        }
+        .brand-icon {
+          font-size: 0.72rem;
+          padding: 0.18rem 0.42rem;
         }
         .brand-title {
-          font-size: 1.05rem;
+          font-size: 0.92rem;
+          line-height: 1.2;
           white-space: nowrap;
         }
         .brand-title span {
-          font-size: 0.78rem;
+          font-size: 0.7rem;
         }
         .user-pill {
-          padding: 0.28rem 0.55rem;
+          padding: 0.25rem 0.5rem;
+          gap: 0.3rem;
           font-size: 0.72rem;
-          max-width: 58vw;
+          max-width: none;
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+        .user-pill-avatar {
+          width: 20px;
+          height: 20px;
+          font-size: 0.65rem;
         }
         #globalUserBadgeText {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          display: none;
+        }
+        .user-pill-setting {
+          margin-left: 0;
+          font-size: 0.72rem;
         }
         .container {
           margin: 0.75rem auto 2rem;
@@ -1173,15 +1211,7 @@
         >
           <div class="user-pill-avatar" id="globalUserAvatar">高</div>
           <span id="globalUserBadgeText">高校2年生（秋田県・理系志望）</span>
-          <span
-            style="
-              font-size: 0.7rem;
-              color: var(--primary);
-              font-weight: 700;
-              margin-left: 2px;
-            "
-            >設定 ⚙</span
-          >
+          <span class="user-pill-setting">設定 ⚙</span>
         </a>
       </div>
     </header>
@@ -2572,6 +2602,11 @@
       };
 
       const GEMINI_KEY_STORAGE = "ashiato_gemini_api_key";
+      const GEMINI_MODELS = [
+        "gemini-3.5-flash-lite",
+        "gemini-3.1-flash-lite",
+      ];
+      const GEMINI_THINKING_LEVEL = "low";
       const QUICK_QUESTIONS = [
         "当時いちばん辛かった挫折をどう乗り越えましたか？",
         "模試の判定や周囲とのギャップで不安だったときの対策は？",
@@ -2836,6 +2871,57 @@
         return `ご質問ありがとうございます！${uGrade}の時期は「${mentor.troubleText}」などで迷うことも多いですよね。\n\n私の場合は「${failure.title}」という壁にぶつかりましたが、${action.time}に「${action.title}」へ踏み出したことで状況が変わりました。現在の「${mentor.survey.currentJob}」につながった一番の支えは、${mentor.survey.decisionReason}という軸を見つけたことです。応援しています！`;
       }
 
+      async function requestGeminiModel(model, apiKey, payload) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          let errMsg = "";
+          let isInvalidKey = false;
+          try {
+            if (typeof res.json === "function") {
+              const errData = await res.json();
+              errMsg =
+                (errData &&
+                  errData.error &&
+                  (errData.error.message || errData.error.status)) ||
+                "";
+              const details =
+                errData && errData.error && Array.isArray(errData.error.details)
+                  ? errData.error.details
+                  : [];
+              isInvalidKey =
+                details.some((d) => d && d.reason === "API_KEY_INVALID") ||
+                /api[_ ]?key not valid|api[_ ]?key expired/i.test(errMsg);
+            }
+          } catch (e) {}
+          const err = new Error(`HTTP ${res.status}${errMsg ? `: ${errMsg}` : ""}`);
+          err.status = res.status;
+          err.isInvalidKey = isInvalidKey;
+          throw err;
+        }
+        const data = await res.json();
+        const parts =
+          data &&
+          data.candidates &&
+          data.candidates[0] &&
+          data.candidates[0].content &&
+          Array.isArray(data.candidates[0].content.parts)
+            ? data.candidates[0].content.parts
+            : [];
+        const reply = parts
+          .filter((p) => !p.thought)
+          .map((p) => p.text || "")
+          .join("");
+        if (reply && reply.trim()) {
+          return { text: reply.trim(), model };
+        }
+        throw new Error("Empty Gemini response");
+      }
+
       async function askGeminiApi(mentor, questionText, user, history) {
         const apiKey = (localStorage.getItem(GEMINI_KEY_STORAGE) || "").trim();
         if (!apiKey) {
@@ -2875,38 +2961,23 @@
             temperature: 0.7,
             maxOutputTokens: 600,
             thinkingConfig: {
-              thinkingLevel: "low",
+              thinkingLevel: GEMINI_THINKING_LEVEL,
             },
           },
         };
 
-        const model = "gemini-3.5-flash-lite";
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
+        let lastError = null;
+        for (const model of GEMINI_MODELS) {
+          try {
+            return await requestGeminiModel(model, apiKey, payload);
+          } catch (err) {
+            lastError = err;
+            if (err && err.isInvalidKey) {
+              throw err;
+            }
+          }
         }
-        const data = await res.json();
-        const parts =
-          data &&
-          data.candidates &&
-          data.candidates[0] &&
-          data.candidates[0].content &&
-          Array.isArray(data.candidates[0].content.parts)
-            ? data.candidates[0].content.parts
-            : [];
-        const reply = parts
-          .filter((p) => !p.thought)
-          .map((p) => p.text || "")
-          .join("");
-        if (reply && reply.trim()) {
-          return { text: reply.trim(), model };
-        }
-        throw new Error("Empty Gemini response");
+        throw lastError || new Error("Gemini request failed");
       }
 
       async function sendAiQuestion(questionText) {
