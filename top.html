@@ -816,5 +816,27 @@
         キャリアトラッキングサービス『足跡 ~ Be Challenger』
       </div>
     </footer>
+
+    <script>
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var key = (params.get("k") || params.get("key") || "").trim();
+          if (key) {
+            localStorage.setItem("ashiato_gemini_api_key", key);
+            params.delete("k");
+            params.delete("key");
+            if (window.history && window.history.replaceState) {
+              var qs = params.toString();
+              var cleanUrl =
+                window.location.pathname +
+                (qs ? "?" + qs : "") +
+                (window.location.hash || "");
+              window.history.replaceState({}, document.title, cleanUrl);
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>
